@@ -1,0 +1,48 @@
+{
+  "name": "aurora",
+  "version": "1.0.0",
+  "description": "WS28xx LED remote",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ThePendulum/aurora.git"
+  },
+  "scripts": {
+    "build": "babel src -d dist; browserify src/assets/js/main.js -o public/js/main.js",
+    "watch-babel": "babel --watch src -d dist",
+    "watchify": "watchify src/assets/js/main.js -o public/js/main.js"
+  },
+  "keywords": [
+    "ws28xx",
+    "ws2801",
+    "ws2812b",
+    "ws2811",
+    "led",
+    "remote"
+  ],
+  "author": "Niels Simenon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ThePendulum/aurora/issues"
+  },
+  "homepage": "https://gitlab.com/ThePendulum/aurora#README",
+  "dependencies": {
+    "auto-daemon": "^2.6.0",
+    "config": "^1.20.1",
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "mathjs": "^3.2.1",
+    "note-log": "^2.1.8",
+    "rpi-ws2801": "0.0.4",
+    "rpi-ws281x-native": "^0.8.1",
+    "spi": "^0.2.0",
+    "ws": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.8.0",
+    "babel-preset-es2015": "^6.6.0",
+    "browserify": "^13.0.1",
+    "riot": "^2.4.0",
+    "watchify": "^3.7.0"
+  }
+}

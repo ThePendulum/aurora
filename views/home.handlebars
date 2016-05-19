@@ -1,0 +1,45 @@
+<h1>aurora</h1>
+
+<h2>Interval</h2>
+<input type="range" min="5" max="500" id="interval" value="{{leds.interval}}">
+
+<h2>Pattern</h2>
+
+<h2>RGB</h2>
+<input type="radio" name="mode" id="rgb">
+
+<label for="red">Red</label>
+<textarea id="red">{{leds.pattern.red.value}}</textarea>
+
+<label for="red">Green</label>
+<textarea id="green">{{leds.pattern.green.value}}</textarea>
+
+<label for="red">Blue</label>
+<textarea id="blue">{{leds.pattern.blue.value}}</textarea>
+
+<h2>HSV</h2>
+<input type="radio" name="mode" id="hsv">
+
+<!--
+<div class="picker-container hue-container" id="hue-container">
+    <input type="range" min="0" max="360" value="0" class="picker hue" id="hue">
+</div>
+-->
+
+<!--
+<div class="picker-container saturation-container" id="saturation-container">
+    <input type="range" min="0" max="100" value="100" class="picker saturation" id="saturation">
+</div>
+-->
+
+<!--
+<div class="picker-container value-container" id="value-container">
+    <input type="range" min="0" max="100" value="100" class="picker value" id="value">
+</div>
+-->
+
+<input type="text" id="hue">
+<input type="text" id="saturation">
+<input type="text" id="value">
+
+<div class="sample" id="sample"></div>
