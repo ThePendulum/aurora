@@ -68,21 +68,21 @@ socket.addEventListener('open', () => {
         updateColor();
     });
 
-    document.querySelector('#hue').addEventListener('input', event => {
+    document.querySelector('#hue').addEventListener('change', event => {
         // color.hue = Number(event.target.value);
         color.hue = event.target.value;
 
         updateColor();
     });
 
-    document.querySelector('#saturation').addEventListener('input', event => {
+    document.querySelector('#saturation').addEventListener('change', event => {
         // color.saturation = Number(event.target.value / 100);
         color.saturation = event.target.value;
 
         updateColor();
     });
 
-    document.querySelector('#value').addEventListener('input', event => {
+    document.querySelector('#value').addEventListener('change', event => {
         color.value = event.target.value;
         // color.value = Number(event.target.value / 100);
 

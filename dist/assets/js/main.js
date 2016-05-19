@@ -68,21 +68,21 @@ socket.addEventListener('open', function () {
         updateColor();
     });
 
-    document.querySelector('#hue').addEventListener('input', function (event) {
+    document.querySelector('#hue').addEventListener('change', function (event) {
         // color.hue = Number(event.target.value);
         color.hue = event.target.value;
 
         updateColor();
     });
 
-    document.querySelector('#saturation').addEventListener('input', function (event) {
+    document.querySelector('#saturation').addEventListener('change', function (event) {
         // color.saturation = Number(event.target.value / 100);
         color.saturation = event.target.value;
 
         updateColor();
     });
 
-    document.querySelector('#value').addEventListener('input', function (event) {
+    document.querySelector('#value').addEventListener('change', function (event) {
         color.value = event.target.value;
         // color.value = Number(event.target.value / 100);
 
