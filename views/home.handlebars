@@ -3,22 +3,13 @@
 <h2>Interval</h2>
 <input type="range" min="5" max="500" id="interval" value="{{leds.interval}}">
 
-<h2>Pattern</h2>
+<section id="pattern">
+    <h2>Pattern</h2>
 
-<h2>RGB</h2>
-<input type="radio" name="mode" id="rgb">
-
-<label for="red">Red</label>
-<textarea id="red">{{leds.pattern.red.value}}</textarea>
-
-<label for="red">Green</label>
-<textarea id="green">{{leds.pattern.green.value}}</textarea>
-
-<label for="red">Blue</label>
-<textarea id="blue">{{leds.pattern.blue.value}}</textarea>
-
-<h2>HSV</h2>
-<input type="radio" name="mode" id="hsv">
+    <label>Red <textarea rv-background="pattern.color">{ pattern.red }</textarea></label>
+    <label>Green <textarea>{ pattern.green }</textarea></label>
+    <label>Blue <textarea>{ pattern.blue }</textarea></label>
+</pattern>
 
 <!--
 <div class="picker-container hue-container" id="hue-container">
@@ -42,4 +33,4 @@
 <input type="text" id="saturation">
 <input type="text" id="value">
 
-<div class="sample" id="sample"></div>
+<div class="sample" rv-style="label.color"></div>

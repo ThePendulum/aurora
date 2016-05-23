@@ -3,6 +3,31 @@
     border: 0;
 }
 
+.color-container {
+  margin: 0 0 1rem 0;
+}
+
+.value-container {
+  display: block;
+  margin: 0 0 .5rem 0;
+}
+
+@media(min-width: 800px) {
+  .color-container {
+    display: flex;
+  }
+
+  .value-container {
+    flex-grow: 1;
+  }
+}
+
+.color-value {
+  width: 100%;
+  padding: .5rem;
+  box-sizing: border-box;
+}
+
 .picker-container {
     width: 100%;
     height: 2rem;
@@ -33,8 +58,7 @@
     height: 2rem;
     width: 3px;
     -webkit-appearance: none;
-    border:solid 1px rgba(0, 0, 0, .3);
-    margin-top: -0.2px;
+    border: solid 1px rgba(0, 0, 0, .4);
 }
 
 .picker::-moz-range-track {
@@ -48,7 +72,7 @@
     height: 2rem;
     width: 3px;
     box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, .3);
+    border: 1px solid rgba(0, 0, 0, .4);
     border-radius: 0;
 }
 
@@ -72,20 +96,8 @@
 .picker::-ms-thumb {
     width: 3px;
     height: 2rem;
-    border: 1px solid rgba(0, 0, 0, .3);
+    border: 1px solid rgba(0, 0, 0, .4);
     border-radius: 0px;
-}
-
-.hue-container {
-    background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
-}
-
-.saturation-container {
-    background: linear-gradient(to right, #fff, #f00);
-}
-
-.value-container {
-    background: linear-gradient(to right, #000, #f00);
 }
 
 .sample {

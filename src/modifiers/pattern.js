@@ -49,7 +49,7 @@ module.exports = function(leds) {
                 saturation = leds.pattern.saturation.eval(scope);
                 value = leds.pattern.value.eval(scope);
             } catch(error) {
-                note(error);
+                note('pattern', 2, error.message);
             }
 
             return hsv2rgb(hue, saturation, value);
