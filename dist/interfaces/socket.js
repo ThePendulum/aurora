@@ -3,48 +3,94 @@
 var config = require('config');
 var util = require('util');
 var note = require('note-log');
-var ws = require('ws').Server;
+var WebSocket = require('ws').Server;
+var uuid = require('uuid');
 var math = require('mathjs');
 
 module.exports = function (leds) {
-  var wss = new ws({ port: config.get('socket.port') });
+  var ws = new WebSocket({ port: config.get('socket.port') });
 
-  note('socket', 'Socket server listening on port ' + config.get('socket.port'));
+  note('wss', 'Socket server listening on port ' + config.get('socket.port'));
 
-  wss.on('connection', function (socket) {
+  ws.on('connection', function (wss) {
+    wss.id = uuid();
+
+    var connected = true;
+
     var ops = {
       interval: function interval(value) {
-        leds.interval = value;
+        leds.interval = parseInt(value);
       },
-      pattern: {
-        mode: function mode(value) {
-          leds.pattern.mode = value;
-        },
-        values: function values(_values) {
-          Object.keys(_values).forEach(function (property) {
-            leds.pattern[property] = {
-              value: _values[property],
-              eval: math.compile(_values[property]).eval
-            };
-          });
-        }
+      mode: function mode(value) {
+        leds.mode = value;
+      },
+      rgb: function rgb(values) {
+        Object.entries(values).forEach(function (entry) {
+          leds.rgb[entry[0]] = {
+            value: entry[1],
+            eval: math.compile(entry[1]).eval
+          };
+        });
+      },
+      hsv: function hsv(values) {
+        Object.entries(values).forEach(function (entry) {
+          leds.hsv[entry[0]] = {
+            value: entry[1],
+            eval: math.compile(entry[1]).eval
+          };
+        });
       }
     };
 
-    socket.on('message', function (msg) {
-      var selector = JSON.parse(msg);
+    wss.on('message', function (data) {
+      var selector = JSON.parse(data);
 
       var operation = selector.slice(0, -1).reduce(function (acc, property) {
         return acc[property];
       }, ops);
 
       if (operation) {
+        // broadcast input
+        if (connected) {
+          ws.clients.forEach(function (client) {
+            // don't broadcast to self
+            if (client.id !== wss.id) {
+              client.send(data);
+            }
+          });
+        }
+
         try {
           operation(selector.slice(-1)[0]);
         } catch (error) {
-          note('socket', 2, error.message);
+          note('wss', 2, error.message);
         }
       };
+    });
+
+    ws.clients.forEach(function (client) {
+      client.send(JSON.stringify(['interval', leds.interval]));
+      client.send(JSON.stringify(['mode', leds.mode]));
+      client.send(JSON.stringify(['rgb', { red: leds.rgb.red.value, green: leds.rgb.green.value, blue: leds.rgb.blue.value }]));
+      client.send(JSON.stringify(['hsv', { hue: leds.hsv.hue.value, saturation: leds.hsv.saturation.value, value: leds.hsv.value.value }]));
+    });
+
+    var updateSample = function updateSample() {
+      if (connected) {
+        wss.send(JSON.stringify(['pixels', leds.pixels]));
+
+        /*
+        setTimeout(() => {
+          updateSample();
+        }, 5000);
+        */
+      }
+    };
+
+    updateSample();
+
+    wss.on('close', function () {
+      connected = false;
     });
   });
 };

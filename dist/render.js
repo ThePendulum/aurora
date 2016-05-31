@@ -5,7 +5,6 @@ var util = require('util');
 var note = require('note-log');
 
 var ws281x = require('rpi-ws281x-native');
-var ws2801 = require('rpi-ws2801');
 
 var chips = {};
 
@@ -16,21 +15,19 @@ var g = colorIndex[1];
 var b = colorIndex[2];
 
 chips.ws2801 = function (leds) {
-    var data = leds.pixels.reduce(function (acc, color) {
-        return acc.concat('0x' + Number(color[r]).toString(16), '0x' + Number(color[g]).toString(16), '0x' + Number(color[b]).toString(16));
-    }, []);
+  var data = leds.pixels.reduce(function (acc, pixel) {
+    return acc.concat('0x' + Number(pixel.values[r] & 0xff).toString(16), '0x' + Number(pixel.values[g] & 0xff).toString(16), '0x' + Number(pixel.values[b] & 0xff).toString(16));
+  }, []);
 
-    leds.spi.write(new Buffer(data));
+  leds.spi.write(new Buffer(data));
 };
 
 chips.ws281x = function (leds) {
-    var data = new Uint32Array(leds.pixels.length).map(function (value, index) {
-        var rgb = leds.pixels[index];
+  var data = leds.pixels.reduce(function (acc, pixel) {
+    return acc.concat(((pixel.values[r] & 0xff) << 16) + ((pixel.values[g] & 0xff) << 8) + (pixel.values[b] & 0xff));
+  }, []);
 
-        return ((rgb[r] & 0xff) << 16) + ((rgb[g] & 0xff) << 8) + (rgb[b] & 0xff);
-    });
-
-    ws281x.render(data);
+  ws281x.render(new Uint32Array(data));
 };
 
 chips.ws2811 = chips.ws281x;
@@ -40,9 +37,9 @@ chips.ws2812b = chips.ws281x;
 var render = chips[config.get('chip').toLowerCase()];
 
 if (!render) {
-    throw new Error('Chip not supported');
+  throw new Error('Chip not supported');
 }
 
 module.exports = function (leds) {
-    render(leds);
+  render(leds);
 };

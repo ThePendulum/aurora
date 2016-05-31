@@ -41,15 +41,15 @@ var each = function each(pixel, leds, pre, init) {
   scope.x = pixel.x;
   scope.y = pixel.y;
 
-  if (leds.pattern.mode === 'hsv') {
+  if (leds.mode === 'hsv') {
     var hue = void 0,
         saturation = void 0,
         value = void 0;
 
     try {
-      hue = leds.pattern.hue.eval(scope);
-      saturation = leds.pattern.saturation.eval(scope);
-      value = leds.pattern.value.eval(scope);
+      hue = leds.hsv.hue.eval(scope);
+      saturation = leds.hsv.saturation.eval(scope);
+      value = leds.hsv.value.eval(scope);
 
       // Use default when empty. Use first of multiple results
       if (typeof hue === 'undefined') {
@@ -76,15 +76,15 @@ var each = function each(pixel, leds, pre, init) {
     return hsv2rgb(hue, saturation, value);
   }
 
-  if (leds.pattern.mode === 'rgb') {
+  if (leds.mode === 'rgb') {
     var r = void 0,
         g = void 0,
         b = void 0;
 
     try {
-      r = Math.max(0, Math.min(255, leds.pattern.red.eval(scope)));
-      g = Math.max(0, Math.min(255, leds.pattern.green.eval(scope)));
-      b = Math.max(0, Math.min(255, leds.pattern.blue.eval(scope)));
+      r = Math.max(0, Math.min(255, leds.rgb.red.eval(scope)));
+      g = Math.max(0, Math.min(255, leds.rgb.green.eval(scope)));
+      b = Math.max(0, Math.min(255, leds.rgb.blue.eval(scope)));
     } catch (error) {
       note(error);
     }

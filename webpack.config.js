@@ -3,19 +3,20 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const APP_DIR = path.join(__dirname, 'assets/js/main.js');
-const BUILD_DIR = path.join(__dirname, 'public/js/bundle.js');
+const APP_DIR = path.join(__dirname, 'assets/js/');
+const BUILD_DIR = path.join(__dirname, 'public/js/');
 
 const config = {
-  entry: APP_DIR,
+  entry: APP_DIR + 'main.js',
   output: {
-    filename: BUILD_DIR
+    filename: BUILD_DIR + 'bundle.js'
   },
   plugins: [
     new webpack.ProvidePlugin({
       riot: 'riot'
     })
   ],
+  devtool: 'source-map',
   module: {
     preLoaders: [{
       test: /\.tag$/,
@@ -27,8 +28,12 @@ const config = {
     }],
     loaders: [{
       test: /\.js$|\.tag$/,
-      include: APP_DIR,
-      loader: 'babel'
+      exclude: /node_modules/,
+      loader: 'babel',
+      query: {
+        presets: ['es2015', 'stage-3'],
+        plugins: ['transform-object-rest-spread']
+      }
     }]
   },
   resolve: {

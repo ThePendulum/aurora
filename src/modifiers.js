@@ -1,6 +1,6 @@
 'use strict';
 
-const pattern = require('./modifiers/pattern.js');
-const shift = require('./modifiers/shift.js');
+const color = require('./modifiers/color.js');
+const regulator = require('./modifiers/regulator.js');
 
-module.exports = [pattern, shift];
+module.exports = [color, regulator];

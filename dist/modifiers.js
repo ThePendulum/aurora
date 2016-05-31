@@ -1,6 +1,6 @@
 'use strict';
 
-var pattern = require('./modifiers/pattern.js');
-var shift = require('./modifiers/shift.js');
+var color = require('./modifiers/color.js');
+var regulator = require('./modifiers/regulator.js');
 
-module.exports = [pattern, shift];
+module.exports = [color, regulator];

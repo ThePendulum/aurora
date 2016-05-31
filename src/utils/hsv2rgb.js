@@ -4,6 +4,8 @@ module.exports = function(h, s, v){
     let r, g, b;
 
     h = Math.abs(h % 360) / 360;
+    s = Math.max(0, Math.min(1, s));
+    v = Math.max(0, Math.min(1, v));
 
     const i = Math.floor(h * 6);
     const f = h * 6 - i;

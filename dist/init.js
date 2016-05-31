@@ -34,18 +34,15 @@ if (!init) {
 
 module.exports = function () {
     var size = config.get('size');
-
-    if (Array.isArray(size)) {
-        size = size[0] * size[1];
-    }
+    var length = Array.isArray(size) ? size[0] * size[1] : size;
 
     var leds = {};
 
-    leds.pixels = Array.apply(null, Array(size)).map(function (pixel, index) {
+    leds.pixels = Array.apply(null, Array(length)).map(function (pixel, index) {
         var x = void 0,
             y = void 0;
 
-        if (Array.isArray(config.size)) {
+        if (Array.isArray(size)) {
             y = Math.floor(index / size[1]);
 
             if (config.zigzag && y % 2) {
@@ -67,14 +64,15 @@ module.exports = function () {
     });
 
     leds.beat = 0;
-    leds.interval = 50;
+    leds.interval = 10;
 
-    leds.pattern = {
-        mode: 'rgb',
+    leds.mode = 'rgb';
+
+    leds.rgb = {
         red: {
-            value: 50,
+            value: 255,
             eval: function _eval() {
-                return 50;
+                return 255;
             }
         },
         green: {
@@ -88,7 +86,10 @@ module.exports = function () {
             eval: function _eval() {
                 return 0;
             }
-        },
+        }
+    };
+
+    leds.hsv = {
         hue: {
             value: 0,
             eval: function _eval() {
@@ -102,9 +103,9 @@ module.exports = function () {
             }
         },
         value: {
-            value: 0.5,
+            value: 1,
             eval: function _eval() {
-                return 0.5;
+                return 1;
             }
         }
     };
