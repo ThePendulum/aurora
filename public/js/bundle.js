@@ -59,8 +59,9 @@
 	__webpack_require__(310);
 	__webpack_require__(311);
 	__webpack_require__(312);
+	__webpack_require__(314);
 	
-	riot.mount('ri-header, ri-interval, ri-color', { socket: socket });
+	riot.mount('ri-header, ri-interval, ri-color, ri-draw', { socket: socket });
 	
 	riot.route.start();
 	
@@ -11033,6 +11034,86 @@
 	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
 	
 	riot.tag2('ri-header', '<header> <section class="panel"> <img src="/img/logo.svg" class="logo"> </section> </header>', '.logo { height: 2rem; }', '', function (opts) {});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(300)))
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+	
+	riot.tag2('ri-draw', '<section class="panel"> <canvas id="fathom" class="fathom"></canvas> <canvas width="512" height="512" id="draw" class="draw"></canvas> <input value="#ff0000" id="draw-colorpicker" class="draw-colorpicker" type="color"> </section>', '.draw-colorpicker { display: block; } .fathom { display: none; } .draw { background: #000; cursor: crosshair; }', '', function (opts) {
+	  var socket = opts.socket;
+	  var mousedown = false;
+	
+	  window.addEventListener('mousedown', function (event) {
+	    mousedown = true;
+	  });
+	
+	  window.addEventListener('mouseup', function (event) {
+	    mousedown = false;
+	  });
+	
+	  this.on('mount', function () {
+	    var drawCanvas = document.querySelector('#draw');
+	    var drawCtx = drawCanvas.getContext('2d');
+	    drawCtx.imageSmoothingEnabled = false;
+	
+	    var fathomCanvas = document.querySelector('#fathom');
+	    var fathomCtx = fathomCanvas.getContext('2d');
+	
+	    var colorpicker = document.querySelector('#draw-colorpicker');
+	
+	    var update = function update() {
+	      drawCtx.drawImage(fathomCanvas, 0, 0, drawCanvas.width, drawCanvas.height);
+	    };
+	
+	    var draw = function draw() {
+	      if (mousedown || event.type === 'click') {
+	        var position = event.target.getBoundingClientRect();
+	        var cursorX = Math.floor((event.clientX - position.left) / (drawCanvas.width / fathomCanvas.width));
+	        var cursorY = Math.floor((event.clientY - position.top) / (drawCanvas.height / fathomCanvas.height));
+	
+	        fathomCtx.fillStyle = colorpicker.value;
+	
+	        fathomCtx.fillRect(cursorX, cursorY, 1, 1);
+	        update();
+	      }
+	    };
+	
+	    drawCanvas.addEventListener('mousemove', function (event) {
+	      draw();
+	    });
+	
+	    drawCanvas.addEventListener('click', function (event) {
+	      draw();
+	    });
+	
+	    socket.addEventListener('message', function (message) {
+	      var data = JSON.parse(message.data);
+	
+	      if (data[0] === 'meta') {
+	        (function () {
+	          fathomCanvas.width = data[1].size[0];
+	          fathomCanvas.height = data[1].size[1];
+	
+	          var deregulator = 1 / (data[1].regulator || 1);
+	
+	          data[1].pixels.forEach(function (pixel) {
+	            var r = ('0' + Math.floor(pixel.values[0] * deregulator).toString(16)).slice(-2);
+	            var g = ('0' + Math.floor(pixel.values[1] * deregulator).toString(16)).slice(-2);
+	            var b = ('0' + Math.floor(pixel.values[2] * deregulator).toString(16)).slice(-2);
+	
+	            fathomCtx.fillStyle = '#' + r + g + b;
+	            fathomCtx.fillRect(pixel.x, pixel.y, 1, 1);
+	
+	            update();
+	          });
+	        })();
+	      }
+	    });
+	  });
+	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(300)))
 
 /***/ }

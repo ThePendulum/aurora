@@ -13,8 +13,9 @@ require('../tags/color.tag');
 require('../tags/color/rgb.tag');
 require('../tags/color/hsv.tag');
 require('../tags/color/sample.tag');
+require('../tags/draw.tag');
 
-riot.mount('ri-header, ri-interval, ri-color', {socket});
+riot.mount('ri-header, ri-interval, ri-color, ri-draw', {socket});
 
 riot.route.start();
 

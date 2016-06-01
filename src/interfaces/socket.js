@@ -77,13 +77,11 @@ module.exports = function(leds) {
 
     const updateSample = function() {
       if(connected) {
-        wss.send(JSON.stringify(['pixels', leds.pixels]));
+        wss.send(JSON.stringify(['meta', {size: config.size, pixels: leds.pixels, regulator: config.regulator}]));
 
-        /*
         setTimeout(() => {
           updateSample();
-        }, 5000);
-        */
+        }, 200);
       }
     };
 
