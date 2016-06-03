@@ -15,80 +15,43 @@ module.exports = function (leds) {
   ws.on('connection', function (wss) {
     wss.id = uuid();
 
-    var connected = true;
+    wss.transfer = function (namespace) {
+      if (wss.readyState === 1) {
+        for (var _len = arguments.length, data = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          data[_key - 1] = arguments[_key];
+        }
 
-    var ops = {
-      interval: function interval(value) {
-        leds.interval = parseInt(value);
-      },
-      mode: function mode(value) {
-        leds.mode = value;
-      },
-      rgb: function rgb(values) {
-        Object.entries(values).forEach(function (entry) {
-          leds.rgb[entry[0]] = {
-            value: entry[1],
-            eval: math.compile(entry[1]).eval
-          };
-        });
-      },
-      hsv: function hsv(values) {
-        Object.entries(values).forEach(function (entry) {
-          leds.hsv[entry[0]] = {
-            value: entry[1],
-            eval: math.compile(entry[1]).eval
-          };
-        });
+        wss.send(JSON.stringify([namespace].concat(data)));
       }
     };
 
-    wss.on('message', function (data) {
-      var selector = JSON.parse(data);
-
-      var operation = selector.slice(0, -1).reduce(function (acc, property) {
-        return acc[property];
-      }, ops);
-
-      if (operation) {
-        // broadcast input
-        if (connected) {
-          ws.clients.forEach(function (client) {
-            // don't broadcast to self
-            if (client.id !== wss.id) {
-              client.send(data);
-            }
-          });
-        }
-
-        try {
-          operation(selector.slice(-1)[0]);
-        } catch (error) {
-          note('wss', 2, error.message);
-        }
-      };
-    });
-
-    ws.clients.forEach(function (client) {
-      client.send(JSON.stringify(['interval', leds.interval]));
-      client.send(JSON.stringify(['mode', leds.mode]));
-      client.send(JSON.stringify(['rgb', { red: leds.rgb.red.value, green: leds.rgb.green.value, blue: leds.rgb.blue.value }]));
-      client.send(JSON.stringify(['hsv', { hue: leds.hsv.hue.value, saturation: leds.hsv.saturation.value, value: leds.hsv.value.value }]));
-    });
-
-    var updateSample = function updateSample() {
-      if (connected) {
-        wss.send(JSON.stringify(['meta', { size: config.size, pixels: leds.pixels, regulator: config.regulator }]));
-
-        setTimeout(function () {
-          updateSample();
-        }, 200);
+    wss.broadcast = function (namespace) {
+      for (var _len2 = arguments.length, data = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        data[_key2 - 1] = arguments[_key2];
       }
+
+      ws.clients.forEach(function (client) {
+        if (wss.readyState === 1 && client.id !== wss.id) {
+          client.send(JSON.stringify([namespace].concat(data)));
+        }
+      });
     };
 
-    updateSample();
+    wss.transfer('interval', leds.interval);
+    wss.transfer('mode', leds.mode);
 
-    wss.on('close', function () {
-      connected = false;
+    wss.on('message', function (msg) {
+      var data = JSON.parse(msg);
+
+      if (data[0] === 'mode') {
+        leds.mode = data[1];
+      }
+
+      if (data[0] === 'interval') {
+        leds.interval = data[1];
+      }
     });
   });
+
+  return ws;
 };

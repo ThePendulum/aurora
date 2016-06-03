@@ -5,10 +5,10 @@ const util = require('util');
 const render = require('./render.js');
 const modifiers = require('./modifiers.js');
 
-const heart = function(leds) {
+const heart = function(leds, ws) {
   const initResults = modifiers.map(modifier => {
     if(modifier.init) {
-      return modifier.init(leds);
+      return modifier.init(leds, ws);
     }
   });
 

@@ -15,80 +15,35 @@ module.exports = function(leds) {
   ws.on('connection', wss => {
     wss.id = uuid();
 
-    let connected = true;
-
-    const ops = {
-      interval: function(value) {
-        leds.interval = parseInt(value);
-      },
-      mode: function(value) {
-        leds.mode = value;
-      },
-      rgb: function(values) {
-        Object.entries(values).forEach(entry => {
-          leds.rgb[entry[0]] = {
-            value: entry[1],
-            eval: math.compile(entry[1]).eval
-          };
-        });
-      },
-      hsv: function(values) {
-        Object.entries(values).forEach(entry => {
-          leds.hsv[entry[0]] = {
-            value: entry[1],
-            eval: math.compile(entry[1]).eval
-          };
-        });
+    wss.transfer = function(namespace, ...data) {
+      if(wss.readyState === 1) {
+        wss.send(JSON.stringify([namespace, ...data]));
       }
     };
 
-    wss.on('message', data => {
-      const selector = JSON.parse(data);
-
-      const operation = selector.slice(0, -1).reduce((acc, property) => {
-        return acc[property];
-      }, ops);
-
-      if(operation) {
-        // broadcast input
-        if(connected) {
-          ws.clients.forEach(client => {
-            // don't broadcast to self
-            if(client.id !== wss.id) {
-              client.send(data);
-            }
-          });
+    wss.broadcast = function(namespace, ...data) {
+      ws.clients.forEach(client => {
+        if(wss.readyState === 1 && client.id !== wss.id) {
+          client.send(JSON.stringify([namespace, ...data]));
         }
-
-        try {
-          operation(selector.slice(-1)[0]);
-        } catch(error) {
-          note('wss', 2, error.message);
-        }
-      };
-    });
-
-    ws.clients.forEach(client => {
-      client.send(JSON.stringify(['interval', leds.interval]));
-      client.send(JSON.stringify(['mode', leds.mode]));
-      client.send(JSON.stringify(['rgb', {red: leds.rgb.red.value, green: leds.rgb.green.value, blue: leds.rgb.blue.value}]));
-      client.send(JSON.stringify(['hsv', {hue: leds.hsv.hue.value, saturation: leds.hsv.saturation.value, value: leds.hsv.value.value}]));
-    });
-
-    const updateSample = function() {
-      if(connected) {
-        wss.send(JSON.stringify(['meta', {size: config.size, pixels: leds.pixels, regulator: config.regulator}]));
-
-        setTimeout(() => {
-          updateSample();
-        }, 200);
-      }
+      });
     };
 
-    updateSample();
+    wss.transfer('interval', leds.interval);
+    wss.transfer('mode', leds.mode);
 
-    wss.on('close', () => {
-      connected = false;
+    wss.on('message', msg => {
+      const data = JSON.parse(msg);
+
+      if(data[0] === 'mode') {
+        leds.mode = data[1];
+      }
+
+      if(data[0] === 'interval') {
+        leds.interval = data[1];
+      }
     });
   });
+
+  return ws;
 };

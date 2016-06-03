@@ -22,3 +22,11 @@ riot.route.start();
 riot.route((collection, id, action) => {
     console.log(collection, id, action);
 });
+
+socket.addEventListener('message', msg => {
+  const data = JSON.parse(msg.data);
+
+  if(data[0] === 'error') {
+    console.log(new Error(data[1]));
+  }
+});

@@ -66,7 +66,15 @@
 	riot.route.start();
 	
 	riot.route(function (collection, id, action) {
-	    console.log(collection, id, action);
+	  console.log(collection, id, action);
+	});
+	
+	socket.addEventListener('message', function (msg) {
+	  var data = JSON.parse(msg.data);
+	
+	  if (data[0] === 'error') {
+	    console.log(new Error(data[1]));
+	  }
 	});
 
 /***/ },
@@ -11042,8 +11050,9 @@
 
 	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
 	
-	riot.tag2('ri-draw', '<section class="panel"> <canvas id="fathom" class="fathom"></canvas> <canvas width="512" height="512" id="draw" class="draw"></canvas> <input value="#ff0000" id="draw-colorpicker" class="draw-colorpicker" type="color"> </section>', '.draw-colorpicker { display: block; } .fathom { display: none; } .draw { background: #000; cursor: crosshair; }', '', function (opts) {
+	riot.tag2('ri-draw', '<section class="panel"> <canvas id="phantom" class="phantom"></canvas> <canvas width="512" height="512" id="draw" class="draw"></canvas> <input value="#ff0000" id="draw-colorpicker" class="draw-colorpicker" type="color"> <input type="button" value="Eraser" id="draw-eraser"> </section>', '.draw-colorpicker { display: block; } .phantom { display: none; } .draw { background: #000; cursor: crosshair; }', '', function (opts) {
 	  var socket = opts.socket;
+	  var hexToRgb = __webpack_require__(315);
 	  var mousedown = false;
 	
 	  window.addEventListener('mousedown', function (event) {
@@ -11057,27 +11066,36 @@
 	  this.on('mount', function () {
 	    var drawCanvas = document.querySelector('#draw');
 	    var drawCtx = drawCanvas.getContext('2d');
-	    drawCtx.imageSmoothingEnabled = false;
 	
-	    var fathomCanvas = document.querySelector('#fathom');
-	    var fathomCtx = fathomCanvas.getContext('2d');
+	    drawCtx.imageSmoothingEnabled = false;
+	    drawCtx.mozImageSmoothingEnabled = false;
+	    drawCtx.msImageSmoothingEnabled = false;
+	
+	    var phantomCanvas = document.querySelector('#phantom');
+	    var phantomCtx = phantomCanvas.getContext('2d');
 	
 	    var colorpicker = document.querySelector('#draw-colorpicker');
+	    var eraser = document.querySelector('#draw-eraser');
+	
+	    var pencil = hexToRgb(colorpicker.value);
 	
 	    var update = function update() {
-	      drawCtx.drawImage(fathomCanvas, 0, 0, drawCanvas.width, drawCanvas.height);
+	      drawCtx.drawImage(phantomCanvas, 0, 0, drawCanvas.width, drawCanvas.height);
 	    };
 	
 	    var draw = function draw() {
 	      if (mousedown || event.type === 'click') {
 	        var position = event.target.getBoundingClientRect();
-	        var cursorX = Math.floor((event.clientX - position.left) / (drawCanvas.width / fathomCanvas.width));
-	        var cursorY = Math.floor((event.clientY - position.top) / (drawCanvas.height / fathomCanvas.height));
+	        var cursorX = Math.floor((event.clientX - position.left) / (drawCanvas.width / phantomCanvas.width));
+	        var cursorY = Math.floor((event.clientY - position.top) / (drawCanvas.height / phantomCanvas.height));
 	
-	        fathomCtx.fillStyle = colorpicker.value;
+	        /*
+	        phantomCtx.fillStyle = colorpicker.value;
+	        phantomCtx.fillRect(cursorX, cursorY, 1, 1);
+	         update();
+	        */
 	
-	        fathomCtx.fillRect(cursorX, cursorY, 1, 1);
-	        update();
+	        socket.send(JSON.stringify(['draw', [cursorX, cursorY, pencil]]));
 	      }
 	    };
 	
@@ -11089,13 +11107,21 @@
 	      draw();
 	    });
 	
+	    colorpicker.addEventListener('input', function (event) {
+	      pencil = hexToRgb(event.target.value);
+	    });
+	
+	    eraser.addEventListener('click', function (event) {
+	      pencil = null;
+	    });
+	
 	    socket.addEventListener('message', function (message) {
 	      var data = JSON.parse(message.data);
 	
 	      if (data[0] === 'meta') {
 	        (function () {
-	          fathomCanvas.width = data[1].size[0];
-	          fathomCanvas.height = data[1].size[1];
+	          phantomCanvas.width = data[1].size[0];
+	          phantomCanvas.height = data[1].size[1];
 	
 	          var deregulator = 1 / (data[1].regulator || 1);
 	
@@ -11104,8 +11130,8 @@
 	            var g = ('0' + Math.floor(pixel.values[1] * deregulator).toString(16)).slice(-2);
 	            var b = ('0' + Math.floor(pixel.values[2] * deregulator).toString(16)).slice(-2);
 	
-	            fathomCtx.fillStyle = '#' + r + g + b;
-	            fathomCtx.fillRect(pixel.x, pixel.y, 1, 1);
+	            phantomCtx.fillStyle = '#' + r + g + b;
+	            phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
 	
 	            update();
 	          });
@@ -11115,6 +11141,20 @@
 	  });
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(300)))
+
+/***/ },
+/* 315 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function (hex) {
+	  var r = parseInt(hex.slice(-6, -4), 16);
+	  var g = parseInt(hex.slice(-4, -2), 16);
+	  var b = parseInt(hex.slice(-2), 16);
+	
+	  return [r, g, b];
+	};
 
 /***/ }
 /******/ ]);

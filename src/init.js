@@ -44,7 +44,7 @@ module.exports = function() {
       if(Array.isArray(size)) {
         y = Math.floor(index / size[1]);
 
-        if(config.zigzag && y % 2) {
+        if(config.zigzag && y % 2 === 0) {
           x = index % size[0];
         } else {
           x = size[0] - 1 - index % size[0];
@@ -66,36 +66,6 @@ module.exports = function() {
     leds.interval = 10;
 
     leds.mode = 'rgb';
-
-    leds.rgb = {
-        red: {
-            value: 255,
-            eval: () => 255
-        },
-        green: {
-            value: 0,
-            eval: () => 0
-        },
-        blue: {
-            value: 0,
-            eval: () => 0
-        }
-    };
-
-    leds.hsv = {
-        hue: {
-            value: 0,
-            eval: () => 0
-        },
-        saturation: {
-            value: 1,
-            eval: () => 1
-        },
-        value: {
-            value: 1,
-            eval: () => 1
-        }
-    };
 
     init(leds);
 
