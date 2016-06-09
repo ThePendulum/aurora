@@ -9,7 +9,7 @@ const init = function(leds, ws) {
 
       setTimeout(() => {
         update();
-      }, 500);
+      }, config.socket.previewUpdateInterval || 1000);
     };
 
     update();

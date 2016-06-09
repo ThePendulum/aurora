@@ -3,7 +3,6 @@
 var config = require('config');
 var note = require('note-log');
 var express = require('express');
-var exphbs = require('express-handlebars');
 
 module.exports = function (leds) {
     var app = express();

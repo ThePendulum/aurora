@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(r, g, b){
+module.exports = function(r, g, b) {
   r = r / 255, g = g / 255, b = b / 255;
 
   let max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -21,13 +21,15 @@ module.exports = function(r, g, b){
     h /= 6;
   }
 
-  const hsv = {
-    hue: Math.floor(h * 360),
-    saturation: s.toFixed(2),
-    value: v.toFixed(2),
+  const values = {
+    hsv: {
+      hue: Math.floor(h * 360),
+      saturation: s.toFixed(2),
+      value: v.toFixed(2),
+    }
   };
 
-  hsv.array = [hsv.hue, hsv.saturation, hsv.value];
+  values.array = [values.hsv.hue, values.hsv.saturation, values.hsv.value]
 
-  return hsv;
+  return values;
 };

@@ -137,7 +137,7 @@ const each = function(pixel, leds, pre, init) {
         value = value.entries[0];
       }
     } catch(error) {
-      note('pattern', 2, error.message);
+      note('color', 2, error.message);
     }
 
     return hsv2rgb(hue, saturation, value);

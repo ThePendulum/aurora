@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(h, s, v){
+module.exports = function(h, s, v) {
     let r, g, b;
 
     h = Math.abs(h % 360) / 360;
@@ -20,14 +20,16 @@ module.exports = function(h, s, v){
         case 5: r = v, g = p, b = q; break;
     }
 
-    const rgb = {
-        red: Math.floor(r * 255),
-        green: Math.floor(g * 255),
-        blue: Math.floor(b * 255)
+    const values = {
+        rgb: {
+            red: Math.floor(r * 255),
+            green: Math.floor(g * 255),
+            blue: Math.floor(b * 255)
+        },
     };
 
-    rgb.array = [rgb.red, rgb.green, rgb.blue];
-    rgb.string = 'rgb(' + rgb.red + ', ' + rgb.green + ', ' + rgb.blue + ')';
+    values.array = [values.rgb.red, values.rgb.green, values.rgb.blue],
+    values.string = 'rgb(' + values.rgb.red + ', ' + values.rgb.green + ', ' + values.rgb.blue + ')'
 
-    return rgb;
+    return values;
 };

@@ -2,6 +2,6 @@
 
 module.exports = {
     socket: {
-        host: 'ws://84.25.144.220:3001'
+        host: 'ws://socket.aurora.unknown.name'
     }
 };

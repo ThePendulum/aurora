@@ -2,37 +2,43 @@
 
 const config = require('config');
 const note = require('note-log');
+const util = require('util');
 
 const init = function(leds, ws) {
-  const canvas = Array.apply(null, new Array(leds.pixels.length)).map(value => null);
+  const init = {
+    canvas: Array.apply(null, new Array(leds.pixels.length)).map(value => {
+      return {
+        values: [0, 0, 0],
+        opacity: 0
+      };
+    })
+  };
 
   ws.on('connection', wss => {
     wss.on('message', msg => {
       const data = JSON.parse(msg);
 
       if(data[0] === 'draw') {
-        const x = data[1][0];
-        const y = data[1][1];
-        const value = data[1][2];
+        const index = data[1].y * config.size[1] + (data[1].y % 2 ? config.size[0] - 1 - data[1].x : data[1].x);
 
-        const index = y * config.size[1] + (y % 2 ? config.size[0] - 1 - x : x);
+        init.canvas[index] = data[1];
+      }
 
-        canvas[index] = value;
+      if(data[0] === 'fill') {
+        init.canvas = init.canvas.map(value => data[1]);
       }
     });
   });
 
-  return canvas;
+  return init;
 };
 
 const each = function(pixel, leds, pre, init) {
-  const canvas = init;
+  const pencil = init.canvas[pixel.index];
 
-  if(canvas[pixel.index] === null) {
-    return pixel.values;
-  }
-
-  return canvas[pixel.index];
+  return pencil.values.map((value, index) => {
+    return (1 - pencil.opacity) * pixel.values[index] + pencil.opacity * value;
+  });
 };
 
 module.exports = {init, each};

@@ -10,6 +10,7 @@ module.exports = {
     port: 3000
   },
   socket: {
-    port: 3001
+    port: 3001,
+    previewUpdateInterval: 200
   }
 };
