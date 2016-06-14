@@ -6,6 +6,7 @@ const state = Immutable.Map({
   canvas: Immutable.Map({
     width: 0,
     height: 0,
+    regulator: 1,
     pixels: Immutable.List()
   }),
   color: Immutable.Map({

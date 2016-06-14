@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractText = require('extract-text-webpack-plugin');
+const cssnext = require('postcss-cssnext');
 
 const config = {
   entry: path.join(__dirname, 'assets/js/main.js'),
@@ -35,7 +36,7 @@ const config = {
       }
     }, {
       test: /\.scss$/,
-      loader: ExtractText.extract('style', 'css?sourceMap!sass?sourceMap')
+      loader: ExtractText.extract('style', 'css?sourceMap!postcss!sass?sourceMap')
     }, {
       test: /\.(woff(2)?|ttf|eot)$/,
       loader: 'url-loader?name=public/fonts/[name].[ext]'
@@ -45,6 +46,9 @@ const config = {
     alias: {
       config: path.join(__dirname, 'assets/js/config.js')
     }
+  },
+  postcss: function() {
+    return [cssnext];
   }
 };
 

@@ -45,6 +45,7 @@ input {
 }
 
 .input-text {
+  color: inherit;
   border: solid 1px #ddd;
 }
 
@@ -180,3 +181,11 @@ input {
   border: 1px solid rgba(0, 0, 0, .4);
   border-radius: 0px;
 }
+
+@import '../tags/header/header';
+@import '../tags/phantom/phantom';
+@import '../tags/preview/preview';
+@import '../tags/hex/hex';
+@import '../tags/rgb/rgb';
+@import '../tags/hsv/hsv';
+@import '../tags/draw/draw';

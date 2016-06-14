@@ -14,7 +14,7 @@
       <div class="value-container">
         <input type="text" class="input-text color-value" value={hue} onchange={updatehue}>
 
-        <div class="color-container hue-container" style={'background: linear-gradient(to right, ' + hsvToRgb(0, saturation, value).string + ', ' + hsvToRgb(60, saturation, value).string + ', '  + hsvToRgb(120, saturation, value).string + ', '  + hsvToRgb(180, saturation, value).string + ', '  + hsvToRgb(240, saturation, value).string + ', '  + hsvToRgb(300, saturation, value).string + ', '  + hsvToRgb(360, saturation, value).string + ')'}>
+        <div class="color-container hue-container" style={'background: linear-gradient(to right, ' + hsvToRgb(0, saturationFixed, valueFixed).string + ', ' + hsvToRgb(60, saturationFixed, valueFixed).string + ', '  + hsvToRgb(120, saturationFixed, valueFixed).string + ', '  + hsvToRgb(180, saturationFixed, valueFixed).string + ', '  + hsvToRgb(240, saturationFixed, valueFixed).string + ', '  + hsvToRgb(300, saturationFixed, valueFixed).string + ', '  + hsvToRgb(360, saturationFixed, valueFixed).string + ')'}>
           <input type="range" min="0" max="360" value={hue} class="picker hue" oninput={updatehue}>
         </div>
       </div>
@@ -45,42 +45,16 @@
     </div>
   </section>
 
-  <style>
-    .panel-hsv {
-      padding-top: 1.5rem;
-    }
-
-    .sync-container {
-      width: 100%;
-      position: absolute;
-      left: 0;
-      top: -1rem;
-      text-align: center;
-    }
-
-    .sync {
-      fill: #aaa;
-      background: #fff;
-      padding: .5rem 2rem;
-      margin: 0;
-      cursor: pointer;
-    }
-
-    .sync-active {
-      fill: #2294ff;
-    }
-  </style>
-
   <script>
-    const store = require('../js/store.js');
-    const socket = require('../js/socket.js');
+    const store = require('../../js/store.js');
+    const socket = require('../../js/socket.js');
 
-    const updateHue = require('../js/actions/updateHue.js');
-    const updateSaturation = require('../js/actions/updateSaturation.js');
-    const updateValue = require('../js/actions/updateValue.js');
-    const updateSync = require('../js/actions/updateSync.js');
+    const updateHue = require('../../js/actions/updateHue.js');
+    const updateSaturation = require('../../js/actions/updateSaturation.js');
+    const updateValue = require('../../js/actions/updateValue.js');
+    const updateSync = require('../../js/actions/updateSync.js');
 
-    this.hsvToRgb = require('../js/hsvToRgb.js');
+    this.hsvToRgb = require('../../js/hsvToRgb.js');
 
     const updateValues = () => {
       const color = store.getState().get('color');
@@ -90,6 +64,10 @@
       this.saturation = hsv.get('saturation');
       this.value = hsv.get('value');
       this.sync = color.get('sync');
+
+      this.hueFixed = isNaN(this.hue) ? 0 : this.hue;
+      this.saturationFixed = isNaN(this.saturation) ? 1 : this.saturation;
+      this.valueFixed = isNaN(this.value) ? 1 : this.value;
 
       if(!isNaN(this.saturation)) {
         this.saturation = Number(this.saturation).toFixed(2);

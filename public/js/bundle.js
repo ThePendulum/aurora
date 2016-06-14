@@ -49,25 +49,10 @@
 	__webpack_require__(1);
 	__webpack_require__(5);
 
-	var config = __webpack_require__(303);
 	var riot = __webpack_require__(304);
 
-	__webpack_require__(345);
-
-	__webpack_require__(331);
-	__webpack_require__(332);
-	__webpack_require__(333);
-	__webpack_require__(334);
-	__webpack_require__(338);
-	__webpack_require__(343);
-
-	riot.mount('ri-header, ri-interval, ri-rgb, ri-hsv, ri-draw');
-
-	riot.route.start();
-
-	riot.route(function (collection, id, action) {
-	    console.log(collection, id, action);
-	});
+	__webpack_require__(353);
+	riot.mount('ri-phantom, ri-header, ri-interval, ri-hex, ri-rgb, ri-hsv, ri-draw');
 
 /***/ },
 /* 1 */
@@ -10777,32 +10762,97 @@
 /* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var config = __webpack_require__(303);
+	var store = __webpack_require__(307);
+
+	var socket = new WebSocket(config.socket.host);
+
+	var updateSize = __webpack_require__(334);
+	var updatePixels = __webpack_require__(335);
+	var updateRegulator = __webpack_require__(336);
+
+	var updateRed = __webpack_require__(337);
+	var updateGreen = __webpack_require__(338);
+	var updateBlue = __webpack_require__(339);
+
+	var updateHue = __webpack_require__(340);
+	var updateSaturation = __webpack_require__(342);
+	var updateValue = __webpack_require__(343);
+
+	socket.addEventListener('message', function (msg) {
+	  var data = JSON.parse(msg.data);
+
+	  if (data[0] === 'meta') {
+	    store.dispatch(updateSize(data[1].size[0], data[1].size[1]));
+	    store.dispatch(updatePixels(data[1].pixels));
+	    store.dispatch(updateRegulator(data[1].regulator));
+	  }
+
+	  if (data[0] === 'rgb') {
+	    store.dispatch(updateRed(data[1].red));
+	    store.dispatch(updateGreen(data[1].green));
+	    store.dispatch(updateBlue(data[1].blue));
+	  }
+
+	  if (data[0] === 'hsv') {
+	    store.dispatch(updateHue(data[1].hue));
+	    store.dispatch(updateSaturation(data[1].saturation));
+	    store.dispatch(updateValue(data[1].value));
+	  }
+
+	  if (data[0] === 'error') {
+	    console.log(new Error(data[1]));
+	  }
+	});
+
+	module.exports = socket;
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var redux = __webpack_require__(308);
+	var Immutable = __webpack_require__(321);
+	var thunk = __webpack_require__(322).default;
+
+	var reducer = __webpack_require__(323);
+
+	module.exports = redux.createStore(reducer, Immutable.Map(), redux.applyMiddleware(thunk));
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-	var _createStore = __webpack_require__(307);
+	var _createStore = __webpack_require__(309);
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _combineReducers = __webpack_require__(314);
+	var _combineReducers = __webpack_require__(316);
 
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-	var _bindActionCreators = __webpack_require__(316);
+	var _bindActionCreators = __webpack_require__(318);
 
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-	var _applyMiddleware = __webpack_require__(317);
+	var _applyMiddleware = __webpack_require__(319);
 
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-	var _compose = __webpack_require__(318);
+	var _compose = __webpack_require__(320);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
-	var _warning = __webpack_require__(315);
+	var _warning = __webpack_require__(317);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -10826,7 +10876,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(299)))
 
 /***/ },
-/* 307 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10835,11 +10885,11 @@
 	exports.ActionTypes = undefined;
 	exports["default"] = createStore;
 
-	var _isPlainObject = __webpack_require__(308);
+	var _isPlainObject = __webpack_require__(310);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _symbolObservable = __webpack_require__(312);
+	var _symbolObservable = __webpack_require__(314);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -11093,12 +11143,12 @@
 	}
 
 /***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var getPrototype = __webpack_require__(309),
-	    isHostObject = __webpack_require__(310),
-	    isObjectLike = __webpack_require__(311);
+	var getPrototype = __webpack_require__(311),
+	    isHostObject = __webpack_require__(312),
+	    isObjectLike = __webpack_require__(313);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -11169,7 +11219,7 @@
 
 
 /***/ },
-/* 309 */
+/* 311 */
 /***/ function(module, exports) {
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
@@ -11190,7 +11240,7 @@
 
 
 /***/ },
-/* 310 */
+/* 312 */
 /***/ function(module, exports) {
 
 	/**
@@ -11216,7 +11266,7 @@
 
 
 /***/ },
-/* 311 */
+/* 313 */
 /***/ function(module, exports) {
 
 	/**
@@ -11251,18 +11301,18 @@
 
 
 /***/ },
-/* 312 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
 	'use strict';
 
-	module.exports = __webpack_require__(313)(global || window || this);
+	module.exports = __webpack_require__(315)(global || window || this);
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11287,7 +11337,7 @@
 
 
 /***/ },
-/* 314 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -11295,13 +11345,13 @@
 	exports.__esModule = true;
 	exports["default"] = combineReducers;
 
-	var _createStore = __webpack_require__(307);
+	var _createStore = __webpack_require__(309);
 
-	var _isPlainObject = __webpack_require__(308);
+	var _isPlainObject = __webpack_require__(310);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _warning = __webpack_require__(315);
+	var _warning = __webpack_require__(317);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -11420,7 +11470,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(299)))
 
 /***/ },
-/* 315 */
+/* 317 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11450,7 +11500,7 @@
 	}
 
 /***/ },
-/* 316 */
+/* 318 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11506,7 +11556,7 @@
 	}
 
 /***/ },
-/* 317 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11517,7 +11567,7 @@
 
 	exports["default"] = applyMiddleware;
 
-	var _compose = __webpack_require__(318);
+	var _compose = __webpack_require__(320);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -11569,7 +11619,7 @@
 	}
 
 /***/ },
-/* 318 */
+/* 320 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -11614,7 +11664,7 @@
 	}
 
 /***/ },
-/* 319 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -16598,7 +16648,7 @@
 	}));
 
 /***/ },
-/* 320 */
+/* 322 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16626,22 +16676,23 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 321 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _require = __webpack_require__(322);
+	var _require = __webpack_require__(324);
 
 	var combineReducers = _require.combineReducers;
 
 
-	var color = __webpack_require__(328);
+	var canvas = __webpack_require__(330);
+	var color = __webpack_require__(333);
 
-	module.exports = combineReducers({ color: color });
+	module.exports = combineReducers({ canvas: canvas, color: color });
 
 /***/ },
-/* 322 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16651,7 +16702,7 @@
 	});
 	exports.combineReducers = undefined;
 
-	var _combineReducers = __webpack_require__(323);
+	var _combineReducers = __webpack_require__(325);
 
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
@@ -16662,7 +16713,7 @@
 
 
 /***/ },
-/* 323 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -16671,9 +16722,9 @@
 	    value: true
 	});
 
-	var _utilities = __webpack_require__(324);
+	var _utilities = __webpack_require__(326);
 
-	var _immutable = __webpack_require__(319);
+	var _immutable = __webpack_require__(321);
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -16731,7 +16782,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(299)))
 
 /***/ },
-/* 324 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16742,15 +16793,15 @@
 	});
 	exports.validateNextState = exports.getUnexpectedInvocationParameterMessage = exports.getStateName = undefined;
 
-	var _getStateName2 = __webpack_require__(325);
+	var _getStateName2 = __webpack_require__(327);
 
 	var _getStateName3 = _interopRequireDefault(_getStateName2);
 
-	var _getUnexpectedInvocationParameterMessage2 = __webpack_require__(326);
+	var _getUnexpectedInvocationParameterMessage2 = __webpack_require__(328);
 
 	var _getUnexpectedInvocationParameterMessage3 = _interopRequireDefault(_getUnexpectedInvocationParameterMessage2);
 
-	var _validateNextState2 = __webpack_require__(327);
+	var _validateNextState2 = __webpack_require__(329);
 
 	var _validateNextState3 = _interopRequireDefault(_validateNextState2);
 
@@ -16763,7 +16814,7 @@
 
 
 /***/ },
-/* 325 */
+/* 327 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16781,7 +16832,7 @@
 
 
 /***/ },
-/* 326 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16790,11 +16841,11 @@
 	    value: true
 	});
 
-	var _immutable = __webpack_require__(319);
+	var _immutable = __webpack_require__(321);
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
-	var _getStateName = __webpack_require__(325);
+	var _getStateName = __webpack_require__(327);
 
 	var _getStateName2 = _interopRequireDefault(_getStateName);
 
@@ -16831,7 +16882,7 @@
 
 
 /***/ },
-/* 327 */
+/* 329 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16853,13 +16904,15 @@
 
 
 /***/ },
-/* 328 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaultState = __webpack_require__(329).get('color');
-	var rgbToHsv = __webpack_require__(330);
+	var Immutable = __webpack_require__(321);
+
+	var defaultState = __webpack_require__(331).get('canvas');
+	var rgbToHsv = __webpack_require__(332);
 
 	module.exports = function () {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? defaultState : arguments[0];
@@ -16867,32 +16920,16 @@
 
 	  var handlers = {};
 
-	  handlers.UPDATE_RED = function (value) {
-	    return state.setIn(['rgb', 'red'], value);
+	  handlers.UPDATE_SIZE = function (dimensions) {
+	    return state.set('width', dimensions.width).set('height', dimensions.height);
 	  };
 
-	  handlers.UPDATE_GREEN = function (value) {
-	    return state.setIn(['rgb', 'green'], value);
+	  handlers.UPDATE_REGULATOR = function (regulator) {
+	    return state.set('regulator', regulator);
 	  };
 
-	  handlers.UPDATE_BLUE = function (value) {
-	    return state.setIn(['rgb', 'blue'], value);
-	  };
-
-	  handlers.UPDATE_HUE = function (value) {
-	    return state.setIn(['hsv', 'hue'], value);
-	  };
-
-	  handlers.UPDATE_SATURATION = function (value) {
-	    return state.setIn(['hsv', 'saturation'], value);
-	  };
-
-	  handlers.UPDATE_VALUE = function (value) {
-	    return state.setIn(['hsv', 'value'], value);
-	  };
-
-	  handlers.UPDATE_SYNC = function (value) {
-	    return state.set('sync', value);
+	  handlers.UPDATE_PIXELS = function (pixels) {
+	    return state.set('pixels', Immutable.List(pixels));
 	  };
 
 	  if (handlers[action.type]) {
@@ -16903,17 +16940,18 @@
 	};
 
 /***/ },
-/* 329 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Immutable = __webpack_require__(319);
+	var Immutable = __webpack_require__(321);
 
 	var state = Immutable.Map({
 	  canvas: Immutable.Map({
 	    width: 0,
 	    height: 0,
+	    regulator: 1,
 	    pixels: Immutable.List()
 	  }),
 	  color: Immutable.Map({
@@ -16940,7 +16978,7 @@
 		module.exports = state;
 
 /***/ },
-/* 330 */
+/* 332 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16986,74 +17024,71 @@
 	};
 
 /***/ },
-/* 331 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-		riot.tag2('ri-header', '<header class="header"> <section class="panel-blank"> <img src="/img/logo-blank.svg" class="logo"> <img src="/img/logo-notext-blank.svg" class="logo-notext"> </section> </header>', '.header { background: #2294ff; padding: 1rem 0; margin: 0 0 1rem 0; } .logo { height: 2rem; } .logo-notext { display: none; height: 2rem; } @media(max-width: 1050px) { .header { padding: .5rem 1rem; margin: 0; text-align: center; } .logo { display: none; } .logo-notext { display: inline-block; } }', '', function (opts) {});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
-/* 332 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-		riot.tag2('ri-interval', '<section class="panel"> <input type="range" min="5" max="100" value="{interval}" oninput="{updateInterval}"> </section>', '', '', function (opts) {});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
 /* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+	'use strict';
 
-		riot.tag2('ri-sample', '<section class="panel"> <div class="picker-container"> <div class="color-label">#</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{\'#\' + (\'0\' + Number(isNaN(opts.rgb.red) ? 0 : opts.rgb.red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(opts.rgb.green) ? 0 : opts.rgb.green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(opts.rgb.blue) ? 0 : opts.rgb.blue).toString(16)).slice(-2)}" onchange="{opts.updatefromcolor}"> <input class="color-container sample" value="{\'#\' + (\'0\' + Number(isNaN(opts.rgb.red) ? 0 : opts.rgb.red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(opts.rgb.green) ? 0 : opts.rgb.green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(opts.rgb.blue) ? 0 : opts.rgb.blue).toString(16)).slice(-2)}" oninput="{opts.updatefromcolor}" type="{\'color\'}"> </div> </div> </section>', '.sample { height: 1.5rem; padding: 0; border: solid 1px #ddd; border-top: none; } .sample::-webkit-color-swatch-wrapper { padding: 0; border: none; } .sample::-webkit-color-swatch { border: none; } .sample::-moz-color-swatch { border: none; }', '', function (opts) {});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+	var defaultState = __webpack_require__(331).get('color');
+	var rgbToHsv = __webpack_require__(332);
+
+	module.exports = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? defaultState : arguments[0];
+	  var action = arguments[1];
+
+	  var handlers = {};
+
+	  handlers.UPDATE_RED = function (value) {
+	    return state.setIn(['rgb', 'red'], value);
+	  };
+
+	  handlers.UPDATE_GREEN = function (value) {
+	    return state.setIn(['rgb', 'green'], value);
+	  };
+
+	  handlers.UPDATE_BLUE = function (value) {
+	    return state.setIn(['rgb', 'blue'], value);
+	  };
+
+	  handlers.UPDATE_HUE = function (value) {
+	    return state.setIn(['hsv', 'hue'], value);
+	  };
+
+	  handlers.UPDATE_SATURATION = function (value) {
+	    return state.setIn(['hsv', 'saturation'], value);
+	  };
+
+	  handlers.UPDATE_VALUE = function (value) {
+	    return state.setIn(['hsv', 'value'], value);
+	  };
+
+	  handlers.UPDATE_SYNC = function (value) {
+	    return state.set('sync', value);
+	  };
+
+	  if (handlers[action.type]) {
+	    return handlers[action.type](action.data);
+	  }
+
+	  return state;
+	};
 
 /***/ },
 /* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+	'use strict';
 
-	riot.tag2('ri-rgb', '<section class="panel panel-rgb"> <div class="picker-container"> <div class="color-label">R</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{red}" onchange="{updatered}"> <div class="color-container red-container" riot-style="{\'background: linear-gradient(to right, rgb(0, \' + green + \', \' + blue + \'), rgb(255, \' + green + \', \' + blue + \'))\'}"> <input type="range" min="0" max="255" value="{red}" class="picker red" oninput="{updatered}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">G</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{green}" onchange="{updategreen}"> <div class="color-container green-container" riot-style="{\'background: linear-gradient(to right, rgb(\' + red + \', 0, \' + blue + \'), rgb(\' + red + \', 255, \' + blue + \'))\'}"> <input type="range" min="0" max="255" value="{green}" class="picker green" oninput="{updategreen}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">B</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{blue}" onchange="{updateblue}"> <div class="color-container blue-container" riot-style="{\'background: linear-gradient(to right, rgb(\' + red + \', \' + green + \', 0), rgb(\' + red + \', \' + green + \', 255))\'}"> <input type="range" min="0" max="255" value="{blue}" class="picker blue" oninput="{updateblue}"> </div> </div> </div> </section>', '.panel-rgb { padding-bottom: 1.5rem; }', '', function (opts) {
-	  var _this = this;
+	var socket = __webpack_require__(306);
 
-	  var store = __webpack_require__(346);
-	  var socket = __webpack_require__(345);
-
-	  var updateRed = __webpack_require__(335);
-	  var updateGreen = __webpack_require__(336);
-	  var updateBlue = __webpack_require__(337);
-
-	  var updateValues = function updateValues() {
-	    var rgb = store.getState().get('color').get('rgb');
-
-	    _this.red = rgb.get('red');
-	    _this.green = rgb.get('green');
-	    _this.blue = rgb.get('blue');
-
-	    _this.update();
+	module.exports = function (width, height) {
+	  return function (dispatch, getState) {
+	    dispatch({
+	      type: 'UPDATE_SIZE',
+	      data: { width: width, height: height }
+	    });
 	  };
-
-	  updateValues();
-	  store.subscribe(updateValues);
-
-	  this.updatered = function (event) {
-	    store.dispatch(updateRed(event.target.value, socket));
-	  };
-
-	  this.updategreen = function (event) {
-	    store.dispatch(updateGreen(event.target.value, socket));
-	  };
-
-	  this.updateblue = function (event) {
-	    store.dispatch(updateBlue(event.target.value, socket));
-	  };
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+	};
 
 /***/ },
 /* 335 */
@@ -17061,9 +17096,43 @@
 
 	'use strict';
 
+	var socket = __webpack_require__(306);
+
+	module.exports = function (pixels) {
+	  return function (dispatch, getState) {
+	    dispatch({
+	      type: 'UPDATE_PIXELS',
+	      data: pixels
+	    });
+	  };
+	};
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var socket = __webpack_require__(306);
+
+	module.exports = function (regulator) {
+	  return function (dispatch, getState) {
+	    dispatch({
+	      type: 'UPDATE_REGULATOR',
+	      data: regulator
+	    });
+	  };
+	};
+
+/***/ },
+/* 337 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var rgbToHsv = __webpack_require__(330);
+	var rgbToHsv = __webpack_require__(332);
 
 	module.exports = function (red, socket) {
 	  return function (dispatch, getState) {
@@ -17106,14 +17175,14 @@
 	};
 
 /***/ },
-/* 336 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var rgbToHsv = __webpack_require__(330);
+	var rgbToHsv = __webpack_require__(332);
 
 	module.exports = function (green, socket) {
 	  return function (dispatch, getState) {
@@ -17156,14 +17225,14 @@
 	};
 
 /***/ },
-/* 337 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var rgbToHsv = __webpack_require__(330);
+	var rgbToHsv = __webpack_require__(332);
 
 	module.exports = function (blue, socket) {
 	  return function (dispatch, getState) {
@@ -17206,67 +17275,57 @@
 	};
 
 /***/ },
-/* 338 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+	'use strict';
 
-	riot.tag2('ri-hsv', '<section class="panel panel-hsv"> <div class="sync-container channels"> <svg class="{\'icon sync\' + (sync ? \' sync-active\' : \'\')}" onclick="{updatesync}"> <use xlink:href="img/icons.svg#loop"> <title>Sync</title> </use> </svg> </div> <div class="picker-container"> <div class="color-label">H</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{hue}" onchange="{updatehue}"> <div class="color-container hue-container" riot-style="{\'background: linear-gradient(to right, \' + hsvToRgb(0, saturation, value).string + \', \' + hsvToRgb(60, saturation, value).string + \', \'  + hsvToRgb(120, saturation, value).string + \', \'  + hsvToRgb(180, saturation, value).string + \', \'  + hsvToRgb(240, saturation, value).string + \', \'  + hsvToRgb(300, saturation, value).string + \', \'  + hsvToRgb(360, saturation, value).string + \')\'}"> <input type="range" min="0" max="360" value="{hue}" class="picker hue" oninput="{updatehue}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">S</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{saturation}" onchange="{updatesaturation}"> <div class="color-container saturation-container" riot-style="{\'background: linear-gradient(to right, \' + hsvToRgb(isNaN(hue) ? 0 : hue, 0, isNaN(value) ? 1 : value).string + \', \' + hsvToRgb(isNaN(hue) ? 1 : hue, 1, isNaN(value) ? 1 : value).string + \')\'}"> <input type="range" min="0" max="1" step="0.01" value="{saturation}" class="picker saturation" oninput="{updatesaturation}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">V</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{value}" onchange="{updatevalue}"> <div class="color-container value-container" riot-style="{\'background: linear-gradient(to right, \' + hsvToRgb(isNaN(hue) ? 0 : hue, isNaN(saturation) ? 1 : saturation, 0).string + \', \' + hsvToRgb(isNaN(hue) ? 0 : hue, isNaN(saturation) ? 1 : saturation, 1).string + \')\'}"> <input type="range" min="0" max="1" step="0.01" value="{value}" class="picker value" oninput="{updatevalue}"> </div> </div> </div> </section>', '.panel-hsv { padding-top: 1.5rem; } .sync-container { width: 100%; position: absolute; left: 0; top: -1rem; text-align: center; } .sync { fill: #aaa; background: #fff; padding: .5rem 2rem; margin: 0; cursor: pointer; } .sync-active { fill: #2294ff; }', '', function (opts) {
-	  var _this = this;
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	  var store = __webpack_require__(346);
-	  var socket = __webpack_require__(345);
+	var hsvToRgb = __webpack_require__(341);
 
-	  var updateHue = __webpack_require__(340);
-	  var updateSaturation = __webpack_require__(341);
-	  var updateValue = __webpack_require__(342);
-	  var updateSync = __webpack_require__(350);
+	module.exports = function (hue, socket) {
+	  return function (dispatch, getState) {
+	    var color = getState().get('color');
+	    var hsv = color.get('hsv').toObject();
+	    var rgb = hsvToRgb(hue, hsv.saturation, hsv.value).rgb;
+	    var sync = color.get('sync');
 
-	  this.hsvToRgb = __webpack_require__(339);
+	    dispatch({
+	      type: 'UPDATE_HUE',
+	      data: hue
+	    });
 
-	  var updateValues = function updateValues() {
-	    var color = store.getState().get('color');
-	    var hsv = color.get('hsv');
-
-	    _this.hue = hsv.get('hue');
-	    _this.saturation = hsv.get('saturation');
-	    _this.value = hsv.get('value');
-	    _this.sync = color.get('sync');
-
-	    if (!isNaN(_this.saturation)) {
-	      _this.saturation = Number(_this.saturation).toFixed(2);
+	    if (socket) {
+	      socket.send(JSON.stringify(['mode', 'hsv']));
+	      socket.send(JSON.stringify(['hsv', _extends({}, hsv, { hue: hue })]));
 	    }
 
-	    if (!isNaN(_this.value)) {
-	      _this.value = Number(_this.value).toFixed(2);
+	    if (sync) {
+	      dispatch({
+	        type: 'UPDATE_RED',
+	        data: rgb.red
+	      });
+
+	      dispatch({
+	        type: 'UPDATE_GREEN',
+	        data: rgb.green
+	      });
+
+	      dispatch({
+	        type: 'UPDATE_BLUE',
+	        data: rgb.blue
+	      });
+
+	      if (socket) {
+	        socket.send(JSON.stringify(['rgb', rgb]));
+	      }
 	    }
-
-	    _this.update();
 	  };
-
-	  updateValues();
-	  store.subscribe(updateValues);
-
-	  this.updatehue = function (event) {
-	    store.dispatch(updateHue(event.target.value, socket));
-	  };
-
-	  this.updatesaturation = function (event) {
-	    store.dispatch(updateSaturation(event.target.value, socket));
-	  };
-
-	  this.updatevalue = function (event) {
-	    store.dispatch(updateValue(event.target.value, socket));
-	  };
-
-	  this.updatesync = function (event) {
-	    store.dispatch(updateSync());
-	  };
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+	};
 
 /***/ },
-/* 339 */
+/* 341 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17313,64 +17372,14 @@
 	};
 
 /***/ },
-/* 340 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var hsvToRgb = __webpack_require__(339);
-
-	module.exports = function (hue, socket) {
-	  return function (dispatch, getState) {
-	    var color = getState().get('color');
-	    var hsv = color.get('hsv').toObject();
-	    var rgb = hsvToRgb(hue, hsv.saturation, hsv.value).rgb;
-	    var sync = color.get('sync');
-
-	    dispatch({
-	      type: 'UPDATE_HUE',
-	      data: hue
-	    });
-
-	    if (socket) {
-	      socket.send(JSON.stringify(['mode', 'hsv']));
-	      socket.send(JSON.stringify(['hsv', _extends({}, hsv, { hue: hue })]));
-	    }
-
-	    if (sync) {
-	      dispatch({
-	        type: 'UPDATE_RED',
-	        data: rgb.red
-	      });
-
-	      dispatch({
-	        type: 'UPDATE_GREEN',
-	        data: rgb.green
-	      });
-
-	      dispatch({
-	        type: 'UPDATE_BLUE',
-	        data: rgb.blue
-	      });
-
-	      if (socket) {
-	        socket.send(JSON.stringify(['rgb', rgb]));
-	      }
-	    }
-	  };
-	};
-
-/***/ },
-/* 341 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var hsvToRgb = __webpack_require__(339);
+	var hsvToRgb = __webpack_require__(341);
 
 	module.exports = function (saturation, socket) {
 	  return function (dispatch, getState) {
@@ -17413,14 +17422,14 @@
 	};
 
 /***/ },
-/* 342 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var hsvToRgb = __webpack_require__(339);
+	var hsvToRgb = __webpack_require__(341);
 
 	module.exports = function (value, socket) {
 	  return function (dispatch, getState) {
@@ -17463,125 +17472,20 @@
 	};
 
 /***/ },
-/* 343 */
+/* 344 */,
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
 
-	riot.tag2('ri-draw', '<section class="panel"> <canvas id="phantom" class="phantom"></canvas> <canvas id="draw" class="draw"></canvas> <input value="#ff0000" id="draw-colorpicker" class="draw-colorpicker" type="color"> <input type="button" value="Pencil" id="draw-pencil"> <input type="button" value="Fill" id="draw-fill"> <input type="button" value="Eraser" id="draw-eraser"> <input type="button" value="Clear" id="draw-clear"> <label>Opacity <input type="range" min="0" max="1" step="0.01" value="{opacity}" id="draw-opacity"></label> </section>', '.phantom { display: none; } .draw { background: #000; width: 50%; cursor: crosshair; }', '', function (opts) {
-	  var updatePixel = __webpack_require__(347);
-
-	  var hexToRgb = __webpack_require__(344);
-	  var mousedown = false;
-
-	  this.opacity = 1;
-
-	  window.addEventListener('mousedown', function (event) {
-	    mousedown = true;
-	  });
-
-	  window.addEventListener('mouseup', function (event) {
-	    mousedown = false;
-	  });
-
-	  this.on('mount', function () {
-	    /*
-	      const phantomCanvas = document.querySelector('#phantom');
-	      const phantomCtx = phantomCanvas.getContext('2d');
-	       const drawCanvas = document.querySelector('#draw');
-	      const drawCtx = drawCanvas.getContext('2d');
-	       const colorpicker = document.querySelector('#draw-colorpicker');
-	      const pencil = document.querySelector('#draw-pencil');
-	      const fill = document.querySelector('#draw-fill');
-	      const eraser = document.querySelector('#draw-eraser');
-	      const clear = document.querySelector('#draw-clear');
-	      const opacity = document.querySelector('#draw-opacity');
-	       let value = hexToRgb(colorpicker.value);
-	       const update = function() {
-	        drawCtx.drawImage(phantomCanvas, 0, 0, drawCanvas.width, drawCanvas.height);
-	      };
-	       const draw = event => {
-	        if(mousedown || event.type === 'click' || event.type === 'touchmove') {
-	          const drawCanvasRect = drawCanvas.getBoundingClientRect();
-	           const cursorX = phantomCanvas.width - 1 - Math.floor(((event.clientX || event.touches[0].clientX) - drawCanvasRect.left) / (drawCanvasRect.width / phantomCanvas.width));
-	          const cursorY = Math.floor(((event.clientY || event.touches[0].clientY) - drawCanvasRect.top) / (drawCanvasRect.height / phantomCanvas.height));
-	           phantomCtx.fillStyle = 'rgba(' + hexToRgb(colorpicker.value).concat(this.opacity).toString() + ')';
-	          phantomCtx.fillRect(phantomCanvas.width - 1 - cursorX, cursorY, 1, 1);
-	           update();
-	           socket.send(JSON.stringify(['draw', {
-	            x: cursorX,
-	            y: cursorY,
-	            values: value,
-	            opacity: this.opacity
-	          }]));
-	        }
-	      };
-	       drawCanvas.addEventListener('mousemove', event => {
-	        draw(event);
-	      });
-	       drawCanvas.addEventListener('touchmove', event => {
-	        event.preventDefault();
-	         draw(event);
-	      });
-	       drawCanvas.addEventListener('click', event => {
-	        draw(event);
-	      });
-	       colorpicker.addEventListener('input', event => {
-	        value = hexToRgb(event.target.value);
-	      });
-	       pencil.addEventListener('click', event => {
-	        value = hexToRgb(colorpicker.value);
-	        this.opacity = opacity.value;
-	      });
-	       fill.addEventListener('click', event => {
-	        this.opacity = opacity.value;
-	         socket.send(JSON.stringify(['fill', {
-	          values: hexToRgb(colorpicker.value),
-	          opacity: this.opacity
-	        }]));
-	      });
-	       eraser.addEventListener('click', event => {
-	        this.opacity = 0;
-	      });
-	       clear.addEventListener('click', event => {
-	        socket.send(JSON.stringify(['fill', {
-	          values: [0, 0, 0],
-	          opacity: 0
-	        }]));
-	      });
-	       opacity.addEventListener('input', event => {
-	        this.opacity = event.target.value;
-	      });
-	       socket.addEventListener('message', message => {
-	        const data = JSON.parse(message.data);
-	         if(data[0] === 'meta') {
-	          phantomCanvas.width = data[1].size[0];
-	          phantomCanvas.height = data[1].size[1];
-	           const drawCanvasRect = drawCanvas.getBoundingClientRect();
-	          const pixelWidth = drawCanvasRect.width / data[1].size[0];
-	          drawCanvas.width = pixelWidth * data[1].size[0];
-	          drawCanvas.height = pixelWidth * data[1].size[1];
-	           drawCtx.imageSmoothingEnabled = false;
-	          drawCtx.mozImageSmoothingEnabled = false;
-	          drawCtx.msImageSmoothingEnabled = false;
-	           const deregulator = 1 / (data[1].regulator || 1);
-	           data[1].pixels.forEach(pixel => {
-	            const r = ('0' + Math.floor(pixel.values[0] * deregulator).toString(16)).slice(-2);
-	            const g = ('0' + Math.floor(pixel.values[1] * deregulator).toString(16)).slice(-2);
-	            const b = ('0' + Math.floor(pixel.values[2] * deregulator).toString(16)).slice(-2);
-	             phantomCtx.fillStyle = '#' + r + g + b;
-	            phantomCtx.fillRect(phantomCanvas.width - 1 - pixel.x, pixel.y, 1, 1);
-	             update();
-	          });
-	        }
-	      });
-	    */
-	  });
-	});
+		riot.tag2('ri-header', '<header class="header"> <section class="panel-blank"> <img src="/img/logo-blank.svg" class="logo"> <img src="/img/logo-notext-blank.svg" class="logo-notext"> <ri-preview class="header-preview"></ri-preview> </section> </header>', '', '', function (opts) {});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
 
 /***/ },
-/* 344 */
+/* 346 */,
+/* 347 */,
+/* 348 */,
+/* 349 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17595,88 +17499,14 @@
 	};
 
 /***/ },
-/* 345 */
+/* 350 */,
+/* 351 */,
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(303);
-	var store = __webpack_require__(346);
-
-	var socket = new WebSocket(config.socket.host);
-
-	var updateRed = __webpack_require__(335);
-	var updateGreen = __webpack_require__(336);
-	var updateBlue = __webpack_require__(337);
-
-	var updateHue = __webpack_require__(340);
-	var updateSaturation = __webpack_require__(341);
-	var updateValue = __webpack_require__(342);
-
-	socket.addEventListener('message', function (msg) {
-	  var data = JSON.parse(msg.data);
-
-	  if (data[0] !== 'meta') {}
-
-	  if (data[0] === 'rgb') {
-	    store.dispatch(updateRed(data[1].red));
-	    store.dispatch(updateGreen(data[1].green));
-	    store.dispatch(updateBlue(data[1].blue));
-	  }
-
-	  if (data[0] === 'hsv') {
-	    store.dispatch(updateHue(data[1].hue));
-	    store.dispatch(updateSaturation(data[1].saturation));
-	    store.dispatch(updateValue(data[1].value));
-	  }
-
-	  if (data[0] === 'error') {
-	    console.log(new Error(data[1]));
-	  }
-	});
-
-	module.exports = socket;
-
-/***/ },
-/* 346 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var redux = __webpack_require__(306);
-	var Immutable = __webpack_require__(319);
-	var thunk = __webpack_require__(320).default;
-
-	var reducer = __webpack_require__(321);
-
-	module.exports = redux.createStore(reducer, Immutable.Map(), redux.applyMiddleware(thunk));
-
-/***/ },
-/* 347 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var socket = __webpack_require__(345);
-
-	module.exports = function (index, pixel) {
-	  return function (dispatch, getState) {
-	    dispatch({
-	      type: 'UPDATE_PIXEL',
-	      data: [index, pixel]
-	    });
-	  };
-	};
-
-/***/ },
-/* 348 */,
-/* 349 */,
-/* 350 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var rgbToHsv = __webpack_require__(330);
+	var rgbToHsv = __webpack_require__(332);
 
 	module.exports = function (newSync) {
 	  return function (dispatch, getState) {
@@ -17688,6 +17518,404 @@
 	    });
 	  };
 	};
+
+/***/ },
+/* 353 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = {
+	  phantom: __webpack_require__(355),
+	  header: __webpack_require__(345),
+	  preview: __webpack_require__(356),
+	  interval: __webpack_require__(357),
+	  hex: __webpack_require__(358),
+	  rgb: __webpack_require__(359),
+	  hsv: __webpack_require__(360),
+	  draw: __webpack_require__(361)
+		};
+
+/***/ },
+/* 354 */,
+/* 355 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-phantom', '<canvas width="{width}" height="{height}" id="phantom" class="phantom"></canvas>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+
+	  this.on('mount', function () {
+	    var phantom = document.querySelector('#phantom');
+	    var phantomCtx = phantom.getContext('2d');
+
+	    var updateValues = function updateValues() {
+	      var canvas = store.getState().get('canvas');
+	      var deregulator = 1 / canvas.get('regulator');
+
+	      canvas.get('pixels').forEach(function (pixel) {
+	        phantomCtx.fillStyle = 'rgb(' + Math.round(pixel.values[0] * deregulator) + ', ' + Math.round(pixel.values[1] * deregulator) + ', ' + Math.round(pixel.values[2] * deregulator) + ')';
+	        phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
+	      });
+
+	      // defaulted to 1 to prevent InvalidStateError for canvases with 0 width or height (Firefox)
+	      _this.width = canvas.get('width') || 1;
+	      _this.height = canvas.get('height') || 1;
+
+	      _this.update();
+	    };
+
+	    updateValues();
+	    store.subscribe(updateValues);
+	  });
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+
+/***/ },
+/* 356 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-preview', '<div class="preview-container"> <canvas width="{width}" height="{height}" id="preview" class="preview"></canvas> </div>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+
+	  this.on('mount', function () {
+	    var previewCanvas = document.querySelector('#preview');
+	    var previewCtx = previewCanvas.getContext('2d');
+
+	    var updateValues = function updateValues() {
+	      var phantomCanvas = document.querySelector('#phantom');
+	      var canvas = store.getState().get('canvas');
+
+	      var previewDimensions = previewCanvas.getBoundingClientRect();
+
+	      _this.width = previewDimensions.width;
+	      _this.height = previewDimensions.height;
+
+	      if (phantomCanvas) {
+	        previewCtx.drawImage(phantomCanvas, 0, 0, previewDimensions.width, previewDimensions.height);
+
+	        previewCtx.imageSmoothingEnabled = false;
+	        previewCtx.mozImageSmoothingEnabled = false;
+	        previewCtx.msImageSmoothingEnabled = false;
+	      }
+
+	      _this.update();
+	    };
+
+	    updateValues();
+	    store.subscribe(updateValues);
+	  });
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+
+/***/ },
+/* 357 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+		riot.tag2('ri-interval', '<section class="panel"> <input type="range" min="5" max="100" value="{interval}" oninput="{updateInterval}"> </section>', '', '', function (opts) {});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+
+/***/ },
+/* 358 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-hex', '<section class="panel"> <div class="picker-container"> <div class="color-label">#</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{\'#\' + (\'0\' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)}" onchange="{updatehex}"> <input class="color-container sample" value="{\'#\' + (\'0\' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)}" onchange="{updatehex}" type="{\'color\'}"> </div> </div> </section>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+	  var socket = __webpack_require__(306);
+
+	  var updateRed = __webpack_require__(337);
+	  var updateGreen = __webpack_require__(338);
+	  var updateBlue = __webpack_require__(339);
+	  var hexToRgb = __webpack_require__(349);
+
+	  var updateValues = function updateValues() {
+	    var rgb = store.getState().get('color').get('rgb');
+
+	    _this.red = rgb.get('red');
+	    _this.green = rgb.get('green');
+	    _this.blue = rgb.get('blue');
+
+	    _this.update();
+	  };
+
+	  updateValues();
+	  store.subscribe(updateValues);
+
+	  this.updatehex = function (event) {
+	    var rgb = hexToRgb(event.target.value);
+
+	    store.dispatch(updateRed(rgb[0], socket));
+	    store.dispatch(updateGreen(rgb[1], socket));
+	    store.dispatch(updateBlue(rgb[2], socket));
+	  };
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+
+/***/ },
+/* 359 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-rgb', '<section class="panel panel-rgb"> <div class="picker-container"> <div class="color-label">R</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{red}" onchange="{updatered}"> <div class="color-container red-container" riot-style="{\'background: linear-gradient(to right, rgb(0, \' + green + \', \' + blue + \'), rgb(255, \' + green + \', \' + blue + \'))\'}"> <input type="range" min="0" max="255" value="{red}" class="picker red" oninput="{updatered}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">G</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{green}" onchange="{updategreen}"> <div class="color-container green-container" riot-style="{\'background: linear-gradient(to right, rgb(\' + red + \', 0, \' + blue + \'), rgb(\' + red + \', 255, \' + blue + \'))\'}"> <input type="range" min="0" max="255" value="{green}" class="picker green" oninput="{updategreen}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">B</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{blue}" onchange="{updateblue}"> <div class="color-container blue-container" riot-style="{\'background: linear-gradient(to right, rgb(\' + red + \', \' + green + \', 0), rgb(\' + red + \', \' + green + \', 255))\'}"> <input type="range" min="0" max="255" value="{blue}" class="picker blue" oninput="{updateblue}"> </div> </div> </div> </section>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+	  var socket = __webpack_require__(306);
+
+	  var updateRed = __webpack_require__(337);
+	  var updateGreen = __webpack_require__(338);
+	  var updateBlue = __webpack_require__(339);
+
+	  var updateValues = function updateValues() {
+	    var rgb = store.getState().get('color').get('rgb');
+
+	    _this.red = rgb.get('red');
+	    _this.green = rgb.get('green');
+	    _this.blue = rgb.get('blue');
+
+	    _this.update();
+	  };
+
+	  updateValues();
+	  store.subscribe(updateValues);
+
+	  this.updatered = function (event) {
+	    store.dispatch(updateRed(event.target.value, socket));
+	  };
+
+	  this.updategreen = function (event) {
+	    store.dispatch(updateGreen(event.target.value, socket));
+	  };
+
+	  this.updateblue = function (event) {
+	    store.dispatch(updateBlue(event.target.value, socket));
+	  };
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+
+/***/ },
+/* 360 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-hsv', '<section class="panel panel-hsv"> <div class="sync-container channels"> <svg class="{\'icon sync\' + (sync ? \' sync-active\' : \'\')}" onclick="{updatesync}"> <use xlink:href="img/icons.svg#loop"> <title>Sync</title> </use> </svg> </div> <div class="picker-container"> <div class="color-label">H</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{hue}" onchange="{updatehue}"> <div class="color-container hue-container" riot-style="{\'background: linear-gradient(to right, \' + hsvToRgb(0, saturationFixed, valueFixed).string + \', \' + hsvToRgb(60, saturationFixed, valueFixed).string + \', \'  + hsvToRgb(120, saturationFixed, valueFixed).string + \', \'  + hsvToRgb(180, saturationFixed, valueFixed).string + \', \'  + hsvToRgb(240, saturationFixed, valueFixed).string + \', \'  + hsvToRgb(300, saturationFixed, valueFixed).string + \', \'  + hsvToRgb(360, saturationFixed, valueFixed).string + \')\'}"> <input type="range" min="0" max="360" value="{hue}" class="picker hue" oninput="{updatehue}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">S</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{saturation}" onchange="{updatesaturation}"> <div class="color-container saturation-container" riot-style="{\'background: linear-gradient(to right, \' + hsvToRgb(isNaN(hue) ? 0 : hue, 0, isNaN(value) ? 1 : value).string + \', \' + hsvToRgb(isNaN(hue) ? 1 : hue, 1, isNaN(value) ? 1 : value).string + \')\'}"> <input type="range" min="0" max="1" step="0.01" value="{saturation}" class="picker saturation" oninput="{updatesaturation}"> </div> </div> </div> <div class="picker-container"> <div class="color-label">V</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{value}" onchange="{updatevalue}"> <div class="color-container value-container" riot-style="{\'background: linear-gradient(to right, \' + hsvToRgb(isNaN(hue) ? 0 : hue, isNaN(saturation) ? 1 : saturation, 0).string + \', \' + hsvToRgb(isNaN(hue) ? 0 : hue, isNaN(saturation) ? 1 : saturation, 1).string + \')\'}"> <input type="range" min="0" max="1" step="0.01" value="{value}" class="picker value" oninput="{updatevalue}"> </div> </div> </div> </section>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+	  var socket = __webpack_require__(306);
+
+	  var updateHue = __webpack_require__(340);
+	  var updateSaturation = __webpack_require__(342);
+	  var updateValue = __webpack_require__(343);
+	  var updateSync = __webpack_require__(352);
+
+	  this.hsvToRgb = __webpack_require__(341);
+
+	  var updateValues = function updateValues() {
+	    var color = store.getState().get('color');
+	    var hsv = color.get('hsv');
+
+	    _this.hue = hsv.get('hue');
+	    _this.saturation = hsv.get('saturation');
+	    _this.value = hsv.get('value');
+	    _this.sync = color.get('sync');
+
+	    _this.hueFixed = isNaN(_this.hue) ? 0 : _this.hue;
+	    _this.saturationFixed = isNaN(_this.saturation) ? 1 : _this.saturation;
+	    _this.valueFixed = isNaN(_this.value) ? 1 : _this.value;
+
+	    if (!isNaN(_this.saturation)) {
+	      _this.saturation = Number(_this.saturation).toFixed(2);
+	    }
+
+	    if (!isNaN(_this.value)) {
+	      _this.value = Number(_this.value).toFixed(2);
+	    }
+
+	    _this.update();
+	  };
+
+	  updateValues();
+	  store.subscribe(updateValues);
+
+	  this.updatehue = function (event) {
+	    store.dispatch(updateHue(event.target.value, socket));
+	  };
+
+	  this.updatesaturation = function (event) {
+	    store.dispatch(updateSaturation(event.target.value, socket));
+	  };
+
+	  this.updatevalue = function (event) {
+	    store.dispatch(updateValue(event.target.value, socket));
+	  };
+
+	  this.updatesync = function (event) {
+	    store.dispatch(updateSync());
+	  };
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+
+/***/ },
+/* 361 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-draw', '<section class="panel"> <canvas id="draw" class="draw"></canvas> <input value="#ff0000" id="draw-colorpicker" class="draw-colorpicker" type="color"> <input type="button" value="Pencil" id="draw-pencil"> <input type="button" value="Fill" id="draw-fill"> <input type="button" value="Eraser" id="draw-eraser"> <input type="button" value="Clear" id="draw-clear"> <label>Opacity <input type="range" min="0" max="1" step="0.01" value="{opacity}" id="draw-opacity"></label> </section>', '', '', function (opts) {
+	  var _this = this;
+
+	  var socket = __webpack_require__(306);
+	  var hexToRgb = __webpack_require__(349);
+
+	  var mousedown = false;
+
+	  window.addEventListener('mousedown', function (event) {
+	    mousedown = true;
+	  });
+
+	  window.addEventListener('mouseup', function (event) {
+	    mousedown = false;
+	  });
+
+	  this.on('mount', function () {
+	    var drawCanvas = document.querySelector('#draw');
+	    var drawCtx = drawCanvas.getContext('2d');
+
+	    var phantomCanvas = document.querySelector('#phantom');
+	    var phantomCtx = phantomCanvas.getContext('2d');
+
+	    var colorpicker = document.querySelector('#draw-colorpicker');
+	    var pencil = document.querySelector('#draw-pencil');
+	    var fill = document.querySelector('#draw-fill');
+	    var eraser = document.querySelector('#draw-eraser');
+	    var clear = document.querySelector('#draw-clear');
+	    var opacity = document.querySelector('#draw-opacity');
+
+	    var value = hexToRgb(colorpicker.value);
+
+	    var update = function update() {
+	      drawCtx.drawImage(phantomCanvas, 0, 0, drawCanvas.width, drawCanvas.height);
+	    };
+
+	    var draw = function draw(event) {
+	      if (mousedown || event.type === 'click' || event.type === 'touchmove') {
+	        var drawCanvasRect = drawCanvas.getBoundingClientRect();
+
+	        var cursorX = phantomCanvas.width - 1 - Math.floor(((event.clientX || event.touches[0].clientX) - drawCanvasRect.left) / (drawCanvasRect.width / phantomCanvas.width));
+	        var cursorY = Math.floor(((event.clientY || event.touches[0].clientY) - drawCanvasRect.top) / (drawCanvasRect.height / phantomCanvas.height));
+
+	        phantomCtx.fillStyle = 'rgba(' + hexToRgb(colorpicker.value).concat(_this.opacity).toString() + ')';
+	        phantomCtx.fillRect(phantomCanvas.width - 1 - cursorX, cursorY, 1, 1);
+
+	        update();
+
+	        socket.send(JSON.stringify(['draw', {
+	          x: cursorX,
+	          y: cursorY,
+	          values: value,
+	          opacity: _this.opacity
+	        }]));
+	      }
+	    };
+
+	    drawCanvas.addEventListener('mousemove', function (event) {
+	      draw(event);
+	    });
+
+	    drawCanvas.addEventListener('touchmove', function (event) {
+	      event.preventDefault();
+
+	      draw(event);
+	    });
+
+	    drawCanvas.addEventListener('click', function (event) {
+	      draw(event);
+	    });
+
+	    colorpicker.addEventListener('input', function (event) {
+	      value = hexToRgb(event.target.value);
+	    });
+
+	    pencil.addEventListener('click', function (event) {
+	      value = hexToRgb(colorpicker.value);
+	      _this.opacity = opacity.value;
+	    });
+
+	    fill.addEventListener('click', function (event) {
+	      _this.opacity = opacity.value;
+
+	      socket.send(JSON.stringify(['fill', {
+	        values: hexToRgb(colorpicker.value),
+	        opacity: _this.opacity
+	      }]));
+	    });
+
+	    eraser.addEventListener('click', function (event) {
+	      _this.opacity = 0;
+	    });
+
+	    clear.addEventListener('click', function (event) {
+	      socket.send(JSON.stringify(['fill', {
+	        values: [0, 0, 0],
+	        opacity: 0
+	      }]));
+	    });
+
+	    opacity.addEventListener('input', function (event) {
+	      _this.opacity = event.target.value;
+	    });
+
+	    socket.addEventListener('message', function (message) {
+	      var data = JSON.parse(message.data);
+
+	      if (data[0] === 'meta') {
+	        (function () {
+	          phantomCanvas.width = data[1].size[0];
+	          phantomCanvas.height = data[1].size[1];
+
+	          var drawCanvasRect = drawCanvas.getBoundingClientRect();
+	          var pixelWidth = drawCanvasRect.width / data[1].size[0];
+	          drawCanvas.width = pixelWidth * data[1].size[0];
+	          drawCanvas.height = pixelWidth * data[1].size[1];
+
+	          drawCtx.imageSmoothingEnabled = false;
+	          drawCtx.mozImageSmoothingEnabled = false;
+	          drawCtx.msImageSmoothingEnabled = false;
+
+	          var deregulator = 1 / (data[1].regulator || 1);
+
+	          data[1].pixels.forEach(function (pixel) {
+	            var r = ('0' + Math.floor(pixel.values[0] * deregulator).toString(16)).slice(-2);
+	            var g = ('0' + Math.floor(pixel.values[1] * deregulator).toString(16)).slice(-2);
+	            var b = ('0' + Math.floor(pixel.values[2] * deregulator).toString(16)).slice(-2);
+
+	            phantomCtx.fillStyle = '#' + r + g + b;
+	            phantomCtx.fillRect(phantomCanvas.width - 1 - pixel.x, pixel.y, 1, 1);
+
+	            update();
+	          });
+	        })();
+	      }
+	    });
+	  });
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
 
 /***/ }
 /******/ ]);

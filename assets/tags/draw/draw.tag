@@ -1,6 +1,5 @@
 <ri-draw>
   <section class="panel">
-    <canvas id="phantom" class="phantom"></canvas>
     <canvas id="draw" class="draw"></canvas>
 
     <input type="color" value="#ff0000" id="draw-colorpicker" class="draw-colorpicker">
@@ -11,25 +10,11 @@
     <label>Opacity <input type="range" min="0" max="1" step="0.01" value={opacity} id="draw-opacity"></label>
   </section>
 
-  <style>
-    .phantom {
-      display: none;
-    }
-
-    .draw {
-      background: #000;
-      width: 50%;
-      cursor: crosshair;
-    }
-  </style>
-
   <script>
-    const updatePixel = require('../js/actions/updatePixel.js');
+    const socket = require('../../js/socket.js');
+    const hexToRgb = require('../../js/hexToRgb.js');
 
-    const hexToRgb = require('../js/hexToRgb.js');
     let mousedown = false;
-
-    this.opacity = 1;
 
     window.addEventListener('mousedown', event => {
       mousedown = true;
@@ -40,12 +25,11 @@
     });
 
     this.on('mount', () => {
-    /*
-      const phantomCanvas = document.querySelector('#phantom');
-      const phantomCtx = phantomCanvas.getContext('2d');
-
       const drawCanvas = document.querySelector('#draw');
       const drawCtx = drawCanvas.getContext('2d');
+
+      const phantomCanvas = document.querySelector('#phantom');
+      const phantomCtx = phantomCanvas.getContext('2d');
 
       const colorpicker = document.querySelector('#draw-colorpicker');
       const pencil = document.querySelector('#draw-pencil');
@@ -158,7 +142,6 @@
           });
         }
       });
-    */
     });
   </script>
 </ri-draw>

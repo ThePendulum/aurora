@@ -5,6 +5,10 @@ const store = require('./store.js');
 
 const socket = new WebSocket(config.socket.host);
 
+const updateSize = require('./actions/updateSize.js');
+const updatePixels = require('./actions/updatePixels.js');
+const updateRegulator = require('./actions/updateRegulator.js');
+
 const updateRed = require('./actions/updateRed.js');
 const updateGreen = require('./actions/updateGreen.js');
 const updateBlue = require('./actions/updateBlue.js');
@@ -16,7 +20,10 @@ const updateValue = require('./actions/updateValue.js');
 socket.addEventListener('message', msg => {
   const data = JSON.parse(msg.data);
 
-  if(data[0] !== 'meta') {
+  if(data[0] === 'meta') {
+    store.dispatch(updateSize(data[1].size[0], data[1].size[1]));
+    store.dispatch(updatePixels(data[1].pixels));
+    store.dispatch(updateRegulator(data[1].regulator));
   }
 
   if(data[0] === 'rgb') {
