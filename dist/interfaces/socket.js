@@ -13,6 +13,8 @@ module.exports = function (leds) {
   note('wss', 'Socket server listening on port ' + config.get('socket.port'));
 
   ws.on('connection', function (wss) {
+    note('socket', 0, 'Established websocket with \'' + (wss.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress) + '\'');
+
     wss.id = uuid();
 
     wss.transfer = function (namespace) {
@@ -50,6 +52,10 @@ module.exports = function (leds) {
       if (data[0] === 'interval') {
         leds.interval = data[1];
       }
+    });
+
+    wss.on('close', function () {
+      note('socket', 0, 'Closed websocket with \'' + (wss.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress) + '\'');
     });
   });
 

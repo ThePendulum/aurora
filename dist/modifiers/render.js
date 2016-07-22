@@ -5,7 +5,11 @@ var config = require('config');
 var init = function init(leds, ws) {
   ws.on('connection', function (wss) {
     var update = function update() {
-      wss.transfer('meta', { size: config.size, pixels: leds.pixels, regulator: config.regulator });
+      wss.transfer('meta', {
+        size: config.size,
+        pixels: leds.pixels,
+        regulator: config.regulator
+      });
 
       setTimeout(function () {
         update();

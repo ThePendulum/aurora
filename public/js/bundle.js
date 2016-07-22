@@ -49,9 +49,9 @@
 	__webpack_require__(1);
 	__webpack_require__(5);
 
-	var riot = __webpack_require__(304);
+	var riot = __webpack_require__(303);
 
-	__webpack_require__(353);
+	__webpack_require__(305);
 	riot.mount('ri-phantom, ri-header, ri-interval, ri-hex, ri-rgb, ri-hsv, ri-draw');
 
 /***/ },
@@ -67,13 +67,13 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/*istanbul ignore next*/"use strict";
+	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
 
-	/*istanbul ignore next*/__webpack_require__(6);
+	__webpack_require__(6);
 
-	/*istanbul ignore next*/__webpack_require__(298);
+	__webpack_require__(298);
 
-	/*istanbul ignore next*/__webpack_require__(300);
+	__webpack_require__(300);
 
 	/* eslint max-len: 0 */
 
@@ -7328,8 +7328,9 @@
 
 	  var hasOwn = Object.prototype.hasOwnProperty;
 	  var undefined; // More compressible than void 0.
-	  var iteratorSymbol =
-	    typeof Symbol === "function" && Symbol.iterator || "@@iterator";
+	  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+	  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+	  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
 	  var inModule = typeof module === "object";
 	  var runtime = global.regeneratorRuntime;
@@ -7399,7 +7400,7 @@
 	  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
 	  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
 	  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-	  GeneratorFunction.displayName = "GeneratorFunction";
+	  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
 
 	  // Helper for defining the .next, .throw, and .return methods of the
 	  // Iterator interface in terms of a single ._invoke method.
@@ -7426,6 +7427,9 @@
 	      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
 	    } else {
 	      genFun.__proto__ = GeneratorFunctionPrototype;
+	      if (!(toStringTagSymbol in genFun)) {
+	        genFun[toStringTagSymbol] = "GeneratorFunction";
+	      }
 	    }
 	    genFun.prototype = Object.create(Gp);
 	    return genFun;
@@ -7445,46 +7449,54 @@
 	  }
 
 	  function AsyncIterator(generator) {
-	    // This invoke function is written in a style that assumes some
-	    // calling function (or Promise) will handle exceptions.
-	    function invoke(method, arg) {
-	      var result = generator[method](arg);
-	      var value = result.value;
-	      return value instanceof AwaitArgument
-	        ? Promise.resolve(value.arg).then(invokeNext, invokeThrow)
-	        : Promise.resolve(value).then(function(unwrapped) {
-	            // When a yielded Promise is resolved, its final value becomes
-	            // the .value of the Promise<{value,done}> result for the
-	            // current iteration. If the Promise is rejected, however, the
-	            // result for this iteration will be rejected with the same
-	            // reason. Note that rejections of yielded Promises are not
-	            // thrown back into the generator function, as is the case
-	            // when an awaited Promise is rejected. This difference in
-	            // behavior between yield and await is important, because it
-	            // allows the consumer to decide what to do with the yielded
-	            // rejection (swallow it and continue, manually .throw it back
-	            // into the generator, abandon iteration, whatever). With
-	            // await, by contrast, there is no opportunity to examine the
-	            // rejection reason outside the generator function, so the
-	            // only option is to throw it from the await expression, and
-	            // let the generator function handle the exception.
-	            result.value = unwrapped;
-	            return result;
+	    function invoke(method, arg, resolve, reject) {
+	      var record = tryCatch(generator[method], generator, arg);
+	      if (record.type === "throw") {
+	        reject(record.arg);
+	      } else {
+	        var result = record.arg;
+	        var value = result.value;
+	        if (value instanceof AwaitArgument) {
+	          return Promise.resolve(value.arg).then(function(value) {
+	            invoke("next", value, resolve, reject);
+	          }, function(err) {
+	            invoke("throw", err, resolve, reject);
 	          });
+	        }
+
+	        return Promise.resolve(value).then(function(unwrapped) {
+	          // When a yielded Promise is resolved, its final value becomes
+	          // the .value of the Promise<{value,done}> result for the
+	          // current iteration. If the Promise is rejected, however, the
+	          // result for this iteration will be rejected with the same
+	          // reason. Note that rejections of yielded Promises are not
+	          // thrown back into the generator function, as is the case
+	          // when an awaited Promise is rejected. This difference in
+	          // behavior between yield and await is important, because it
+	          // allows the consumer to decide what to do with the yielded
+	          // rejection (swallow it and continue, manually .throw it back
+	          // into the generator, abandon iteration, whatever). With
+	          // await, by contrast, there is no opportunity to examine the
+	          // rejection reason outside the generator function, so the
+	          // only option is to throw it from the await expression, and
+	          // let the generator function handle the exception.
+	          result.value = unwrapped;
+	          resolve(result);
+	        }, reject);
+	      }
 	    }
 
 	    if (typeof process === "object" && process.domain) {
 	      invoke = process.domain.bind(invoke);
 	    }
 
-	    var invokeNext = invoke.bind(generator, "next");
-	    var invokeThrow = invoke.bind(generator, "throw");
-	    var invokeReturn = invoke.bind(generator, "return");
 	    var previousPromise;
 
 	    function enqueue(method, arg) {
 	      function callInvokeWithMethodAndArg() {
-	        return invoke(method, arg);
+	        return new Promise(function(resolve, reject) {
+	          invoke(method, arg, resolve, reject);
+	        });
 	      }
 
 	      return previousPromise =
@@ -7505,9 +7517,7 @@
 	          // Avoid propagating failures to Promises returned by later
 	          // invocations of the iterator.
 	          callInvokeWithMethodAndArg
-	        ) : new Promise(function (resolve) {
-	          resolve(callInvokeWithMethodAndArg());
-	        });
+	        ) : callInvokeWithMethodAndArg();
 	    }
 
 	    // Define the unified helper method that is used to implement .next,
@@ -7615,13 +7625,10 @@
 	        }
 
 	        if (method === "next") {
-	          context._sent = arg;
+	          // Setting context._sent for legacy support of Babel's
+	          // function.sent implementation.
+	          context.sent = context._sent = arg;
 
-	          if (state === GenStateSuspendedYield) {
-	            context.sent = arg;
-	          } else {
-	            context.sent = undefined;
-	          }
 	        } else if (method === "throw") {
 	          if (state === GenStateSuspendedStart) {
 	            state = GenStateCompleted;
@@ -7682,6 +7689,8 @@
 	  Gp[iteratorSymbol] = function() {
 	    return this;
 	  };
+
+	  Gp[toStringTagSymbol] = "Generator";
 
 	  Gp.toString = function() {
 	    return "[object Generator]";
@@ -7791,7 +7800,9 @@
 	    reset: function(skipTempReset) {
 	      this.prev = 0;
 	      this.next = 0;
-	      this.sent = undefined;
+	      // Resetting context._sent for legacy support of Babel's
+	      // function.sent implementation.
+	      this.sent = this._sent = undefined;
 	      this.done = false;
 	      this.delegate = null;
 
@@ -7980,6 +7991,31 @@
 	// shim for using process in browser
 
 	var process = module.exports = {};
+
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+
+	(function () {
+	  try {
+	    cachedSetTimeout = setTimeout;
+	  } catch (e) {
+	    cachedSetTimeout = function () {
+	      throw new Error('setTimeout is not defined');
+	    }
+	  }
+	  try {
+	    cachedClearTimeout = clearTimeout;
+	  } catch (e) {
+	    cachedClearTimeout = function () {
+	      throw new Error('clearTimeout is not defined');
+	    }
+	  }
+	} ())
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -8004,7 +8040,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = setTimeout(cleanUpNextTick);
+	    var timeout = cachedSetTimeout(cleanUpNextTick);
 	    draining = true;
 
 	    var len = queue.length;
@@ -8021,7 +8057,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    clearTimeout(timeout);
+	    cachedClearTimeout(timeout);
 	}
 
 	process.nextTick = function (fun) {
@@ -8033,7 +8069,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
+	        cachedSetTimeout(drainQueue, 0);
 	    }
 	};
 
@@ -8106,25 +8142,13 @@
 
 /***/ },
 /* 303 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = {
-	    socket: {
-	        host: 'ws://socket.aurora.unknown.name'
-	    }
-		};
-
-/***/ },
-/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.4.0, @license MIT */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.5.0, @license MIT */
 
 	;(function(window, undefined) {
 	  'use strict';
-	var riot = { version: 'v2.4.0', settings: {} },
+	var riot = { version: 'v2.5.0', settings: {} },
 	  // be aware, internal usage
 	  // ATTENTION: prefix the global dynamic variables with `__`
 
@@ -9088,7 +9112,7 @@
 	var mkdom = (function _mkdom() {
 	  var
 	    reHasYield  = /<yield\b/i,
-	    reYieldAll  = /<yield\s*(?:\/>|>([\S\s]*?)<\/yield\s*>)/ig,
+	    reYieldAll  = /<yield\s*(?:\/>|>([\S\s]*?)<\/yield\s*>|>)/ig,
 	    reYieldSrc  = /<yield\s+to=['"]([^'">]*)['"]\s*>([\S\s]*?)<\/yield\s*>/ig,
 	    reYieldDest = /<yield\s+from=['"]?([-\w]+)['"]?\s*(?:\/>|>([\S\s]*?)<\/yield\s*>)/ig
 	  var
@@ -9332,7 +9356,7 @@
 	      // reorder only if the items are objects
 	      var
 	        item = items[i],
-	        _mustReorder = mustReorder && item instanceof Object && !hasKeys,
+	        _mustReorder = mustReorder && typeof item == T_OBJECT && !hasKeys,
 	        oldPos = oldItems.indexOf(item),
 	        pos = ~oldPos && _mustReorder ? oldPos : i,
 	        // does a tag exist in this position?
@@ -9408,8 +9432,8 @@
 	    unmountRedundant(items, tags)
 
 	    // insert the new nodes
+	    root.insertBefore(frag, ref)
 	    if (isOption) {
-	      root.appendChild(frag)
 
 	      // #1374 FireFox bug in <option selected={expression}>
 	      if (FIREFOX && !root.multiple) {
@@ -9422,7 +9446,6 @@
 	        }
 	      }
 	    }
-	    else root.insertBefore(frag, ref)
 
 	    // set the 'tags' property of the parent tag
 	    // if child is 'undefined' it means that we don't need to set this property
@@ -9594,7 +9617,9 @@
 	  // it could be handy to use it also to improve the virtual dom rendering speed
 	  defineProperty(this, '_riot_id', ++__uid) // base 1 allows test !t._riot_id
 
-	  extend(this, { parent: parent, root: root, opts: opts, tags: {} }, item)
+	  extend(this, { parent: parent, root: root, opts: opts}, item)
+	  // protect the "tags" property from being overridden
+	  defineProperty(this, 'tags', {})
 
 	  // grab attributes
 	  each(root.attributes, function(el) {
@@ -9678,7 +9703,9 @@
 
 	  defineProperty(this, 'mixin', function() {
 	    each(arguments, function(mix) {
-	      var instance
+	      var instance,
+	        props = [],
+	        obj
 
 	      mix = typeof mix === T_STRING ? riot.mixin(mix) : mix
 
@@ -9686,17 +9713,20 @@
 	      if (isFunction(mix)) {
 	        // create the new mixin instance
 	        instance = new mix()
-	        // save the prototype to loop it afterwards
-	        mix = mix.prototype
 	      } else instance = mix
 
+	      // build multilevel prototype inheritance chain property list
+	      do props = props.concat(Object.getOwnPropertyNames(obj || instance))
+	      while (obj = Object.getPrototypeOf(obj || instance))
+
 	      // loop the keys in the function prototype or the all object keys
-	      each(Object.getOwnPropertyNames(mix), function(key) {
+	      each(props, function(key) {
 	        // bind methods to self
-	        if (key != 'init')
+	        if (key != 'init' && !self[key])
+	          // apply method only if it does not already exist on the instance
 	          self[key] = isFunction(instance[key]) ?
-	                        instance[key].bind(self) :
-	                        instance[key]
+	            instance[key].bind(self) :
+	            instance[key]
 	      })
 
 	      // init method will be called automatically
@@ -10569,9 +10599,20 @@
 	    var store = g ? globals : mixins
 
 	    // Getter
-	    if (!mixin) return store[name]
+	    if (!mixin) {
+	      if (typeof store[name] === T_UNDEF) {
+	        throw new Error('Unregistered mixin: ' + name)
+	      }
+	      return store[name]
+	    }
 	    // Setter
-	    store[name] = extend(store[name] || {}, mixin)
+	    if (isFunction(mixin)) {
+	      extend(mixin.prototype, store[name] || {})
+	      store[name] = mixin
+	    }
+	    else {
+	      store[name] = extend(store[name] || {}, mixin)
+	    }
 	  }
 
 	})()
@@ -10742,7 +10783,7 @@
 	  /* istanbul ignore next */
 	  if (typeof exports === T_OBJECT)
 	    module.exports = riot
-	  else if ("function" === T_FUNCTION && typeof __webpack_require__(305) !== T_UNDEF)
+	  else if ("function" === T_FUNCTION && typeof __webpack_require__(304) !== T_UNDEF)
 	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return riot }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
 	  else
 	    window.riot = riot
@@ -10751,7 +10792,7 @@
 
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -10759,55 +10800,58 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 306 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(303);
-	var store = __webpack_require__(307);
+	module.exports = {
+	  phantom: __webpack_require__(306),
+	  header: __webpack_require__(334),
+	  preview: __webpack_require__(335),
+	  interval: __webpack_require__(336),
+	  hex: __webpack_require__(337),
+	  rgb: __webpack_require__(351),
+	  hsv: __webpack_require__(352),
+	  draw: __webpack_require__(354)
+		};
 
-	var socket = new WebSocket(config.socket.host);
+/***/ },
+/* 306 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var updateSize = __webpack_require__(334);
-	var updatePixels = __webpack_require__(335);
-	var updateRegulator = __webpack_require__(336);
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
 
-	var updateRed = __webpack_require__(337);
-	var updateGreen = __webpack_require__(338);
-	var updateBlue = __webpack_require__(339);
+	riot.tag2('ri-phantom', '<canvas width="{width}" height="{height}" id="phantom" class="phantom"></canvas>', '', '', function (opts) {
+	  var _this = this;
 
-	var updateHue = __webpack_require__(340);
-	var updateSaturation = __webpack_require__(342);
-	var updateValue = __webpack_require__(343);
+	  var store = __webpack_require__(307);
 
-	socket.addEventListener('message', function (msg) {
-	  var data = JSON.parse(msg.data);
+	  this.on('mount', function () {
+	    var phantom = document.querySelector('#phantom');
+	    var phantomCtx = phantom.getContext('2d');
 
-	  if (data[0] === 'meta') {
-	    store.dispatch(updateSize(data[1].size[0], data[1].size[1]));
-	    store.dispatch(updatePixels(data[1].pixels));
-	    store.dispatch(updateRegulator(data[1].regulator));
-	  }
+	    var updateValues = function updateValues() {
+	      var canvas = store.getState().get('canvas');
+	      var deregulator = 1 / canvas.get('regulator');
 
-	  if (data[0] === 'rgb') {
-	    store.dispatch(updateRed(data[1].red));
-	    store.dispatch(updateGreen(data[1].green));
-	    store.dispatch(updateBlue(data[1].blue));
-	  }
+	      canvas.get('pixels').forEach(function (pixel) {
+	        phantomCtx.fillStyle = 'rgb(' + Math.round(pixel.values[0] * deregulator) + ', ' + Math.round(pixel.values[1] * deregulator) + ', ' + Math.round(pixel.values[2] * deregulator) + ')';
+	        phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
+	      });
 
-	  if (data[0] === 'hsv') {
-	    store.dispatch(updateHue(data[1].hue));
-	    store.dispatch(updateSaturation(data[1].saturation));
-	    store.dispatch(updateValue(data[1].value));
-	  }
+	      // defaulted to 1 to prevent InvalidStateError for canvases with 0 width or height (Firefox)
+	      _this.width = canvas.get('width') || 1;
+	      _this.height = canvas.get('height') || 1;
 
-	  if (data[0] === 'error') {
-	    console.log(new Error(data[1]));
-	  }
+	      _this.update();
+	    };
+
+	    updateValues();
+	    store.subscribe(updateValues);
+	  });
 	});
-
-	module.exports = socket;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
 
 /***/ },
 /* 307 */
@@ -16998,17 +17042,17 @@
 	  if (max == min) {
 	    h = 0; // achromatic
 	  } else {
-	      switch (max) {
-	        case r:
-	          h = (g - b) / d + (g < b ? 6 : 0);break;
-	        case g:
-	          h = (b - r) / d + 2;break;
-	        case b:
-	          h = (r - g) / d + 4;break;
-	      }
-
-	      h /= 6;
+	    switch (max) {
+	      case r:
+	        h = (g - b) / d + (g < b ? 6 : 0);break;
+	      case g:
+	        h = (b - r) / d + 2;break;
+	      case b:
+	        h = (r - g) / d + 4;break;
 	    }
+
+	    h /= 6;
+	  }
 
 	  var values = {
 	    hsv: {
@@ -17077,9 +17121,177 @@
 /* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+		riot.tag2('ri-header', '<header class="header"> <section class="panel-blank"> <img src="/img/logo-blank.svg" class="logo"> <img src="/img/logo-notext-blank.svg" class="logo-notext"> <ri-preview class="header-preview"></ri-preview> </section> </header>', '', '', function (opts) {});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
+
+/***/ },
+/* 335 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-preview', '<div class="preview-container"> <canvas width="{width}" height="{height}" id="preview" class="preview"></canvas> </div>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+
+	  this.on('mount', function () {
+	    var previewCanvas = document.querySelector('#preview');
+	    var previewCtx = previewCanvas.getContext('2d');
+
+	    var updateValues = function updateValues() {
+	      var phantomCanvas = document.querySelector('#phantom');
+	      var canvas = store.getState().get('canvas');
+
+	      var previewDimensions = previewCanvas.getBoundingClientRect();
+
+	      _this.width = previewDimensions.width;
+	      _this.height = previewDimensions.height;
+
+	      if (phantomCanvas) {
+	        previewCtx.drawImage(phantomCanvas, 0, 0, previewDimensions.width, previewDimensions.height);
+
+	        previewCtx.imageSmoothingEnabled = false;
+	        previewCtx.mozImageSmoothingEnabled = false;
+	        previewCtx.msImageSmoothingEnabled = false;
+	      }
+
+	      _this.update();
+	    };
+
+	    updateValues();
+	    store.subscribe(updateValues);
+	  });
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+		riot.tag2('ri-interval', '<section class="panel"> <input type="range" min="5" max="100" value="{interval}" oninput="{updateInterval}"> </section>', '', '', function (opts) {});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
+
+/***/ },
+/* 337 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
+
+	riot.tag2('ri-hex', '<section class="panel"> <div class="picker-container"> <div class="color-label">#</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{\'#\' + (\'0\' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)}" onchange="{updatehex}"> <input class="color-container sample" value="{\'#\' + (\'0\' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)}" onchange="{updatehex}" type="{\'color\'}"> </div> </div> </section>', '', '', function (opts) {
+	  var _this = this;
+
+	  var store = __webpack_require__(307);
+	  var socket = __webpack_require__(338);
+
+	  var updateRed = __webpack_require__(343);
+	  var updateGreen = __webpack_require__(344);
+	  var updateBlue = __webpack_require__(345);
+	  var hexToRgb = __webpack_require__(350);
+
+	  var updateValues = function updateValues() {
+	    var rgb = store.getState().get('color').get('rgb');
+
+	    _this.red = rgb.get('red');
+	    _this.green = rgb.get('green');
+	    _this.blue = rgb.get('blue');
+
+	    _this.update();
+	  };
+
+	  updateValues();
+	  store.subscribe(updateValues);
+
+	  this.updatehex = function (event) {
+	    var rgb = hexToRgb(event.target.value);
+
+	    store.dispatch(updateRed(rgb[0], socket));
+	    store.dispatch(updateGreen(rgb[1], socket));
+	    store.dispatch(updateBlue(rgb[2], socket));
+	  };
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
+
+/***/ },
+/* 338 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	var socket = __webpack_require__(306);
+	var config = __webpack_require__(339);
+	var store = __webpack_require__(307);
+
+	var socket = new WebSocket(config.socket.host);
+
+	var updateSize = __webpack_require__(340);
+	var updatePixels = __webpack_require__(341);
+	var updateRegulator = __webpack_require__(342);
+
+	var updateRed = __webpack_require__(343);
+	var updateGreen = __webpack_require__(344);
+	var updateBlue = __webpack_require__(345);
+
+	var updateHue = __webpack_require__(346);
+	var updateSaturation = __webpack_require__(348);
+	var updateValue = __webpack_require__(349);
+
+	socket.addEventListener('message', function (msg) {
+	  var data = JSON.parse(msg.data);
+
+	  if (data[0] === 'meta') {
+	    var size = data[1].size;
+
+	    if (!Array.isArray(size)) {
+	      size = [size, 1];
+	    }
+
+	    store.dispatch(updateSize(size[0], size[1]));
+	    store.dispatch(updatePixels(data[1].pixels));
+	    store.dispatch(updateRegulator(data[1].regulator));
+	  }
+
+	  if (data[0] === 'rgb') {
+	    store.dispatch(updateRed(data[1].red));
+	    store.dispatch(updateGreen(data[1].green));
+	    store.dispatch(updateBlue(data[1].blue));
+	  }
+
+	  if (data[0] === 'hsv') {
+	    store.dispatch(updateHue(data[1].hue));
+	    store.dispatch(updateSaturation(data[1].saturation));
+	    store.dispatch(updateValue(data[1].value));
+	  }
+
+	  if (data[0] === 'error') {
+	    console.log(new Error(data[1]));
+	  }
+	});
+
+	module.exports = socket;
+
+/***/ },
+/* 339 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	    socket: {
+	        host: 'ws://socket.aurora.unknown.name'
+	    }
+		};
+
+/***/ },
+/* 340 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var socket = __webpack_require__(338);
 
 	module.exports = function (width, height) {
 	  return function (dispatch, getState) {
@@ -17091,12 +17303,12 @@
 	};
 
 /***/ },
-/* 335 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var socket = __webpack_require__(306);
+	var socket = __webpack_require__(338);
 
 	module.exports = function (pixels) {
 	  return function (dispatch, getState) {
@@ -17108,12 +17320,12 @@
 	};
 
 /***/ },
-/* 336 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var socket = __webpack_require__(306);
+	var socket = __webpack_require__(338);
 
 	module.exports = function (regulator) {
 	  return function (dispatch, getState) {
@@ -17125,7 +17337,7 @@
 	};
 
 /***/ },
-/* 337 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17175,7 +17387,7 @@
 	};
 
 /***/ },
-/* 338 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17225,7 +17437,7 @@
 	};
 
 /***/ },
-/* 339 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17275,14 +17487,14 @@
 	};
 
 /***/ },
-/* 340 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var hsvToRgb = __webpack_require__(341);
+	var hsvToRgb = __webpack_require__(347);
 
 	module.exports = function (hue, socket) {
 	  return function (dispatch, getState) {
@@ -17325,7 +17537,7 @@
 	};
 
 /***/ },
-/* 341 */
+/* 347 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17372,14 +17584,14 @@
 	};
 
 /***/ },
-/* 342 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var hsvToRgb = __webpack_require__(341);
+	var hsvToRgb = __webpack_require__(347);
 
 	module.exports = function (saturation, socket) {
 	  return function (dispatch, getState) {
@@ -17422,14 +17634,14 @@
 	};
 
 /***/ },
-/* 343 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var hsvToRgb = __webpack_require__(341);
+	var hsvToRgb = __webpack_require__(347);
 
 	module.exports = function (value, socket) {
 	  return function (dispatch, getState) {
@@ -17472,20 +17684,7 @@
 	};
 
 /***/ },
-/* 344 */,
-/* 345 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-		riot.tag2('ri-header', '<header class="header"> <section class="panel-blank"> <img src="/img/logo-blank.svg" class="logo"> <img src="/img/logo-notext-blank.svg" class="logo-notext"> <ri-preview class="header-preview"></ri-preview> </section> </header>', '', '', function (opts) {});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
-/* 346 */,
-/* 347 */,
-/* 348 */,
-/* 349 */
+/* 350 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17499,173 +17698,7 @@
 	};
 
 /***/ },
-/* 350 */,
-/* 351 */,
-/* 352 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var rgbToHsv = __webpack_require__(332);
-
-	module.exports = function (newSync) {
-	  return function (dispatch, getState) {
-	    var sync = getState().get('color').get('sync');
-
-	    dispatch({
-	      type: 'UPDATE_SYNC',
-	      data: newSync === undefined ? !sync : newSync
-	    });
-	  };
-	};
-
-/***/ },
-/* 353 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = {
-	  phantom: __webpack_require__(355),
-	  header: __webpack_require__(345),
-	  preview: __webpack_require__(356),
-	  interval: __webpack_require__(357),
-	  hex: __webpack_require__(358),
-	  rgb: __webpack_require__(359),
-	  hsv: __webpack_require__(360),
-	  draw: __webpack_require__(361)
-		};
-
-/***/ },
-/* 354 */,
-/* 355 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-	riot.tag2('ri-phantom', '<canvas width="{width}" height="{height}" id="phantom" class="phantom"></canvas>', '', '', function (opts) {
-	  var _this = this;
-
-	  var store = __webpack_require__(307);
-
-	  this.on('mount', function () {
-	    var phantom = document.querySelector('#phantom');
-	    var phantomCtx = phantom.getContext('2d');
-
-	    var updateValues = function updateValues() {
-	      var canvas = store.getState().get('canvas');
-	      var deregulator = 1 / canvas.get('regulator');
-
-	      canvas.get('pixels').forEach(function (pixel) {
-	        phantomCtx.fillStyle = 'rgb(' + Math.round(pixel.values[0] * deregulator) + ', ' + Math.round(pixel.values[1] * deregulator) + ', ' + Math.round(pixel.values[2] * deregulator) + ')';
-	        phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
-	      });
-
-	      // defaulted to 1 to prevent InvalidStateError for canvases with 0 width or height (Firefox)
-	      _this.width = canvas.get('width') || 1;
-	      _this.height = canvas.get('height') || 1;
-
-	      _this.update();
-	    };
-
-	    updateValues();
-	    store.subscribe(updateValues);
-	  });
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
-/* 356 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-	riot.tag2('ri-preview', '<div class="preview-container"> <canvas width="{width}" height="{height}" id="preview" class="preview"></canvas> </div>', '', '', function (opts) {
-	  var _this = this;
-
-	  var store = __webpack_require__(307);
-
-	  this.on('mount', function () {
-	    var previewCanvas = document.querySelector('#preview');
-	    var previewCtx = previewCanvas.getContext('2d');
-
-	    var updateValues = function updateValues() {
-	      var phantomCanvas = document.querySelector('#phantom');
-	      var canvas = store.getState().get('canvas');
-
-	      var previewDimensions = previewCanvas.getBoundingClientRect();
-
-	      _this.width = previewDimensions.width;
-	      _this.height = previewDimensions.height;
-
-	      if (phantomCanvas) {
-	        previewCtx.drawImage(phantomCanvas, 0, 0, previewDimensions.width, previewDimensions.height);
-
-	        previewCtx.imageSmoothingEnabled = false;
-	        previewCtx.mozImageSmoothingEnabled = false;
-	        previewCtx.msImageSmoothingEnabled = false;
-	      }
-
-	      _this.update();
-	    };
-
-	    updateValues();
-	    store.subscribe(updateValues);
-	  });
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
-/* 357 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-		riot.tag2('ri-interval', '<section class="panel"> <input type="range" min="5" max="100" value="{interval}" oninput="{updateInterval}"> </section>', '', '', function (opts) {});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
-/* 358 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
-
-	riot.tag2('ri-hex', '<section class="panel"> <div class="picker-container"> <div class="color-label">#</div> <div class="value-container"> <input type="text" class="input-text color-value" value="{\'#\' + (\'0\' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)}" onchange="{updatehex}"> <input class="color-container sample" value="{\'#\' + (\'0\' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + (\'0\' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + (\'0\' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)}" onchange="{updatehex}" type="{\'color\'}"> </div> </div> </section>', '', '', function (opts) {
-	  var _this = this;
-
-	  var store = __webpack_require__(307);
-	  var socket = __webpack_require__(306);
-
-	  var updateRed = __webpack_require__(337);
-	  var updateGreen = __webpack_require__(338);
-	  var updateBlue = __webpack_require__(339);
-	  var hexToRgb = __webpack_require__(349);
-
-	  var updateValues = function updateValues() {
-	    var rgb = store.getState().get('color').get('rgb');
-
-	    _this.red = rgb.get('red');
-	    _this.green = rgb.get('green');
-	    _this.blue = rgb.get('blue');
-
-	    _this.update();
-	  };
-
-	  updateValues();
-	  store.subscribe(updateValues);
-
-	  this.updatehex = function (event) {
-	    var rgb = hexToRgb(event.target.value);
-
-	    store.dispatch(updateRed(rgb[0], socket));
-	    store.dispatch(updateGreen(rgb[1], socket));
-	    store.dispatch(updateBlue(rgb[2], socket));
-	  };
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
-
-/***/ },
-/* 359 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
@@ -17674,11 +17707,11 @@
 	  var _this = this;
 
 	  var store = __webpack_require__(307);
-	  var socket = __webpack_require__(306);
+	  var socket = __webpack_require__(338);
 
-	  var updateRed = __webpack_require__(337);
-	  var updateGreen = __webpack_require__(338);
-	  var updateBlue = __webpack_require__(339);
+	  var updateRed = __webpack_require__(343);
+	  var updateGreen = __webpack_require__(344);
+	  var updateBlue = __webpack_require__(345);
 
 	  var updateValues = function updateValues() {
 	    var rgb = store.getState().get('color').get('rgb');
@@ -17705,10 +17738,10 @@
 	    store.dispatch(updateBlue(event.target.value, socket));
 	  };
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
 
 /***/ },
-/* 360 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
@@ -17717,14 +17750,14 @@
 	  var _this = this;
 
 	  var store = __webpack_require__(307);
-	  var socket = __webpack_require__(306);
+	  var socket = __webpack_require__(338);
 
-	  var updateHue = __webpack_require__(340);
-	  var updateSaturation = __webpack_require__(342);
-	  var updateValue = __webpack_require__(343);
-	  var updateSync = __webpack_require__(352);
+	  var updateHue = __webpack_require__(346);
+	  var updateSaturation = __webpack_require__(348);
+	  var updateValue = __webpack_require__(349);
+	  var updateSync = __webpack_require__(353);
 
-	  this.hsvToRgb = __webpack_require__(341);
+	  this.hsvToRgb = __webpack_require__(347);
 
 	  var updateValues = function updateValues() {
 	    var color = store.getState().get('color');
@@ -17769,10 +17802,29 @@
 	    store.dispatch(updateSync());
 	  };
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
 
 /***/ },
-/* 361 */
+/* 353 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var rgbToHsv = __webpack_require__(332);
+
+	module.exports = function (newSync) {
+	  return function (dispatch, getState) {
+	    var sync = getState().get('color').get('sync');
+
+	    dispatch({
+	      type: 'UPDATE_SYNC',
+	      data: newSync === undefined ? !sync : newSync
+	    });
+	  };
+	};
+
+/***/ },
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(riot) {'use strict';
@@ -17780,8 +17832,8 @@
 	riot.tag2('ri-draw', '<section class="panel"> <canvas id="draw" class="draw"></canvas> <input value="#ff0000" id="draw-colorpicker" class="draw-colorpicker" type="color"> <input type="button" value="Pencil" id="draw-pencil"> <input type="button" value="Fill" id="draw-fill"> <input type="button" value="Eraser" id="draw-eraser"> <input type="button" value="Clear" id="draw-clear"> <label>Opacity <input type="range" min="0" max="1" step="0.01" value="{opacity}" id="draw-opacity"></label> </section>', '', '', function (opts) {
 	  var _this = this;
 
-	  var socket = __webpack_require__(306);
-	  var hexToRgb = __webpack_require__(349);
+	  var socket = __webpack_require__(338);
+	  var hexToRgb = __webpack_require__(350);
 
 	  var mousedown = false;
 
@@ -17915,7 +17967,7 @@
 	    });
 	  });
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(304)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(303)))
 
 /***/ }
 /******/ ]);

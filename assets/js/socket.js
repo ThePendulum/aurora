@@ -21,7 +21,13 @@ socket.addEventListener('message', msg => {
   const data = JSON.parse(msg.data);
 
   if(data[0] === 'meta') {
-    store.dispatch(updateSize(data[1].size[0], data[1].size[1]));
+    let size = data[1].size;
+
+    if(!Array.isArray(size)) {
+      size = [size, 1];
+    }
+
+    store.dispatch(updateSize(size[0], size[1]));
     store.dispatch(updatePixels(data[1].pixels));
     store.dispatch(updateRegulator(data[1].regulator));
   }

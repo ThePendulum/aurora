@@ -103,10 +103,11 @@ var pre = function pre(leds, init) {
 
   scope.beat = scope.b = leds.beat;
   scope.random = scope.r = [Math.random(), Math.random(), Math.random(), Math.random()];
-  scope.time = scope.t = date;
+  scope.time = scope.t = date.getTime();
   scope.year = scope.yr = date.getFullYear();
-  scope.month = scope.mo = date.getMonth();
+  scope.month = scope.mo = date.getMonth() + 1;
   scope.date = scope.d = date.getDate();
+  scope.day = date.getDay();
   scope.hour = scope.hr = date.getHours();
   scope.minute = scope.m = date.getMinutes();
   scope.second = scope.s = date.getSeconds();
@@ -121,6 +122,7 @@ var each = function each(pixel, leds, pre, init) {
   scope.index = scope.i = pixel.index;
   scope.x = pixel.x;
   scope.y = pixel.y;
+  scope.pixelRandom = scope.pr = Math.random();
 
   if (leds.mode === 'hsv') {
     var hue = void 0,

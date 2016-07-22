@@ -1,5 +1,7 @@
 'use strict';
 
+var config = require('config');
+
 var note = require('note-log');
 var util = require('util');
 var render = require('./render.js');
@@ -41,6 +43,22 @@ var heart = function heart(leds, ws) {
   };
 
   beat();
+
+  if (config.persist === false) {
+    var shutdown = function shutdown() {
+      leds.pixels = leds.pixels.map(function (pixel) {
+        pixel.values = [0, 0, 0];
+
+        return pixel;
+      });
+
+      render(leds);
+      process.exit();
+    };
+
+    process.on('SIGINT', shutdown);
+    process.on('exit', shutdown);
+  }
 };
 
 module.exports = heart;

@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = {
-  chip: 'ws2812b',
-  size: [16, 16],
-  zigzag: true,
-  colorIndex: [0, 1, 2],
-  regulator: .3,
+  chip: 'ws2801',
+  size: 50,
+  colorIndex: [0, 2, 1],
+  regulator: 1,
+  persist: false,
   web: {
     port: 3000
   },

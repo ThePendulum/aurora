@@ -64,7 +64,7 @@ module.exports = function () {
   });
 
   leds.beat = 0;
-  leds.interval = 10;
+  leds.interval = 30;
 
   leds.mode = 'rgb';
 
