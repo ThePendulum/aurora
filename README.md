@@ -19,7 +19,7 @@ The RGB channels represent red, green and blue respectively. Each channel accept
 ### HSV
 The HSV channels represent hue, saturation and value, a [cylindrical representation](http://i.imgur.com/iYzgRRI.png) of the RGB color model. The hue channel accepts a value between 0 and 360 (degrees) on a [color wheel](http://i.imgur.com/5UpyIGh.png). The saturation and value channels accept a value between 0 and 1, and represent the colorfulness and brightness respectively. The HSV channels are most suitable for e.g. color cycling and brightness fading and pulsing, as a single HSV channel can affect all colors of the RGB color model at once. The hue channel refers to a color wheel and values above 360 degrees will simply reset to 0 degrees, while the saturation and value channels are capped to 1.
 
-### Synchronizations
+### Synchronization
 When the an RGB or HSV channel is updated, the other channel group will synchronize when possible. This behavior can be disabled with the synchronization toggle.
 
 ### Mathematical expressions

@@ -5,7 +5,11 @@ var config = require('config');
 var util = require('util');
 
 var SPI = require('spi');
+var note = require('note-log');
 var ws281x = require('rpi-ws281x-native');
+var SerialPort = require('serialport');
+
+var chipMap = require('./chipMap.js');
 
 var chips = {};
 
@@ -22,21 +26,31 @@ chips.ws281x = function (leds) {
   ws281x.init(leds.pixels.length);
 };
 
-chips.ws2811 = chips.ws281x;
-chips.ws2812 = chips.ws281x;
-chips.ws2812b = chips.ws281x;
+chips.usb = function (leds) {
+  leds.usb = new SerialPort(config.usb.path, config.usb);
 
-var init = chips[config.get('chip').toLowerCase()];
+  leds.usb.open();
 
-if (!init) {
-  throw new Error('Chip not supported');
-}
+  leds.usb.on('data', function (data) {
+    note(data.toString());
+  });
+
+  leds.usb.on('error', note);
+};
 
 module.exports = function () {
   var size = config.get('size');
   var length = Array.isArray(size) ? size[0] * size[1] : size;
 
   var leds = {};
+
+  leds.chip = chipMap(config.chip);
+
+  var init = chips[leds.chip];
+
+  if (!init) {
+    throw new Error('Chip not supported');
+  }
 
   leds.pixels = Array.apply(null, Array(length)).map(function (pixel, index) {
     var x = void 0,

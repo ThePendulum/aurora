@@ -4,7 +4,6 @@ const config = require('config');
 
 const note = require('note-log');
 const util = require('util');
-const render = require('./render.js');
 const modifiers = require('./modifiers.js');
 
 const heart = function(leds, ws) {
@@ -33,32 +32,20 @@ const heart = function(leds, ws) {
       return pixel;
     });
 
+    const postResults = modifiers.map((modifier, index) => {
+      if(modifier.post) {
+        return modifier.post(leds, preResults[index], initResults[index]);
+      }
+    });
+
     leds.beat += 1;
 
     setTimeout(function() {
       beat();
     }, leds.interval);
-
-    render(leds);
   }
 
   beat();
-
-  if(config.persist === false) {
-    const shutdown = function() {
-      leds.pixels = leds.pixels.map(pixel => {
-        pixel.values = [0, 0, 0];
-
-        return pixel;
-      });
-
-      render(leds);
-      process.exit();
-    };
-
-    process.on('SIGINT', shutdown);
-    process.on('exit', shutdown);
-  }
 };
 
 module.exports = heart;

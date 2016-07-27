@@ -16,7 +16,9 @@ var b = colorIndex[2];
 
 chips.ws2801 = function (leds) {
   var data = leds.pixels.reduce(function (acc, pixel) {
-    return acc.concat('0x' + Number(pixel.values[r] & 0xff).toString(16), '0x' + Number(pixel.values[g] & 0xff).toString(16), '0x' + Number(pixel.values[b] & 0xff).toString(16));
+    acc.push('0x' + Number(pixel.values[r] & 0xff).toString(16), '0x' + Number(pixel.values[g] & 0xff).toString(16), '0x' + Number(pixel.values[b] & 0xff).toString(16));
+
+    return acc;
   }, []);
 
   leds.spi.write(new Buffer(data));
@@ -24,22 +26,32 @@ chips.ws2801 = function (leds) {
 
 chips.ws281x = function (leds) {
   var data = leds.pixels.reduce(function (acc, pixel) {
-    return acc.concat(((pixel.values[r] & 0xff) << 16) + ((pixel.values[g] & 0xff) << 8) + (pixel.values[b] & 0xff));
+    acc.push(((pixel.values[r] & 0xff) << 16) + ((pixel.values[g] & 0xff) << 8) + (pixel.values[b] & 0xff));
+
+    return acc;
   }, []);
 
   ws281x.render(new Uint32Array(data));
 };
 
-chips.ws2811 = chips.ws281x;
-chips.ws2812 = chips.ws281x;
-chips.ws2812b = chips.ws281x;
+chips.usb = function (leds) {
+  if (leds.usb.isOpen()) {
+    var data = leds.pixels.reduce(function (acc, pixel) {
+      acc.push('0x' + Number(pixel.values[r] & 0xff).toString(16), '0x' + Number(pixel.values[g] & 0xff).toString(16), '0x' + Number(pixel.values[b] & 0xff).toString(16));
 
-var render = chips[config.get('chip').toLowerCase()];
+      return acc;
+    }, []);
 
-if (!render) {
-  throw new Error('Chip not supported');
-}
+    leds.usb.write(new Buffer(data));
+  }
+};
 
 module.exports = function (leds) {
+  var render = chips[leds.chip];
+
+  if (!render) {
+    throw new Error('Chip not supported');
+  }
+
   render(leds);
 };
