@@ -1,6 +1,4 @@
 <ri-rgb>
-  <ri-hex></ri-hex>
-
   <section class="panel panel-rgb">
     <div class="picker-container">
       <div class="color-label">R</div>

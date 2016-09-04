@@ -1,4 +1,5 @@
 <ri-color>
+  <ri-hex></ri-hex>
   <ri-rgb></ri-rgb>
   <ri-hsv></ri-hsv>
 
