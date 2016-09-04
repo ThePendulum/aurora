@@ -6,4 +6,4 @@ require('babel-polyfill');
 const riot = require('riot');
 
 require('../tags/');
-riot.mount('ri-phantom, ri-header, ri-interval, ri-hex, ri-rgb, ri-hsv, ri-draw');
+riot.mount('ri-header, ri-nav, ri-container');

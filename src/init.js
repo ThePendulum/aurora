@@ -79,7 +79,7 @@ module.exports = function() {
     leds.beat = 0;
     leds.interval = 30;
 
-    leds.mode = 'rgb';
+    leds.mode = 'hsv';
 
     init(leds);
 

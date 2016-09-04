@@ -1,4 +1,6 @@
 <ri-rgb>
+  <ri-hex></ri-hex>
+
   <section class="panel panel-rgb">
     <div class="picker-container">
       <div class="color-label">R</div>
@@ -38,12 +40,16 @@
   </section>
 
   <script>
+    const riot = require('riot');
+
     const store = require('../../js/store.js');
     const socket = require('../../js/socket.js');
 
     const updateRed = require('../../js/actions/updateRed.js');
     const updateGreen = require('../../js/actions/updateGreen.js');
     const updateBlue = require('../../js/actions/updateBlue.js');
+
+    riot.mount('ri-hex');
 
     const updateValues = () => {
       const rgb = store.getState().get('color').get('rgb');

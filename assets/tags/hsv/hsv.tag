@@ -1,13 +1,5 @@
 <ri-hsv>
   <section class="panel panel-hsv">
-    <div class="sync-container channels">
-      <svg class={'icon sync' + (sync ? ' sync-active' : '')} onclick={updatesync}>
-        <use xlink:href="img/icons.svg#loop">
-          <title>Sync</title>
-        </use>
-      </svg>
-    </div>
-
     <div class="picker-container">
       <div class="color-label">H</div>
 
