@@ -7,10 +7,12 @@ const WebSocket = require('ws').Server;
 const uuid = require('uuid');
 const math = require('mathjs');
 
-module.exports = function(leds) {
-  const ws = new WebSocket({port: config.get('socket.port')});
+const port = config.has('socket.port') ? config.socket.port : 3001;
 
-  note('wss', 'Socket server listening on port ' + config.get('socket.port'));
+module.exports = function(leds) {
+  const ws = new WebSocket({port});
+
+  note('wss', 'Socket server listening on port ' + port);
 
   ws.on('connection', wss => {
     note('socket', 0, `Established websocket with '${wss.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}'`);
@@ -31,8 +33,28 @@ module.exports = function(leds) {
       });
     };
 
+    wss.transfer('meta', {
+      width: leds.width,
+      height: leds.height,
+      pixels: leds.pixels,
+      regulator: config.regulator,
+      interval: leds.interval
+    });
+
     wss.transfer('interval', leds.interval);
     wss.transfer('mode', leds.mode);
+
+    const update = function() {
+      wss.transfer('pixels', leds.pixels);
+
+      if(wss.readyState === 1) {
+        setTimeout(() => {
+          update();
+        }, config.has('socket.previewInterval') ? config.socket.previewInterval : 1000);
+      }
+    };
+
+    update();
 
     wss.on('message', msg => {
       const data = JSON.parse(msg);

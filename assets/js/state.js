@@ -3,7 +3,7 @@
 const Immutable = require('immutable');
 
 const state = Immutable.Map({
-  canvas: Immutable.Map({
+  spec: Immutable.Map({
     width: 0,
     height: 0,
     regulator: 1,
@@ -23,6 +23,7 @@ const state = Immutable.Map({
     sync: true
   }),
   draw: Immutable.Map({
+    canvas: Immutable.List(),
     pencil: Immutable.Map({
       color: [0, 0, 0],
       opacity: 1

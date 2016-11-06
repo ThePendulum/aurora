@@ -29,6 +29,7 @@
   "dependencies": {
     "auto-daemon": "^2.6.0",
     "config": "^1.20.1",
+    "expr-eval": "^0.10.1",
     "express": "^4.13.4",
     "immutable": "^3.8.1",
     "mathjs": "^3.2.1",

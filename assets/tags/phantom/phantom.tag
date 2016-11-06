@@ -9,17 +9,17 @@
       const phantomCtx = phantom.getContext('2d');
 
       const updateValues = () => {
-        const canvas = store.getState().get('canvas');
-        const deregulator = 1 / canvas.get('regulator');
+        const spec = store.getState().get('spec');
+        const deregulator = 1 / spec.get('regulator');
 
-        canvas.get('pixels').forEach(pixel => {
+        spec.get('pixels').forEach(pixel => {
           phantomCtx.fillStyle = 'rgb(' + Math.round(pixel.values[0] * deregulator) + ', ' + Math.round(pixel.values[1] * deregulator) + ', ' + Math.round(pixel.values[2] * deregulator) + ')';
           phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
         });
 
         // defaulted to 1 to prevent InvalidStateError for canvases with 0 width or height (Firefox)
-        this.width = canvas.get('width') || 1;
-        this.height = canvas.get('height') || 1;
+        this.width = spec.get('width') || 1;
+        this.height = spec.get('height') || 1;
 
         this.update();
       };

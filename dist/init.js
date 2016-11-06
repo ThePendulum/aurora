@@ -1,68 +1,44 @@
 'use strict';
 
 var config = require('config');
-
-var util = require('util');
-
-var SPI = require('spi');
 var note = require('note-log');
-var ws281x = require('rpi-ws281x-native');
-var SerialPort = require('serialport');
+var util = require('util');
+var SPI = require('spi');
 
 var chipMap = require('./chipMap.js');
 
-var chips = {};
-
-chips.ws2801 = function (leds) {
-  leds.spi = new SPI.Spi('/dev/spidev0.0', {
-    mode: SPI.MODE['MODE_0'],
-    chipSelect: SPI.CS['none']
-  }, function (s) {
-    s.open();
-  });
-};
-
-chips.ws281x = function (leds) {
-  ws281x.init(leds.pixels.length);
-};
-
-chips.usb = function (leds) {
-  leds.usb = new SerialPort(config.usb.path, config.usb);
-
-  leds.usb.open();
-
-  leds.usb.on('data', function (data) {
-    note(data.toString());
-  });
-
-  leds.usb.on('error', note);
-};
-
 module.exports = function () {
-  var size = config.get('size');
-  var length = Array.isArray(size) ? size[0] * size[1] : size;
+  var size = config.size;
+  var zigzag = config.zigzag === undefined ? true : config.zigzag;
 
   var leds = {};
+  var length = void 0;
 
   leds.chip = chipMap(config.chip);
 
-  var init = chips[leds.chip];
+  if (Array.isArray(size)) {
+    leds.width = size[0];
+    leds.height = size[1];
 
-  if (!init) {
-    throw new Error('Chip not supported');
+    length = size[0] * size[1];
+  } else {
+    leds.width = size;
+    leds.height = 1;
+
+    length = size;
   }
 
-  leds.pixels = Array.apply(null, Array(length)).map(function (pixel, index) {
+  leds.pixels = Array.from({ length: length }, function (pixel, index) {
     var x = void 0,
         y = void 0;
 
     if (Array.isArray(size)) {
-      y = Math.floor(index / size[1]);
+      y = Math.floor(index / leds.height);
 
-      if (config.zigzag && y % 2 === 0) {
-        x = index % size[0];
+      if (zigzag && y % 2 === 0) {
+        x = index % leds.width;
       } else {
-        x = size[0] - 1 - index % size[0];
+        x = leds.width - 1 - index % leds.width;
       }
     } else {
       y = 0;
@@ -79,10 +55,7 @@ module.exports = function () {
 
   leds.beat = 0;
   leds.interval = 30;
-
   leds.mode = 'hsv';
-
-  init(leds);
 
   return leds;
 };

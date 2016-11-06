@@ -4,7 +4,10 @@ var config = require('config');
 var note = require('note-log');
 var util = require('util');
 var math = require('mathjs');
+var Parser = require('expr-eval').Parser;
 var hsv2rgb = require('../utils/hsv2rgb.js');
+
+var parser = new Parser();
 
 var init = function init(leds, ws) {
   var rgb = {

@@ -1,12 +1,12 @@
 'use strict';
 
 const config = require('config');
-
 const note = require('note-log');
 const util = require('util');
-const modifiers = require('./modifiers.js');
 
 const heart = function(leds, ws) {
+  const modifiers = require('./modifiers/modifiers.js')(leds);
+
   const initResults = modifiers.map(modifier => {
     if(modifier.init) {
       return modifier.init(leds, ws);
@@ -43,7 +43,7 @@ const heart = function(leds, ws) {
     setTimeout(function() {
       beat();
     }, leds.interval);
-  }
+  };
 
   beat();
 };

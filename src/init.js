@@ -1,87 +1,60 @@
 'use strict';
 
 const config = require('config');
-
-const util = require('util');
-
-const SPI = require('spi');
 const note = require('note-log');
-const ws281x = require('rpi-ws281x-native');
-const SerialPort = require('serialport');
+const util = require('util');
+const SPI = require('spi');
 
 const chipMap = require('./chipMap.js');
 
-const chips = {};
-
-chips.ws2801 = function(leds) {
-    leds.spi = new SPI.Spi('/dev/spidev0.0', {
-        mode: SPI.MODE['MODE_0'],
-        chipSelect: SPI.CS['none']
-    }, function(s) {
-        s.open();
-    });
-};
-
-chips.ws281x = function(leds) {
-    ws281x.init(leds.pixels.length);
-};
-
-chips.usb = function(leds) {
-  leds.usb = new SerialPort(config.usb.path, config.usb);
-
-  leds.usb.open();
-
-  leds.usb.on('data', data => {
-    note(data.toString());
-  });
-
-  leds.usb.on('error', note);
-};
-
 module.exports = function() {
-    let size = config.get('size');
-    let length = Array.isArray(size) ? size[0] * size[1] : size;
+  const size = config.size;
+  const zigzag = config.zigzag === undefined ? true : config.zigzag;
 
-    const leds = {};
+  const leds = {};
+  let length;
 
-    leds.chip = chipMap(config.chip);
+  leds.chip = chipMap(config.chip);
 
-    const init = chips[leds.chip];
+  if(Array.isArray(size)) {
+    leds.width = size[0];
+    leds.height = size[1];
 
-    if(!init) {
-        throw new Error('Chip not supported');
+    length = size[0] * size[1];
+  } else {
+    leds.width = size;
+    leds.height = 1;
+
+    length = size;
+  }
+
+  leds.pixels = Array.from({length}, (pixel, index) => {
+    let x, y;
+
+    if(Array.isArray(size)) {
+      y = Math.floor(index / leds.height);
+
+      if(zigzag && y % 2 === 0) {
+        x = index % leds.width;
+      } else {
+        x = leds.width - 1 - index % leds.width;
+      }
+    } else {
+      y = 0;
+      x = index;
     }
 
-    leds.pixels = Array.apply(null, Array(length)).map((pixel, index) => {
-      let x, y;
+    return {
+      values: [0, 0, 0],
+      index,
+      x,
+      y
+    };
+  });
 
-      if(Array.isArray(size)) {
-        y = Math.floor(index / size[1]);
+  leds.beat = 0;
+  leds.interval = 30;
+  leds.mode = 'hsv';
 
-        if(config.zigzag && y % 2 === 0) {
-          x = index % size[0];
-        } else {
-          x = size[0] - 1 - index % size[0];
-        }
-      } else {
-        y = 0;
-        x = index;
-      }
-
-      return {
-        values: [0, 0, 0],
-        index,
-        x,
-        y
-      };
-    });
-
-    leds.beat = 0;
-    leds.interval = 30;
-
-    leds.mode = 'hsv';
-
-    init(leds);
-
-    return leds;
+  return leds;
 };

@@ -21,15 +21,13 @@ socket.addEventListener('message', msg => {
   const data = JSON.parse(msg.data);
 
   if(data[0] === 'meta') {
-    let size = data[1].size;
-
-    if(!Array.isArray(size)) {
-      size = [size, 1];
-    }
-
-    store.dispatch(updateSize(size[0], size[1]));
-    store.dispatch(updatePixels(data[1].pixels));
+    store.dispatch(updateSize(data[1].width, data[1].height));
     store.dispatch(updateRegulator(data[1].regulator));
+    store.dispatch(updatePixels(data[1].pixels));
+  }
+
+  if(data[0] === 'pixels') {
+    store.dispatch(updatePixels(data[1]));
   }
 
   if(data[0] === 'rgb') {

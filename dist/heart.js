@@ -1,12 +1,12 @@
 'use strict';
 
 var config = require('config');
-
 var note = require('note-log');
 var util = require('util');
-var modifiers = require('./modifiers.js');
 
 var heart = function heart(leds, ws) {
+  var modifiers = require('./modifiers/modifiers.js')(leds);
+
   var initResults = modifiers.map(function (modifier) {
     if (modifier.init) {
       return modifier.init(leds, ws);

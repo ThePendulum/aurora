@@ -12,7 +12,6 @@
 
       const updateValues = () => {
         const phantomCanvas = document.querySelector('#phantom');
-        const canvas = store.getState().get('canvas');
 
         const previewDimensions = previewCanvas.getBoundingClientRect();
 

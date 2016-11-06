@@ -674,11 +674,14 @@ input {
 .sync-active {
   fill: #2294ff; }
 
-.phantom {
-  display: none; }
+.draw-container {
+  max-width: 100%;
+  max-height: 960px;
+  overflow: hidden; }
 
 .draw {
   background: #000;
   cursor: crosshair; }
 
-/*# sourceMappingURL=style.css.map*/
+.draw-phantom {
+  display: none; }

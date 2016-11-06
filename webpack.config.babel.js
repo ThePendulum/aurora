@@ -16,7 +16,7 @@ const config = {
     }),
     new ExtractText(path.join(__dirname, 'public/css/style.css'))
   ],
-  devtool: 'cheap-module-source-map',
+  devtool: 'eval-source-map',
   module: {
     preLoaders: [{
       test: /\.tag$/,

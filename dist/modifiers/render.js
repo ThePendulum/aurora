@@ -17,9 +17,7 @@ var pre = function pre(leds, initResults) {
 var each = function each(pixel, leds, preResults, initResults) {
   var chips = {};
 
-  chips.ws2801 = function () {
-    leds.buffer.push('0x' + Number(pixel.values[r] & 0xff).toString(16), '0x' + Number(pixel.values[g] & 0xff).toString(16), '0x' + Number(pixel.values[b] & 0xff).toString(16));
-  };
+  chips.ws2801 = function () {};
 
   chips.ws281x = function () {
     leds.buffer.push(((pixel.values[r] & 0xff) << 16) + ((pixel.values[g] & 0xff) << 8) + (pixel.values[b] & 0xff));
@@ -55,8 +53,20 @@ var post = function post(leds, pre, init) {
 var init = function init(leds, ws) {
   ws.on('connection', function (wss) {
     var update = function update() {
-      wss.transfer('meta', {
-        size: config.size,
+      var width = void 0,
+          height = void 0;
+
+      if (Array.isArray(config.size)) {
+        width = config.size[0];
+        height = config.size[1];
+      } else {
+        width = config.size;
+        height = 1;
+      }
+
+      wss.transfer('spec', {
+        width: width,
+        height: height,
         pixels: leds.pixels,
         regulator: config.regulator
       });
@@ -68,30 +78,6 @@ var init = function init(leds, ws) {
 
     update();
   });
-
-  if (config.persist === false) {
-    var shutdown = function shutdown() {
-      // 'short circuit' beat to turn off LEDs
-      leds.pixels = leds.pixels.map(function (pixel) {
-        pixel.values = [0, 0, 0];
-
-        return pixel;
-      });
-
-      pre(leds);
-
-      leds.pixels.forEach(function (pixel) {
-        each(pixel, leds);
-      });
-
-      post(leds);
-
-      process.exit();
-    };
-
-    process.on('SIGINT', shutdown);
-    process.on('exit', shutdown);
-  }
 };
 
 module.exports = { init: init, pre: pre, each: each, post: post };

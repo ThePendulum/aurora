@@ -5,16 +5,18 @@ var note = require('note-log');
 var express = require('express');
 var path = require('path');
 
+var port = config.has('web.port') ? config.web.port : 3000;
+
 module.exports = function (leds) {
-    var app = express();
+  var app = express();
 
-    app.use(express.static('public'));
+  app.use(express.static('public'));
 
-    app.get('*', function (req, res) {
-        res.sendFile(path.join(__dirname, '../../public/index.html'));
-    });
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
+  });
 
-    app.listen(config.get('web.port'), function () {
-        note('server', 'Web server listening on port ' + config.get('web.port'));
-    });
+  app.listen(port, function () {
+    note('server', 'Web server listening on port ' + port);
+  });
 };

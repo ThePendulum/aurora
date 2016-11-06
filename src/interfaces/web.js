@@ -5,16 +5,18 @@ const note = require('note-log');
 const express = require('express');
 const path = require('path');
 
+const port = config.has('web.port') ? config.web.port : 3000;
+
 module.exports = function(leds) {
-    const app = express();
+  const app = express();
 
-    app.use(express.static('public'));
+  app.use(express.static('public'));
 
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../public/index.html'));
-    });
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
+  });
 
-    app.listen(config.get('web.port'), () => {
-        note('server', 'Web server listening on port ' + config.get('web.port'));
-    });
+  app.listen(port, () => {
+    note('server', 'Web server listening on port ' + port);
+  });
 };
