@@ -54,10 +54,6 @@ The color channels RGB and HSV support expressions with the following variables:
 ### Examples
 For all examples, we will use a LED strip with 100 LEDs or a LED matrix with 256 LEDs in a 16 by 16 configuration. Many examples will only work as intended on strips with individually addressable LEDs.
 
-#### Warm white
-
-**H**
-
 #### Color cycle
 
 **H**: `beat`
