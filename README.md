@@ -54,6 +54,10 @@ The color channels RGB and HSV support expressions with the following variables:
 ### Examples
 For all examples, we will use a LED strip with 100 LEDs or a LED matrix with 256 LEDs in a 16 by 16 configuration. Many examples will only work as intended on strips with individually addressable LEDs.
 
+#### Warm white
+
+**H**
+
 #### Color cycle
 
 **H**: `beat`
@@ -69,3 +73,9 @@ For long strips, the simplest flowing rainbow is created by mapping each LED `in
 **H**: `index / length * 360 + beat`
 
 The simple flowing rainbow requires at least 360 LEDs to display the entirity of the color wheel at once. To map the full color wheel over a strip of any length, the length of the strip must be used in the expression. By dividing the index of each LED by the length of the strip, all LEDs are mapped linearly to a value between 0 and 1. By multiplying this value by 360, the color wheel will be spanned entirely.
+
+#### Chase
+
+**V**: `(index + beat) % 3 ? 0 : 1`
+
+The chase effect turns adjectant LEDs or and off as to create the illusion of motion. The expression combines a ternary and modulo operator on the value channel to create logic that turns on every 3rd LED. By adding the `beat` variable, this pattern is shifted forward every update cycle.
