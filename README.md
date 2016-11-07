@@ -12,7 +12,6 @@ To start aurora, run `app.js` through node:
 ## Color channels
 There are RGB and HSV color channels available. When one of the RGB channels gets modified, the HSV channels will be ignored. Likewise, when an HSV channel gets modified, the RGB channels will be ignored.
 
-
 ### RGB
 The RGB channels represent red, green and blue respectively. Each channel accepts a value between 0 and 255. By combining all three channels, over 16 million colors can be created. All RGB channels are capped, meaning values above 255 will be truncated to 255.
 
@@ -23,7 +22,7 @@ The HSV channels represent hue, saturation and value, a [cylindrical representat
 When the an RGB or HSV channel is updated, the other channel group will synchronize when possible. This behavior can be disabled with the synchronization toggle.
 
 ### Mathematical expressions
-A static color can look charming, but to spice things up, our LEDs should come to life! Each color channel is powered by a mathematical expression parser that allows access to [tons of mathematical operations](http://mathjs.org/docs/expressions/syntax.html), which become especially powerful in combination with the variables aurora makes available.
+A static color can look charming, but to make things more exciting, our LEDs should come to life! Each color channel is powered by a mathematical expression parser that provides access to [tons of mathematical operations](http://mathjs.org/docs/expressions/syntax.html), which become especially powerful in combination with the variables aurora makes available.
 
 ### Variables
 The color channels RGB and HSV support expressions with the following variables:
@@ -59,15 +58,14 @@ For all examples, we will use a LED strip with 100 LEDs or a LED matrix with 256
 
 **H**: `beat`
 
-The beat variable increments by 1 on every update cycle. By applying this to the hue channel, it will cycle around the color wheel the channel represents by 1 degree per update cycle. To speed up or slow down the color cycle, you may multiply the `beat` variable by a value higher or lower than 1 respectively. That's all we need!
+The beat variable increments by 1 on every update cycle. By applying this to the hue channel, each LED will cycle through the 360° color wheel the hue channel represents by 1° per update cycle. To speed up or slow down the color cycle, you may multiply (`*`) the `beat` variable by a value higher or lower than 1 respectively.
 
 #### Flowing rainbow
-First, let's create a static rainbow.
 
-**H**: `index / length * 360`
+**H**: `index + beat`
 
-To map a rainbow along the length of our LED strip, we will cycle around the 360 degrees of the hue channel. By diving `i` (the index of each LED) by `length` (the total length of the strip), each LED will get a hue value between 0 and 1 incrementing from the beginning to the end of the strip. The 30th LED, for example, will have a hue value `30 / 100 = .3`. Because the hue channel is based on a color wheel, we must multiply these values by 360 degrees, because values between 0 and 1 are all still red. Bingo! Now our LEDs are all mapped to a color. The 30th LED will now have a hue value `30 / 100 * 360 = 108`, a shade of green. Let's make it flow!
+For long strips, the simplest flowing rainbow is created by mapping each LED `index` to a degree on the color wheel. The first LED will have an index 0, representing 0° on the color wheel; a solid red. The 91st LED with index 90 will map to 90° on the color wheel, which represents a solid green. By adding the `beat` variable, each LED will cycle through the color wheel with its `index` offset in mind, resulting in a flowing rainbow effect.
 
 **H**: `index / length * 360 + beat`
 
-To make the rainbow flow, we need an animation seed. By adding the `beat` variable, our values will shift forward 1 degree every update cycle. This makes each LED cycle through the color wheel, but because they all have a different starting point on the color wheel, it will appear to move across the length of the strip!
+The simple flowing rainbow requires at least 360 LEDs to display the entirity of the color wheel at once. To map the full color wheel over a strip of any length, the length of the strip must be used in the expression. By dividing the index of each LED by the length of the strip, all LEDs are mapped linearly to a value between 0 and 1. By multiplying this value by 360, the color wheel will be spanned entirely.
