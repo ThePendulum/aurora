@@ -12,6 +12,7 @@ const each = function(pixel, leds, pre, init) {
   scope.x = pixel.x;
   scope.y = pixel.y;
   scope.pixelRandom = scope.pr = Math.random();
+  scope.previous = scope.p = pixel.values;
 
   if(leds.mode === 'hsv') {
     let hue, saturation, value;

@@ -72,6 +72,6 @@ The simple flowing rainbow requires at least 360 LEDs to display the entirity of
 
 #### Chase
 
-**V**: `(index + beat) % 3 ? 0 : 1`
+**V**: `sin(index + beat)`
 
-The chase effect turns adjectant LEDs on or off as to create the illusion of lights moving along the strip. The expression combines a ternary and modulo operator on the value channel to create logic that turns on every 3rd LED. By adding the `beat` variable, this pattern is shifted forward every update cycle.
+The chase effect turns adjacent LEDs on or off to create the illusion of light moving along the strip. A simple chase effect can be achieved by aplying the sine of the index of each LED added with the beat variable to the value channel. This creates a (clipping) wave pattern along the length of the strip, and moves it forward.

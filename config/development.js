@@ -2,7 +2,7 @@
 
 const strip = {
   chip: 'ws2812b',
-  size: 178,
+  size: 180,
   colorIndex: [0, 1, 2],
   zigzag: false,
   regulator: 1,
