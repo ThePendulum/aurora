@@ -15,7 +15,7 @@
                 <input type="text" class="input-text color-value" value={hue} onchange={updateHue}>
 
                 <div class="color-container hue-container" style={hueGradient}>
-                    <input type="range" min="0" max="360" value={hue} class="picker hue" oninput={updateHue}>
+                    <input type="range" min="0" max="360" value={hueFixed} class="picker hue" oninput={updateHue}>
                 </div>
             </div>
 
@@ -32,7 +32,7 @@
                 <input type="text" class="input-text color-value" value={saturation} onchange={updateSaturation}>
 
                 <div class="color-container saturation-container" style={saturationGradient}>
-                    <input type="range" min="0" max="1" step="0.01" value={saturation} class="picker saturation" oninput={updateSaturation}>
+                    <input type="range" min="0" max="1" step="0.01" value={saturationFixed} class="picker saturation" oninput={updateSaturation}>
                 </div>
             </div>
 
@@ -49,7 +49,7 @@
                 <input type="text" class="input-text color-value" value={value} onchange={updateValue}>
 
                 <div class="color-container value-container" style={valueGradient}>
-                    <input type="range" min="0" max="1" step="0.01" value={value} class="picker value" oninput={updateValue}>
+                    <input type="range" min="0" max="1" step="0.01" value={valueFixed} class="picker value" oninput={updateValue}>
                 </div>
             </div>
 
@@ -81,9 +81,9 @@
             const saturation = hsv.get('saturation');
             const value = hsv.get('value');
 
-            const hueFixed = isNaN(this.hue) ? 0 : this.hue;
-            const saturationFixed = isNaN(this.saturation) ? 1 : this.saturation;
-            const valueFixed = isNaN(this.value) ? 1 : this.value;
+            this.hueFixed = isNaN(this.hue) ? 0 : this.hue;
+            this.saturationFixed = isNaN(this.saturation) ? 1 : this.saturation;
+            this.valueFixed = isNaN(this.value) ? 1 : this.value;
 
             this.hue = Number.isNaN(hue) ? 'Calculated' : hue;
 
@@ -110,15 +110,15 @@
             this.saturationPresets = presets.filter(preset => preset.target === 'saturation').toArray();
 
             const hueToRgb = hue => {
-                return hsvToRgb(hue, saturationFixed, valueFixed).string;
+                return hsvToRgb(hue, this.saturationFixed, this.valueFixed).string;
             };
 
             const saturationToRgb = saturation => {
-                return hsvToRgb(hueFixed, saturation, valueFixed).string;
+                return hsvToRgb(this.hueFixed, saturation, this.valueFixed).string;
             };
 
             const valueToRgb = value => {
-                return hsvToRgb(hueFixed, saturationFixed, value).string;
+                return hsvToRgb(this.hueFixed, this.saturationFixed, value).string;
             };
 
             this.hueGradient = `background: linear-gradient(to right, ${hueToRgb(0)}, ${hueToRgb(60)}, ${hueToRgb(120)}, ${hueToRgb(180)}, ${hueToRgb(240)}, ${hueToRgb(300)}, ${hueToRgb(360)})`;

@@ -4,10 +4,10 @@
             <div class="color-label">R</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={red} onchange={updatered}>
+                <input type="text" class="input-text color-value" value={red} onchange={updateRed}>
 
                 <div class="color-container red-container" style={redGradient}>
-                    <input type="range" min="0" max="255" value={red} class="picker red" oninput={updatered}>
+                    <input type="range" min="0" max="255" value={this.redFixed} class="picker red" oninput={updateRed}>
                 </div>
             </div>
         </div>
@@ -16,10 +16,10 @@
             <div class="color-label">G</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={green} onchange={updategreen}>
+                <input type="text" class="input-text color-value" value={green} onchange={updateGreen}>
 
                 <div class="color-container green-container" style={greenGradient}>
-                    <input type="range" min="0" max="255" value={green} class="picker green" oninput={updategreen}>
+                    <input type="range" min="0" max="255" value={this.greenFixed} class="picker green" oninput={updateGreen}>
                 </div>
             </div>
         </div>
@@ -28,10 +28,10 @@
             <div class="color-label">B</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={blue} onchange={updateblue}>
+                <input type="text" class="input-text color-value" value={blue} onchange={updateBlue}>
 
                 <div class="color-container blue-container" style={blueGradient}>
-                    <input type="range" min="0" max="255" value={blue} class="picker blue" oninput={updateblue}>
+                    <input type="range" min="0" max="255" value={this.blueFixed} class="picker blue" oninput={updateBlue}>
                 </div>
             </div>
         </div>
@@ -56,9 +56,9 @@
             this.green = rgb.get('green');
             this.blue = rgb.get('blue');
 
-            const redFixed = isNaN(this.red) ? 0 : this.red;
-            const greenFixed = isNaN(this.green) ? 0 : this.green;
-            const blueFixed = isNaN(this.blue) ? 0 : this.blue;
+            this.redFixed = isNaN(this.red) ? 0 : this.red;
+            this.greenFixed = isNaN(this.green) ? 0 : this.green;
+            this.blueFixed = isNaN(this.blue) ? 0 : this.blue;
 
             if(Number.isNaN(this.red)) {
                 this.red = 'Calculated';
@@ -72,9 +72,9 @@
                 this.blue = 'Calculated';
             }
 
-            this.redGradient = 'background: linear-gradient(to right, rgb(0, ' + greenFixed + ', ' + blueFixed + '), rgb(255, ' + greenFixed + ', ' + blueFixed + '))';
-            this.greenGradient = 'background: linear-gradient(to right, rgb(' + redFixed + ', 0, ' + blueFixed + '), rgb(' + redFixed + ', 255, ' + blueFixed + '))';
-            this.blueGradient = 'background: linear-gradient(to right, rgb(' + redFixed + ', ' + greenFixed + ', 0), rgb(' + redFixed + ', ' + greenFixed + ', 255))';
+            this.redGradient = 'background: linear-gradient(to right, rgb(0, ' + this.greenFixed + ', ' + this.blueFixed + '), rgb(255, ' + this.greenFixed + ', ' + this.blueFixed + '))';
+            this.greenGradient = 'background: linear-gradient(to right, rgb(' + this.redFixed + ', 0, ' + this.blueFixed + '), rgb(' + this.redFixed + ', 255, ' + this.blueFixed + '))';
+            this.blueGradient = 'background: linear-gradient(to right, rgb(' + this.redFixed + ', ' + this.greenFixed + ', 0), rgb(' + this.redFixed + ', ' + this.greenFixed + ', 255))';
 
             this.update();
         };
@@ -82,15 +82,15 @@
         updateValues();
         store.subscribe(updateValues);
 
-        this.updatered = event => {
+        this.updateRed = event => {
             store.dispatch(updateRed(event.target.value, socket));
         };
 
-        this.updategreen = event => {
+        this.updateGreen = event => {
             store.dispatch(updateGreen(event.target.value, socket));
         };
 
-        this.updateblue = event => {
+        this.updateBlue = event => {
             store.dispatch(updateBlue(event.target.value, socket));
         };
     </script>
