@@ -1,15 +1,10 @@
 'use strict';
 
-const Knex = require('knex');
+const config = require('config');
 const note = require('note-log');
+const Knex = require('knex');
 
-const knex = Knex({
-    client: 'sqlite3',
-    connection: {
-      filename: './database/aurora.sqlite'
-    },
-    useNullAsDefault: true
-});
+const knex = Knex(config.database);
 
 knex.schema.dropTable('presets').then(() => {
     return knex.schema.createTable('presets', table => {
