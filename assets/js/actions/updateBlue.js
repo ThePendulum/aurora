@@ -17,14 +17,14 @@ module.exports = function(blue, socket) {
         if(Number.isNaN(rgb.red)) {
             dispatch({
                 type: 'UPDATE_RED',
-                data: 255
+                data: 0
             });
         }
 
         if(Number.isNaN(rgb.green)) {
             dispatch({
                 type: 'UPDATE_GREEN',
-                data: 255
+                data: 0
             });
         }
 
