@@ -3,32 +3,33 @@
 const Immutable = require('immutable');
 
 const state = Immutable.Map({
-  spec: Immutable.Map({
-    width: 0,
-    height: 0,
-    regulator: 1,
-    pixels: Immutable.List()
-  }),
-  color: Immutable.Map({
-    rgb: Immutable.Map({
-      red: 255,
-      green: 0,
-      blue: 0
+    spec: Immutable.Map({
+        width: 0,
+        height: 0,
+        regulator: 1,
+        pixels: Immutable.List()
     }),
-    hsv: Immutable.Map({
-      hue: 0,
-      saturation: 1,
-      value: 1
+    presets: Immutable.List(),
+    color: Immutable.Map({
+        rgb: Immutable.Map({
+            red: 255,
+            green: 0,
+            blue: 0
+        }),
+        hsv: Immutable.Map({
+            hue: 0,
+            saturation: 1,
+            value: 1
+        }),
+        sync: true
     }),
-    sync: true
-  }),
-  draw: Immutable.Map({
-    canvas: Immutable.List(),
-    pencil: Immutable.Map({
-      color: [0, 0, 0],
-      opacity: 1
+    draw: Immutable.Map({
+        canvas: Immutable.List(),
+        pencil: Immutable.Map({
+            color: [0, 0, 0],
+            opacity: 1
+        })
     })
-  })
 });
 
 module.exports = state;

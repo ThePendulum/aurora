@@ -32,6 +32,7 @@
     "expr-eval": "^0.10.1",
     "express": "^4.13.4",
     "immutable": "^3.8.1",
+    "knex": "^0.12.6",
     "mathjs": "^3.2.1",
     "normalize.css": "^4.1.1",
     "note-log": "^2.1.8",
@@ -42,6 +43,7 @@
     "rpi-ws281x-native": "^0.8.1",
     "serialport": "^4.0.1",
     "spi": "^0.2.0",
+    "sqlite3": "^3.1.8",
     "uuid": "^2.0.2",
     "ws": "^1.1.0"
   },

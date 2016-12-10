@@ -6,6 +6,7 @@ var note = require('note-log');
 var WebSocket = require('ws').Server;
 var uuid = require('uuid');
 var math = require('mathjs');
+var knex = require('../knex.js');
 
 var port = config.has('socket.port') ? config.socket.port : 3001;
 
@@ -51,6 +52,12 @@ module.exports = function (leds) {
 
     wss.transfer('interval', leds.interval);
     wss.transfer('mode', leds.mode);
+
+    knex('presets').select().then(function (presets) {
+      wss.transfer('presets', presets);
+    }).catch(function (error) {
+      note(error);
+    });
 
     var update = function update() {
       wss.transfer('pixels', leds.pixels);

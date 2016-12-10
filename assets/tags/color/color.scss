@@ -1,0 +1,96 @@
+.color-label {
+  color: #aaa;
+  width: 2rem;
+  display: inline-block;
+  display: flex;
+  align-items: center;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.color-container {
+  width: 100%;
+  height: 1rem;
+  box-sizing: border-box;
+  border: solid 1px #ddd;
+  border-top: none;
+}
+
+.color-value {
+  width: 100%;
+}
+
+.picker-container {
+  display: flex;
+}
+
+.picker-container:not(:last-child) {
+  margin: 0 0 1rem;
+}
+
+.picker {
+  -webkit-appearance: none;
+  background: none;
+  width: calc(100% + .4rem);
+  height: 1rem;
+  margin: 0 0 0 -.2rem;
+  cursor: crosshair;
+}
+
+.picker:focus {
+  outline: none;
+}
+
+.picker:focus {
+  outline: none;
+}
+
+.picker::-webkit-slider-thumb {
+  height: 0;
+  width: 0;
+  border-bottom: solid .4rem #333;
+  border-left: solid .3rem transparent;
+  border-right: solid .3rem transparent;
+  margin: 1rem 0 0;
+  -webkit-appearance: none;
+}
+
+.picker::-moz-range-track {
+  background: none;
+}
+
+.picker::-moz-range-thumb {
+  background: none;
+  height: 0;
+  width: 0;
+  border-radius: 0;
+  border-bottom: solid .4rem #333;
+  border-left: solid .3rem transparent;
+  border-right: solid .3rem transparent;
+  margin: 3rem 0 0;
+}
+
+.picker::-ms-track {
+  width: 100%;
+  height: 1rem;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+.picker::-ms-fill-lower {
+  border-radius: 0px;
+}
+
+.picker::-ms-fill-upper {
+  border-radius: 0px;
+}
+
+.picker::-ms-thumb {
+  background: #fff;
+  width: 3px;
+  height: 1rem;
+  border: 1px solid rgba(0, 0, 0, .4);
+  border-radius: 0px;
+}

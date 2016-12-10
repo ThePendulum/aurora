@@ -1,123 +1,150 @@
 <ri-hsv>
-  <section class="panel panel-hsv">
-    <div class="sync-container channels">
-      <svg class="icon sync {sync ? ' sync-active' : ''}" onclick={updateSync}>
-        <use xlink:href="img/icons.svg#loop">
-          <title>Sync</title>
-        </use>
-      </svg>
-    </div>
-
-    <div class="picker-container">
-      <div class="color-label">H</div>
-
-      <div class="value-container">
-        <input type="text" class="input-text color-value" value={hue} onchange={updateHue}>
-
-        <div class="color-container hue-container" style={hueGradient}>
-          <input type="range" min="0" max="360" value={hue} class="picker hue" oninput={updateHue}>
+    <section class="panel panel-hsv">
+        <div class="sync-container channels">
+            <svg class="icon sync {sync ? ' sync-active' : ''}" onclick={updateSync}>
+                <use xlink:href="img/icons.svg#loop">
+                <title>Sync</title>
+                </use>
+            </svg>
         </div>
-      </div>
-    </div>
 
-    <div class="picker-container">
-      <div class="color-label">S</div>
+        <div class="picker-container">
+            <div class="color-label">H</div>
 
-      <div class="value-container">
-        <input type="text" class="input-text color-value" value={saturation} onchange={updateSaturation}>
+            <div class="value-container">
+                <input type="text" class="input-text color-value" value={hue} onchange={updateHue}>
 
-        <div class="color-container saturation-container" style={saturationGradient}>
-          <input type="range" min="0" max="1" step="0.01" value={saturation} class="picker saturation" oninput={updateSaturation}>
+                <div class="color-container hue-container" style={hueGradient}>
+                    <input type="range" min="0" max="360" value={hue} class="picker hue" oninput={updateHue}>
+                </div>
+            </div>
+
+            <select class="value-preset" onchange={updateHue}>
+                <option value="0">Default</option>
+                <option each={preset in huePresets} value={preset.value} selected={hue === preset.value}>{preset.name}</option>
+            </select>
         </div>
-      </div>
-    </div>
 
-    <div class="picker-container">
-      <div class="color-label">V</div>
+        <div class="picker-container">
+            <div class="color-label">S</div>
 
-      <div class="value-container">
-        <input type="text" class="input-text color-value" value={value} onchange={updateValue}>
+            <div class="value-container">
+                <input type="text" class="input-text color-value" value={saturation} onchange={updateSaturation}>
 
-        <div class="color-container value-container" style={valueGradient}>
-          <input type="range" min="0" max="1" step="0.01" value={value} class="picker value" oninput={updateValue}>
+                <div class="color-container saturation-container" style={saturationGradient}>
+                    <input type="range" min="0" max="1" step="0.01" value={saturation} class="picker saturation" oninput={updateSaturation}>
+                </div>
+            </div>
+
+            <select class="value-preset" onchange={updateSaturation}>
+                <option value="1">Default</option>
+                <option each={preset in saturationPresets} value={preset.value} selected={saturation === preset.value}>{preset.name}</option>
+            </select>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <script>
-    const store = require('../../js/store.js');
-    const socket = require('../../js/socket.js');
+        <div class="picker-container">
+            <div class="color-label">V</div>
 
-    const updateHue = require('../../js/actions/updateHue.js');
-    const updateSaturation = require('../../js/actions/updateSaturation.js');
-    const updateValue = require('../../js/actions/updateValue.js');
-    const updateSync = require('../../js/actions/updateSync.js');
+            <div class="value-container">
+                <input type="text" class="input-text color-value" value={value} onchange={updateValue}>
 
-    const hsvToRgb = require('../../js/hsvToRgb.js');
+                <div class="color-container value-container" style={valueGradient}>
+                    <input type="range" min="0" max="1" step="0.01" value={value} class="picker value" oninput={updateValue}>
+                </div>
+            </div>
 
-    const updateValues = () => {
-      const color = store.getState().get('color');
-      const hsv = color.get('hsv');
+            <select class="value-preset" onchange={updateValue}>
+                <option value="1">Default</option>
+                <option each={preset in valuePresets} value={preset.value} selected={value === preset.value}>{preset.name}</option>
+            </select>
+        </div>
+    </section>
 
-      const hue = hsv.get('hue');
-      const saturation = hsv.get('saturation');
-      const value = hsv.get('value');
+    <script>
+        const store = require('../../js/store.js');
+        const socket = require('../../js/socket.js');
 
-      const hueFixed = isNaN(this.hue) ? 0 : this.hue;
-      const saturationFixed = isNaN(this.saturation) ? 1 : this.saturation;
-      const valueFixed = isNaN(this.value) ? 1 : this.value;
+        const updateHue = require('../../js/actions/updateHue.js');
+        const updateSaturation = require('../../js/actions/updateSaturation.js');
+        const updateValue = require('../../js/actions/updateValue.js');
+        const updateSync = require('../../js/actions/updateSync.js');
 
-      this.hue = hue;
-      this.saturation = saturation;
-      this.value = value;
+        const hsvToRgb = require('../../js/hsvToRgb.js');
 
-      this.sync = color.get('sync');
+        const updateValues = () => {
+            const state = store.getState();
+            const color = state.get('color');
+            const presets = state.get('presets');
+            const hsv = color.get('hsv');
 
-      const hueToRgb = hue => {
-        return hsvToRgb(hue, saturationFixed, valueFixed).string;
-      };
+            const hue = hsv.get('hue');
+            const saturation = hsv.get('saturation');
+            const value = hsv.get('value');
 
-      const saturationToRgb = saturation => {
-        return hsvToRgb(hueFixed, saturation, valueFixed).string;
-      };
+            const hueFixed = isNaN(this.hue) ? 0 : this.hue;
+            const saturationFixed = isNaN(this.saturation) ? 1 : this.saturation;
+            const valueFixed = isNaN(this.value) ? 1 : this.value;
 
-      const valueToRgb = value => {
-        return hsvToRgb(hueFixed, saturationFixed, value).string;
-      };
+            this.hue = Number.isNaN(hue) ? 'Calculated' : hue;
 
-      this.hueGradient = `background: linear-gradient(to right, ${hueToRgb(0)}, ${hueToRgb(60)}, ${hueToRgb(120)}, ${hueToRgb(180)}, ${hueToRgb(240)}, ${hueToRgb(300)}, ${hueToRgb(360)})`;
-      this.saturationGradient = `background: linear-gradient(to right, ${saturationToRgb(0)}, ${saturationToRgb(1)})`;
-      this.valueGradient = `background: linear-gradient(to right, ${valueToRgb(0)}, ${valueToRgb(1)})`;
+            if(Number.isNaN(saturation)) {
+                this.saturation = 'Calculated';
+            } else if(isNaN(saturation)) {
+                this.saturation = saturation;
+            } else {
+                this.saturation = Number(saturation).toFixed(2);
+            }
 
-      if(!isNaN(this.saturation)) {
-        this.saturation = Number(this.saturation).toFixed(2);
-      }
+            if(Number.isNaN(value)) {
+                this.value = 'Calculated';
+            } else if(isNaN(value)) {
+                this.value = value;
+            } else {
+                this.value = Number(value).toFixed(2);
+            }
 
-      if(!isNaN(this.value)) {
-        this.value = Number(this.value).toFixed(2);
-      }
+            this.sync = color.get('sync');
 
-      this.update();
-    };
+            this.huePresets = presets.filter(preset => preset.target === 'hue').toArray();
+            this.valuePresets = presets.filter(preset => preset.target === 'value').toArray();
+            this.saturationPresets = presets.filter(preset => preset.target === 'saturation').toArray();
 
-    updateValues();
-    store.subscribe(updateValues);
+            const hueToRgb = hue => {
+                return hsvToRgb(hue, saturationFixed, valueFixed).string;
+            };
 
-    this.updateHue = event => {
-      store.dispatch(updateHue(event.target.value, socket));
-    };
+            const saturationToRgb = saturation => {
+                return hsvToRgb(hueFixed, saturation, valueFixed).string;
+            };
 
-    this.updateSaturation = event => {
-      store.dispatch(updateSaturation(event.target.value, socket));
-    };
+            const valueToRgb = value => {
+                return hsvToRgb(hueFixed, saturationFixed, value).string;
+            };
 
-    this.updateValue = event => {
-      store.dispatch(updateValue(event.target.value, socket));
-    };
+            this.hueGradient = `background: linear-gradient(to right, ${hueToRgb(0)}, ${hueToRgb(60)}, ${hueToRgb(120)}, ${hueToRgb(180)}, ${hueToRgb(240)}, ${hueToRgb(300)}, ${hueToRgb(360)})`;
+            this.saturationGradient = `background: linear-gradient(to right, ${saturationToRgb(0)}, ${saturationToRgb(1)})`;
+            this.valueGradient = `background: linear-gradient(to right, ${valueToRgb(0)}, ${valueToRgb(1)})`;
 
-    this.updateSync = event => {
-      store.dispatch(updateSync());
-    };
-  </script>
+            this.update();
+        };
+
+        updateValues();
+        store.subscribe(updateValues);
+
+        this.updateHue = event => {
+            store.dispatch(updateHue(event.target.value, socket));
+        };
+
+        this.updateSaturation = event => {
+            store.dispatch(updateSaturation(event.target.value, socket));
+        };
+
+        this.updateValue = event => {
+            store.dispatch(updateValue(event.target.value, socket));
+        };
+
+        this.updateSync = event => {
+            store.dispatch(updateSync());
+        };
+    </script>
 </ri-hsv>

@@ -1,0 +1,22 @@
+input {
+  outline: none;
+}
+
+.input-text {
+  color: inherit;
+  box-sizing: border-box;
+  padding: .5rem;
+  border: solid 1px #ddd;
+}
+
+.input-text:focus {
+  border: solid 1px #5af;
+}
+
+.value-container {
+  flex-grow: 1;
+}
+
+.value-preset {
+    width: 2rem;
+};

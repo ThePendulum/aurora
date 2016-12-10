@@ -3,41 +3,59 @@
 const hsvToRgb = require('../hsvToRgb.js');
 
 module.exports = function(hue, socket) {
-  return function(dispatch, getState) {
-    const color = getState().get('color');
-    const hsv = color.get('hsv').toObject();
-    const rgb = hsvToRgb(hue, hsv.saturation, hsv.value).rgb;
-    const sync = color.get('sync');
+    return function(dispatch, getState) {
+        let color = getState().get('color');
+        let hsv = color.get('hsv').toObject();
+        let rgb = hsvToRgb(hue, hsv.saturation, hsv.value).rgb;
+        const sync = color.get('sync');
 
-    dispatch({
-      type: 'UPDATE_HUE',
-      data: hue
-    });
+        dispatch({
+            type: 'UPDATE_HUE',
+            data: hue
+        });
 
-    if(socket) {
-      socket.send(JSON.stringify(['mode', 'hsv']));
-      socket.send(JSON.stringify(['hsv', {...hsv, hue}]));
-    }
+        if(Number.isNaN(hsv.saturation)) {
+            dispatch({
+                type: 'UPDATE_SATURATION',
+                data: 1
+            });
+        }
 
-    if(sync) {
-      dispatch({
-        type: 'UPDATE_RED',
-        data: rgb.red
-      });
+        if(Number.isNaN(hsv.value)) {
+            dispatch({
+                type: 'UPDATE_VALUE',
+                data: 1
+            });
+        }
 
-      dispatch({
-        type: 'UPDATE_GREEN',
-        data: rgb.green
-      });
+        color = getState().get('color');
+        hsv = color.get('hsv').toObject();
+        rgb = hsvToRgb(hsv.hue, hsv.saturation, hsv.value).rgb;
 
-      dispatch({
-        type: 'UPDATE_BLUE',
-        data: rgb.blue
-      });
+        if(socket) {
+            socket.send(JSON.stringify(['mode', 'hsv']));
+            socket.send(JSON.stringify(['hsv', hsv]));
+        }
 
-      if(socket) {
-        socket.send(JSON.stringify(['rgb', rgb]));
-      }
-    }
-  };
+        if(sync) {
+            dispatch({
+                type: 'UPDATE_RED',
+                data: rgb.red
+            });
+
+            dispatch({
+                type: 'UPDATE_GREEN',
+                data: rgb.green
+            });
+
+            dispatch({
+                type: 'UPDATE_BLUE',
+                data: rgb.blue
+            });
+
+            if(socket) {
+                socket.send(JSON.stringify(['rgb', rgb]));
+            }
+        }
+    };
 };
