@@ -56,9 +56,9 @@
             this.green = rgb.get('green');
             this.blue = rgb.get('blue');
 
-            const redFixed = isNaN(this.red) ? 255 : this.red;
-            const greenFixed = isNaN(this.green) ? 255 : this.green;
-            const blueFixed = isNaN(this.blue) ? 255 : this.blue;
+            const redFixed = isNaN(this.red) ? 0 : this.red;
+            const greenFixed = isNaN(this.green) ? 0 : this.green;
+            const blueFixed = isNaN(this.blue) ? 0 : this.blue;
 
             if(Number.isNaN(this.red)) {
                 this.red = 'Calculated';
