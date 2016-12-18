@@ -34,7 +34,11 @@
             this.green = rgb.get('green');
             this.blue = rgb.get('blue');
 
-            this.hex = '#' + ('0' + Number(isNaN(this.red) ? 0 : this.red).toString(16)).slice(-2) + ('0' + Number(isNaN(this.green) ? 0 : this.green).toString(16)).slice(-2) + ('0' + Number(isNaN(this.blue) ? 0 : this.blue).toString(16)).slice(-2);
+            if(Number.isNaN(this.red) || Number.isNaN(this.green) || Number.isNaN(this.blue)) {
+                this.hex = 'Calculated';
+            } else {
+                this.hex = '#' + ('0' + Number(isNaN(this.red) ? 0 : this.red).toString(16)).slice(-2) + ('0' + Number(isNaN(this.green) ? 0 : this.green).toString(16)).slice(-2) + ('0' + Number(isNaN(this.blue) ? 0 : this.blue).toString(16)).slice(-2);
+            }
 
             this.hexPresets = presets.filter(preset => preset.target === 'hex').toArray();
 
