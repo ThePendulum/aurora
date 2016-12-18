@@ -1,7 +1,7 @@
 <ri-rgb>
     <section class="panel panel-rgb">
         <div class="picker-container">
-            <div class="color-label">R</div>
+            <div class="color-label" title="Red">R</div>
 
             <div class="value-container">
                 <input type="text" class="input-text color-value" value={red} onchange={updateRed}>
@@ -13,10 +13,10 @@
         </div>
 
         <div class="picker-container">
-            <div class="color-label">G</div>
+            <div class="color-label" title="Green">G</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={green} onchange={updateGreen}>
+                <input type="text" class="input-text color-value" id="channelGreen" value={green} onchange={updateGreen}>
 
                 <div class="color-container green-container" style={greenGradient}>
                     <input type="range" min="0" max="255" value={this.greenFixed} class="picker green" oninput={updateGreen}>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="picker-container">
-            <div class="color-label">B</div>
+            <div class="color-label" title="Blue">B</div>
 
             <div class="value-container">
                 <input type="text" class="input-text color-value" value={blue} onchange={updateBlue}>

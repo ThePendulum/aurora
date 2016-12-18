@@ -1,44 +1,67 @@
 <ri-hex>
-  <section class="panel">
-    <div class="picker-container">
-      <div class="color-label">#</div>
+    <section class="panel">
+        <div class="picker-container">
+            <div class="color-label" title="Hex">#</div>
 
-      <div class="value-container">
-        <input type="text" class="input-text color-value" value={'#' + ('0' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + ('0' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + ('0' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)} onchange={updatehex}>
+            <div class="value-container">
+                <input type="text" class="input-text color-value" value={hex} onclick={focus} onchange={updateHex}>
 
-        <input type="color" class="color-container sample" value={'#' + ('0' + Number(isNaN(red) ? 0 : red).toString(16)).slice(-2) + ('0' + Number(isNaN(green) ? 0 : green).toString(16)).slice(-2) + ('0' + Number(isNaN(blue) ? 0 : blue).toString(16)).slice(-2)} onchange={updatehex}>
-      </div>
-    </div>
-  </section>
+                <ul show={focused} class="value-presets">
+                    <li><button value="#ffffff" class="preset {hex === '#ffffff' ? 'preset-applied' : ''}" onclick={updateHex}>Default</button></li>
+                    <li each={preset in hexPresets}><button value={preset.value} class="preset {preset.value === hex ? 'preset-applied' : ''}" onclick={updateHex}>{preset.name}</button></li>
+                </ul>
 
-  <script>
-    const store = require('../../js/store.js');
-    const socket = require('../../js/socket.js');
+                <input type="color" class="color-container sample" value={hex} onchange={updateHex}>
+            </div>
+        </div>
+    </section>
 
-    const updateRed = require('../../js/actions/updateRed.js');
-    const updateGreen = require('../../js/actions/updateGreen.js');
-    const updateBlue = require('../../js/actions/updateBlue.js');
-    const hexToRgb = require('../../js/hexToRgb.js');
+    <script>
+        const store = require('../../js/store.js');
+        const socket = require('../../js/socket.js');
 
-    const updateValues = () => {
-      const rgb = store.getState().get('color').get('rgb');
+        const updateRed = require('../../js/actions/updateRed.js');
+        const updateGreen = require('../../js/actions/updateGreen.js');
+        const updateBlue = require('../../js/actions/updateBlue.js');
+        const hexToRgb = require('../../js/hexToRgb.js');
 
-      this.red = rgb.get('red');
-      this.green = rgb.get('green');
-      this.blue = rgb.get('blue');
+        const updateValues = () => {
+            const state = store.getState();
+            const rgb = state.get('color').get('rgb');
+            const presets = state.get('presets');
 
-      this.update();
-    };
+            this.red = rgb.get('red');
+            this.green = rgb.get('green');
+            this.blue = rgb.get('blue');
 
-    updateValues();
-    store.subscribe(updateValues);
+            this.hex = '#' + ('0' + Number(isNaN(this.red) ? 0 : this.red).toString(16)).slice(-2) + ('0' + Number(isNaN(this.green) ? 0 : this.green).toString(16)).slice(-2) + ('0' + Number(isNaN(this.blue) ? 0 : this.blue).toString(16)).slice(-2);
 
-    this.updatehex = event => {
-      const rgb = hexToRgb(event.target.value);
+            this.hexPresets = presets.filter(preset => preset.target === 'hex').toArray();
 
-      store.dispatch(updateRed(rgb[0], socket));
-      store.dispatch(updateGreen(rgb[1], socket));
-      store.dispatch(updateBlue(rgb[2], socket));
-    };
-  </script>
+            this.update();
+        };
+
+        updateValues();
+        store.subscribe(updateValues);
+
+        this.updateHex = event => {
+            const rgb = hexToRgb(event.target.value);
+
+            store.dispatch(updateRed(rgb[0], socket));
+            store.dispatch(updateGreen(rgb[1], socket));
+            store.dispatch(updateBlue(rgb[2], socket));
+        };
+
+        this.focus = event => {
+            event.stopPropagation();
+
+            this.focused = true;
+            this.update();
+        };
+
+        document.addEventListener('click', event => {
+            this.focused = false;
+            this.update();
+        });
+    </script>
 </ri-hex>

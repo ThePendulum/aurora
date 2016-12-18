@@ -9,54 +9,54 @@
         </div>
 
         <div class="picker-container">
-            <div class="color-label">H</div>
+            <div class="color-label" title="Hue">H</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={hue} onchange={updateHue}>
+                <input type="text" class="input-text color-value" value={hue} onclick={focus.bind(null, 'hue')} onchange={updateHue}>
+
+                <ul show={focused === 'hue'} class="value-presets">
+                    <li><button value="0" class="preset {hue === '0' ? 'preset-applied' : ''}" onclick={updateHue}>Default</button></li>
+                    <li each={preset in huePresets}><button value={preset.value} class="preset {preset.value === hue ? 'preset-applied' : ''}" onclick={updateHue}>{preset.name}</button></li>
+                </ul>
 
                 <div class="color-container hue-container" style={hueGradient}>
                     <input type="range" min="0" max="360" value={hueFixed} class="picker hue" oninput={updateHue}>
                 </div>
             </div>
-
-            <select class="value-preset" onchange={updateHue}>
-                <option value="0">Default</option>
-                <option each={preset in huePresets} value={preset.value} selected={hue === preset.value}>{preset.name}</option>
-            </select>
         </div>
 
         <div class="picker-container">
-            <div class="color-label">S</div>
+            <div class="color-label" title="Saturation">S</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={saturation} onchange={updateSaturation}>
+                <input type="text" class="input-text color-value" value={saturation} onclick={focus.bind(null, 'saturation')} onchange={updateSaturation}>
+
+                <ul show={focused === 'saturation'} class="value-presets">
+                    <li><button value="1" class="preset {saturation === '1' ? 'preset-applied' : ''}" onclick={updateSaturation}>Default</button></li>
+                    <li each={preset in saturationPresets}><button value={preset.value} class="preset {preset.value === saturation ? 'preset-applied' : ''}" onclick={updateSaturation}>{preset.name}</button></li>
+                </ul>
 
                 <div class="color-container saturation-container" style={saturationGradient}>
                     <input type="range" min="0" max="1" step="0.01" value={saturationFixed} class="picker saturation" oninput={updateSaturation}>
                 </div>
             </div>
-
-            <select class="value-preset" onchange={updateSaturation}>
-                <option value="1">Default</option>
-                <option each={preset in saturationPresets} value={preset.value} selected={saturation === preset.value}>{preset.name}</option>
-            </select>
         </div>
 
         <div class="picker-container">
-            <div class="color-label">V</div>
+            <div class="color-label" title="Value">V</div>
 
             <div class="value-container">
-                <input type="text" class="input-text color-value" value={value} onchange={updateValue}>
+                <input type="text" class="input-text color-value" value={value} onclick={focus.bind(null, 'value')} onchange={updateValue}>
+
+                <ul show={focused === 'value'} class="value-presets">
+                    <li><button value="1" class="preset {value === '1' ? 'preset-applied' : ''}" onclick={updateValue}>Default</button></li>
+                    <li each={preset in valuePresets}><button value={preset.value} class="preset {preset.value === value ? 'preset-applied' : ''}" onclick={updateValue}>{preset.name}</button></li>
+                </ul>
 
                 <div class="color-container value-container" style={valueGradient}>
                     <input type="range" min="0" max="1" step="0.01" value={valueFixed} class="picker value" oninput={updateValue}>
                 </div>
             </div>
-
-            <select class="value-preset" onchange={updateValue}>
-                <option value="1">Default</option>
-                <option each={preset in valuePresets} value={preset.value} selected={value === preset.value}>{preset.name}</option>
-            </select>
         </div>
     </section>
 
@@ -146,5 +146,17 @@
         this.updateSync = event => {
             store.dispatch(updateSync());
         };
+
+        this.focus = (target, event) => {
+            event.stopPropagation();
+
+            this.focused = target;
+            this.update();
+        };
+
+        document.addEventListener('click', event => {
+            this.focused = null;
+            this.update();
+        });
     </script>
 </ri-hsv>

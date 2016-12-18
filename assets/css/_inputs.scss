@@ -1,22 +1,56 @@
-input {
-  outline: none;
+*:focus {
+    outline: none;
 }
 
-.input-text {
-  color: inherit;
-  box-sizing: border-box;
-  padding: .5rem;
-  border: solid 1px #ddd;
+.input-text,
+.input-select {
+    color: inherit;
+    box-sizing: border-box;
+    padding: .5rem;
+    border: solid 1px #ddd;
+    outline: none;
 }
 
 .input-text:focus {
-  border: solid 1px #5af;
+    border: solid 1px #5af;
+}
+
+.input-select {
+    background: #fff;
 }
 
 .value-container {
-  flex-grow: 1;
+    position: relative;
+    flex-grow: 1;
 }
 
-.value-preset {
-    width: 2rem;
+.value-presets {
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    top: 1.25rem;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .3);
+
+    .preset {
+        color: #333;
+        background: none;
+        width: 100%;
+        padding: .5rem;
+        border: none;
+        text-align: left;
+        font: inherit;
+
+        &:hover {
+            color: #fff;
+            background: #2294ff;
+            cursor: pointer;
+        }
+    }
+
+    .preset-applied {
+        font-weight: bold;
+    }
 };
