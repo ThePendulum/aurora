@@ -7,7 +7,6 @@
                 <input type="text" class="input-text color-value" value={hex} onclick={focus} onchange={updateHex}>
 
                 <ul show={focused} class="value-presets">
-                    <li><button value="#ffffff" class="preset {hex === '#ffffff' ? 'preset-applied' : ''}" onclick={updateHex}>Default</button></li>
                     <li each={preset in hexPresets}><button value={preset.value} class="preset {preset.value === hex ? 'preset-applied' : ''}" onclick={updateHex}>{preset.name}</button></li>
                 </ul>
 

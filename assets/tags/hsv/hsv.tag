@@ -15,7 +15,7 @@
                 <input type="text" class="input-text color-value" value={hue} onclick={focus.bind(null, 'hue')} onchange={updateHue}>
 
                 <ul show={focused === 'hue'} class="value-presets">
-                    <li><button value="0" class="preset {hue === '0' ? 'preset-applied' : ''}" onclick={updateHue}>Default</button></li>
+                    <li><button value="0" class="preset {hue === '0' ? 'preset-applied' : ''}" onclick={updateHue}>Red</button></li>
                     <li each={preset in huePresets}><button value={preset.value} class="preset {preset.value === hue ? 'preset-applied' : ''}" onclick={updateHue}>{preset.name}</button></li>
                 </ul>
 
@@ -32,7 +32,7 @@
                 <input type="text" class="input-text color-value" value={saturation} onclick={focus.bind(null, 'saturation')} onchange={updateSaturation}>
 
                 <ul show={focused === 'saturation'} class="value-presets">
-                    <li><button value="1" class="preset {saturation === '1' ? 'preset-applied' : ''}" onclick={updateSaturation}>Default</button></li>
+                    <li><button value="1" class="preset {saturation === '1' ? 'preset-applied' : ''}" onclick={updateSaturation}>Full</button></li>
                     <li each={preset in saturationPresets}><button value={preset.value} class="preset {preset.value === saturation ? 'preset-applied' : ''}" onclick={updateSaturation}>{preset.name}</button></li>
                 </ul>
 
@@ -49,7 +49,7 @@
                 <input type="text" class="input-text color-value" value={value} onclick={focus.bind(null, 'value')} onchange={updateValue}>
 
                 <ul show={focused === 'value'} class="value-presets">
-                    <li><button value="1" class="preset {value === '1' ? 'preset-applied' : ''}" onclick={updateValue}>Default</button></li>
+                    <li><button value="1" class="preset {value === '1' ? 'preset-applied' : ''}" onclick={updateValue}>Full</button></li>
                     <li each={preset in valuePresets}><button value={preset.value} class="preset {preset.value === value ? 'preset-applied' : ''}" onclick={updateValue}>{preset.name}</button></li>
                 </ul>
 

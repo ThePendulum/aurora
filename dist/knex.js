@@ -12,6 +12,11 @@ knex.schema.dropTable('presets').then(function () {
     });
 }).then(function () {
     return knex('presets').insert([{
+        name: 'Cold White',
+        target: 'hex',
+        value: '#ffffff',
+        labels: '1d,2d'
+    }, {
         name: 'Warm White',
         target: 'hex',
         value: '#ffcc99',
@@ -37,19 +42,24 @@ knex.schema.dropTable('presets').then(function () {
         value: 'sin(i + b)',
         labels: '1d,2d'
     }, {
-        name: 'Fade',
-        target: 'value',
-        value: '.5 + .5sin(.1b)',
-        labels: '1d,2d'
-    }, {
         name: 'Strobe',
         target: 'value',
         value: 'b % 2',
         labels: '1d,2d'
     }, {
+        name: 'Fade',
+        target: 'value',
+        value: '.5 + .5sin(.1b)',
+        labels: '1d,2d'
+    }, {
+        name: 'Alert',
+        target: 'value',
+        value: 'sin(.3b)',
+        labels: '1d,2d'
+    }, {
         name: 'Lightning',
         target: 'value',
-        value: 'sin(.1b) * r[1]'
+        value: 'sin(.05b) * r[1] * (.5 + .5sin(.05i * r[2]))'
     }]);
 }).catch(function (error) {
     note('create', error);
