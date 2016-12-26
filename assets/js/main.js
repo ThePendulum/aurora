@@ -3,7 +3,18 @@
 require('../css/style.scss');
 require('babel-polyfill');
 
-const riot = require('riot');
+import Vue from 'vue';
 
-require('../tags/');
-riot.mount('ri-header, ri-nav, ri-container');
+import router from './router.js';
+import store from './store';
+
+import Container from '../components/container/container.vue';
+
+new Vue({
+    el: '#container',
+    router,
+    store,
+    render(createElement) {
+        return createElement(Container);
+    }
+});
