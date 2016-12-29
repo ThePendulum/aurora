@@ -5,9 +5,7 @@
                 <span class="channel-label" title="Red">R</span>
 
                 <div class="channel-value">
-                    <form @submit.prevent="updateRed">
-                        <input type="text" :value="redInterpreted" class="input channel-input" @blur="updateRed">
-                    </form>
+                    <input type="text" :value="redInterpreted" class="input channel-input" @blur="updateRed" @keyup.enter="updateRed">
 
                     <div class="channel-picker" :style="redGradient">
                         <input type="range" min="0" max="255" :value="redFixed" class="channel-slider red" @input="updateRed">
@@ -19,9 +17,7 @@
                 <span class="channel-label" title="Green">G</span>
 
                 <div class="channel-value">
-                    <form @submit.prevent="updateGreen">
-                        <input type="text" :value="greenInterpreted" class="input channel-input" @blur="updateGreen">
-                    </form>
+                    <input type="text" :value="greenInterpreted" class="input channel-input" @blur="updateGreen" @keyup.enter="updateGreen">
 
                     <div class="channel-picker" :style="greenGradient">
                         <input type="range" min="0" max="255" :value="greenFixed" class="channel-slider green" @input="updateGreen">
@@ -33,9 +29,7 @@
                 <span class="channel-label" title="Blue">B</span>
 
                 <div class="channel-value">
-                    <form @submit.prevent="updateBlue">
-                        <input type="text" :value="blueInterpreted" class="input channel-input" @blur="updateBlue">
-                    </form>
+                    <input type="text" :value="blueInterpreted" class="input channel-input" @blur="updateBlue" @keyup.enter="updateBlue">
 
                     <div class="channel-picker" :style="blueGradient">
                         <input type="range" min="0" max="255" :value="blueFixed" class="channel-slider blue" @input="updateBlue">
@@ -49,9 +43,7 @@
                 <span class="channel-label" title="Hue">H</span>
 
                 <div class="channel-value">
-                    <form @submit.prevent="updateHue">
-                        <input type="text" :value="hueInterpreted" class="input channel-input" @blur="updateHue">
-                    </form>
+                    <input type="text" :value="hueInterpreted" class="input channel-input" @blur="updateHue" @keyup.enter="updateHue">
 
                     <div class="channel-picker" :style="hueGradient">
                         <input type="range" min="0" max="360" :value="hueFixed" class="channel-slider hue" @input="updateHue">
@@ -64,7 +56,7 @@
 
                 <div class="channel-value">
                     <form @submit.prevent="updateSaturation">
-                        <input type="text" :value="saturationInterpreted" class="input channel-input" @blur="updateSaturation">
+                        <input type="text" :value="saturationInterpreted" class="input channel-input" @blur="updateSaturation" @keyup.enter="updateSaturation">
                     </form>
 
                     <div class="channel-picker" :style="saturationGradient">
@@ -78,7 +70,7 @@
 
                 <div class="channel-value">
                     <form @submit.prevent="updateValue">
-                        <input type="text" :value="valueInterpreted" class="input channel-input" @blur="updateValue">
+                        <input type="text" :value="valueInterpreted" class="input channel-input" @blur="updateValue" @keyup.enter="updateValue">
                     </form>
 
                     <div class="channel-picker" :style="valueGradient">
@@ -110,10 +102,30 @@
             hueFixed() { return isNaN(this.hue) ? 0 : this.hue; },
             saturationFixed() { return isNaN(this.saturation) ? 1 : this.saturation; },
             valueFixed() { return isNaN(this.value) ? 1 : this.value; },
-            redInterpreted() { return Number.isNaN(this.red) ? 'Calculated' : Math.round(this.red); },
-            greenInterpreted() { return Number.isNaN(this.green) ? 'Calculated' : Math.round(this.green); },
-            blueInterpreted() { return Number.isNaN(this.blue) ? 'Calculated' : Math.round(this.blue); },
-            hueInterpreted() { return Number.isNaN(this.hue) ? 'Calculated' : Math.round(this.hue); },
+            redInterpreted() {
+                if(Number.isNaN(this.red)) { return 'Calculated'; }
+                if(isNaN(this.red)) { return this.red; }
+
+                return Math.round(this.red);
+            },
+            greenInterpreted() {
+                if(Number.isNaN(this.green)) { return 'Calculated'; }
+                if(isNaN(this.green)) { return this.green; }
+
+                return Math.round(this.green);
+            },
+            blueInterpreted() {
+                if(Number.isNaN(this.blue)) { return 'Calculated'; }
+                if(isNaN(this.blue)) { return this.blue; }
+
+                return Math.round(this.blue);
+            },
+            hueInterpreted() {
+                if(Number.isNaN(this.hue)) { return 'Calculated'; }
+                if(isNaN(this.hue)) { return this.hue; }
+
+                return Math.round(this.hue);
+            },
             saturationInterpreted() {
                 if(Number.isNaN(this.saturation)) { return 'Calculated' };
                 if(isNaN(this.saturation)) { return this.saturation; };

@@ -1,6 +1,8 @@
 'use strict';
 
 const config = require('config');
+const note = require('note-log');
+const util = require('util');
 const math = require('mathjs');
 
 const init = function(leds, ws) {
