@@ -34,12 +34,7 @@
     }
 
     .header-logo {
-        margin: .5rem .5rem .5rem 0;
-    }
-
-    .header-title {
-        display: inline-block;
-        margin: 0 1rem 0 0;
+        margin: .5rem 1rem .5rem 0;
     }
 </style>
 
