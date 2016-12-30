@@ -55,9 +55,7 @@
                 <span class="channel-label" title="Saturation">S</span>
 
                 <div class="channel-value">
-                    <form @submit.prevent="updateSaturation">
-                        <input type="text" :value="saturationInterpreted" class="input channel-input" @blur="updateSaturation" @keyup.enter="updateSaturation">
-                    </form>
+                    <input type="text" :value="saturationInterpreted" class="input channel-input" @blur="updateSaturation" @keyup.enter="updateSaturation">
 
                     <div class="channel-picker" :style="saturationGradient">
                         <input type="range" min="0" max="1" step="0.01" :value="saturationFixed" class="channel-slider saturation" @input="updateSaturation">
@@ -69,9 +67,7 @@
                 <span class="channel-label" title="Value">V</span>
 
                 <div class="channel-value">
-                    <form @submit.prevent="updateValue">
-                        <input type="text" :value="valueInterpreted" class="input channel-input" @blur="updateValue" @keyup.enter="updateValue">
-                    </form>
+                    <input type="text" :value="valueInterpreted" class="input channel-input" @blur="updateValue" @keyup.enter="updateValue">
 
                     <div class="channel-picker" :style="valueGradient">
                         <input type="range" min="0" max="1" step="0.01" :value="valueFixed" class="channel-slider value" @input="updateValue">
@@ -127,6 +123,8 @@
                 return Math.round(this.hue);
             },
             saturationInterpreted() {
+                console.log(this.saturation, isNaN(this.saturation));
+
                 if(Number.isNaN(this.saturation)) { return 'Calculated' };
                 if(isNaN(this.saturation)) { return this.saturation; };
 
