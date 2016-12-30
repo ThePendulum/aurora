@@ -12,8 +12,10 @@
   padding: 0 1rem 0 0;
   font-size: .8rem;
   font-weight: bold;
+  cursor: default;
 }
 .channel-value[data-v-052d04e3] {
+  position: relative;
   flex-grow: 1;
 }
 .channel-input[data-v-052d04e3] {
@@ -53,33 +55,74 @@
     border-left: solid .3rem transparent;
     border-right: solid .3rem transparent;
 }
+.channel-color[data-v-052d04e3] {
+  height: 1.3rem;
+  box-sizing: border-box;
+  padding: 0;
+  border: solid 1px #ddd;
+  border-top: none;
+  cursor: pointer;
+}
+.channel-color[data-v-052d04e3]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+}
+.channel-color[data-v-052d04e3]::-webkit-color-swatch {
+    border: none;
+}
+.channel-color[data-v-052d04e3]::moz-color-swatch {
+    border: none;
+}
+.channel-presets[data-v-052d04e3] {
+  background: #fff;
+  width: 100%;
+  list-style: none;
+  position: absolute;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+}
+.channel-presets .preset[data-v-052d04e3] {
+    padding: .5rem;
+}
+.channel-presets .preset[data-v-052d04e3]:hover {
+      color: #fff;
+      background: #2294ff;
+      cursor: pointer;
+}
 
 .header[data-v-afc61ebe] {
   color: #fff;
   background: #2294ff;
   display: flex;
   align-items: center;
-  padding: .5rem 1rem;
+  padding: 0 1rem;
 }
 .header-logo[data-v-afc61ebe] {
-  margin: 0 .5rem 0 0;
+  margin: .5rem .5rem .5rem 0;
 }
 .header-title[data-v-afc61ebe] {
   display: inline-block;
-  margin: -.75rem 0 0 0;
+  margin: 0 1rem 0 0;
 }
 
+.header-logo,
 .header-logo svg {
   width: 3rem;
   height: 3rem;
 }
 
-.nav[data-v-e41e297e] {
-  background: #eee;
-}
 .nav-item[data-v-e41e297e] {
   display: inline-block;
-  padding: 1rem;
+  padding: 1.5rem;
+}
+.nav-item[data-v-e41e297e]:hover {
+    color: #2294ff;
+    background: #fff;
+}
+.nav-item.selected[data-v-e41e297e] {
+    font-weight: bold;
 }
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
@@ -498,7 +541,5 @@ h1 {
 .panel {
   box-sizing: border-box;
   padding: 16px;
-  padding: 1rem; }
-
-.panel:not(:last-child) {
+  padding: 1rem;
   border-bottom: solid 1px #ddd; }

@@ -1,11 +1,32 @@
 <template>
     <div>
         <div class="panel">
+            <div class="channel master">
+                <span class="channel-label" title="Master">M</span>
+
+                <div class="channel-value">
+                    <input type="text" :value="Number.isNaN(hex) ? '' : hex" class="input channel-input" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
+
+                    <ul v-if="focused === 'master'" class="channel-presets">
+                        <li v-for="preset in masterPresets" class="preset" @click="applyPreset(preset)">{{preset.name}}</li>
+                    </ul>
+
+                    <input type="color" :value="Number.isNaN(hex) ? '#ffffff' : hex" class="channel-color channel-input" @input="updateHex">
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+
             <div class="channel red">
                 <span class="channel-label" title="Red">R</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="redInterpreted" class="input channel-input" @blur="updateRed" @keyup.enter="updateRed">
+                    <input type="text" :value="Number.isNaN(redInterpreted) ? '' : redInterpreted" :placeholder="Number.isNaN(redInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('red')" @blur="updateRed" @keyup.enter="updateRed">
+
+                    <ul v-if="focused === 'red'" class="channel-presets">
+                        <li v-for="preset in redPresets" class="preset" @click="applyPreset(preset, 'red')">{{preset.name}}</li>
+                    </ul>
 
                     <div class="channel-picker" :style="redGradient">
                         <input type="range" min="0" max="255" :value="redFixed" class="channel-slider red" @input="updateRed">
@@ -17,7 +38,11 @@
                 <span class="channel-label" title="Green">G</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="greenInterpreted" class="input channel-input" @blur="updateGreen" @keyup.enter="updateGreen">
+                    <input type="text" :value="Number.isNaN(greenInterpreted) ? '' : greenInterpreted" :placeholder="Number.isNaN(greenInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('green')" @blur="updateGreen" @keyup.enter="updateGreen">
+
+                    <ul v-if="focused === 'green'" class="channel-presets">
+                        <li v-for="preset in greenPresets" class="preset" @click="applyPreset(preset, 'green')">{{preset.name}}</li>
+                    </ul>
 
                     <div class="channel-picker" :style="greenGradient">
                         <input type="range" min="0" max="255" :value="greenFixed" class="channel-slider green" @input="updateGreen">
@@ -29,7 +54,11 @@
                 <span class="channel-label" title="Blue">B</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="blueInterpreted" class="input channel-input" @blur="updateBlue" @keyup.enter="updateBlue">
+                    <input type="text" :value="Number.isNaN(blueInterpreted) ? '' : blueInterpreted" :placeholder="Number.isNaN(blueInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('blue')" @blur="updateBlue" @keyup.enter="updateBlue">
+
+                    <ul v-if="focused === 'blue'" class="channel-presets">
+                        <li v-for="preset in bluePresets" class="preset" @click="applyPreset(preset, 'blue')">{{preset.name}}</li>
+                    </ul>
 
                     <div class="channel-picker" :style="blueGradient">
                         <input type="range" min="0" max="255" :value="blueFixed" class="channel-slider blue" @input="updateBlue">
@@ -43,7 +72,11 @@
                 <span class="channel-label" title="Hue">H</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="hueInterpreted" class="input channel-input" @blur="updateHue" @keyup.enter="updateHue">
+                    <input type="text" :value="Number.isNaN(hueInterpreted) ? '' : hueInterpreted" :placeholder="Number.isNaN(hueInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('hue')" @blur="updateHue" @keyup.enter="updateHue">
+
+                    <ul v-if="focused === 'hue'" class="channel-presets">
+                        <li v-for="preset in huePresets" class="preset" @click="applyPreset(preset, 'hue')">{{preset.name}}</li>
+                    </ul>
 
                     <div class="channel-picker" :style="hueGradient">
                         <input type="range" min="0" max="360" :value="hueFixed" class="channel-slider hue" @input="updateHue">
@@ -55,7 +88,11 @@
                 <span class="channel-label" title="Saturation">S</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="saturationInterpreted" class="input channel-input" @blur="updateSaturation" @keyup.enter="updateSaturation">
+                    <input type="text" :value="Number.isNaN(saturationInterpreted) ? '' : saturationInterpreted" :placeholder="Number.isNaN(saturationInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('saturation')" @blur="updateSaturation" @keyup.enter="updateSaturation">
+
+                    <ul v-if="focused === 'saturation'" class="channel-presets">
+                        <li v-for="preset in saturationPresets" class="preset" @click="applyPreset(preset, 'saturation')">{{preset.name}}</li>
+                    </ul>
 
                     <div class="channel-picker" :style="saturationGradient">
                         <input type="range" min="0" max="1" step="0.01" :value="saturationFixed" class="channel-slider saturation" @input="updateSaturation">
@@ -67,7 +104,11 @@
                 <span class="channel-label" title="Value">V</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="valueInterpreted" class="input channel-input" @blur="updateValue" @keyup.enter="updateValue">
+                    <input type="text" :value="Number.isNaN(valueInterpreted) ? '' : valueInterpreted" :placeholder="Number.isNaN(valueInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('value')" @blur="updateValue" @keyup.enter="updateValue">
+
+                    <ul v-if="focused === 'value'" class="channel-presets">
+                        <li v-for="preset in valuePresets" class="preset" @click="applyPreset(preset, 'value')">{{preset.name}}</li>
+                    </ul>
 
                     <div class="channel-picker" :style="valueGradient">
                         <input type="range" min="0" max="1" step="0.01" :value="valueFixed" class="channel-slider value" @input="updateValue">
@@ -82,7 +123,24 @@
     import convert from 'color-convert';
     import {mapState} from 'vuex';
 
+    import debounce from '../../js/utils/debounce.js';
+
+    const methodMap = {
+        hex: 'updateHex',
+        red: 'updateRed',
+        green: 'updateGreen',
+        blue: 'updateBlue',
+        hue: 'updateHue',
+        saturation: 'updateSaturation',
+        value: 'updateValue'
+    };
+
     export default {
+        data() {
+            return {
+                focused: null
+            };
+        },
         computed: {
             ...mapState({
                 red(state) { return state.pattern.red; },
@@ -90,8 +148,22 @@
                 blue(state) { return state.pattern.blue; },
                 hue(state) { return state.pattern.hue; },
                 saturation(state) { return state.pattern.saturation; },
-                value(state) { return state.pattern.value; }
+                value(state) { return state.pattern.value; },
+                masterPresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('master')); },
+                redPresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('red')); },
+                greenPresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('green')); },
+                bluePresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('blue')); },
+                huePresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('hue')); },
+                saturationPresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('saturation')); },
+                valuePresets(state) { return state.presets.presets.filter(preset => preset.targets.includes('value')); }
             }),
+            hex() {
+                if(Number.isNaN(this.red) || Number.isNaN(this.green) || Number.isNaN(this.blue)) {
+                    return NaN;
+                }
+
+                return '#' + convert.rgb.hex(this.red, this.green, this.blue).toLowerCase();
+            },
             redFixed() { return isNaN(this.red) ? 0 : Math.round(this.red); },
             greenFixed() { return isNaN(this.green) ? 0 : Math.round(this.green); },
             blueFixed() { return isNaN(this.blue) ? 0 : Math.round(this.blue); },
@@ -99,39 +171,37 @@
             saturationFixed() { return isNaN(this.saturation) ? 1 : this.saturation; },
             valueFixed() { return isNaN(this.value) ? 1 : this.value; },
             redInterpreted() {
-                if(Number.isNaN(this.red)) { return 'Calculated'; }
+                if(Number.isNaN(this.red)) { return NaN; }
                 if(isNaN(this.red)) { return this.red; }
 
                 return Math.round(this.red);
             },
             greenInterpreted() {
-                if(Number.isNaN(this.green)) { return 'Calculated'; }
+                if(Number.isNaN(this.green)) { return NaN; }
                 if(isNaN(this.green)) { return this.green; }
 
                 return Math.round(this.green);
             },
             blueInterpreted() {
-                if(Number.isNaN(this.blue)) { return 'Calculated'; }
+                if(Number.isNaN(this.blue)) { return NaN; }
                 if(isNaN(this.blue)) { return this.blue; }
 
                 return Math.round(this.blue);
             },
             hueInterpreted() {
-                if(Number.isNaN(this.hue)) { return 'Calculated'; }
+                if(Number.isNaN(this.hue)) { return NaN; }
                 if(isNaN(this.hue)) { return this.hue; }
 
                 return Math.round(this.hue);
             },
             saturationInterpreted() {
-                console.log(this.saturation, isNaN(this.saturation));
-
-                if(Number.isNaN(this.saturation)) { return 'Calculated' };
+                if(Number.isNaN(this.saturation)) { return NaN; };
                 if(isNaN(this.saturation)) { return this.saturation; };
 
                 return Number(this.saturation).toFixed(2);
             },
             valueInterpreted() {
-                if(Number.isNaN(this.value)) { return 'Calculated' };
+                if(Number.isNaN(this.value)) { return NaN; };
                 if(isNaN(this.value)) { return this.value; };
 
                 return Number(this.value).toFixed(2);
@@ -168,15 +238,35 @@
             }
         },
         methods: {
-            updateRed(event) { this.$store.dispatch('setRed', event.target.value); },
-            updateGreen(event) { this.$store.dispatch('setGreen', event.target.value); },
-            updateBlue(event) { this.$store.dispatch('setBlue', event.target.value); },
-            updateHue(event) { this.$store.dispatch('setHue', event.target.value); },
-            updateSaturation(event) { this.$store.dispatch('setSaturation', event.target.value); },
-            updateValue(event) { this.$store.dispatch('setValue', event.target.value); },
+            updateHex: debounce(function(event, value) {
+                const rgb = convert.hex.rgb(event ? event.target.value : value);
+
+                this.$store.dispatch('setRed', rgb[0]);
+                this.$store.dispatch('setGreen', rgb[1]);
+                this.$store.dispatch('setBlue', rgb[2]);
+            }, 10),
+            updateRed(event, value) { this.$store.dispatch('setRed', event ? event.target.value : value); },
+            updateGreen(event, value) { this.$store.dispatch('setGreen', event ? event.target.value : value); },
+            updateBlue(event, value) { this.$store.dispatch('setBlue', event ? event.target.value : value); },
+            updateHue(event, value) { this.$store.dispatch('setHue', event ? event.target.value : value); },
+            updateSaturation(event, value) { this.$store.dispatch('setSaturation', event ? event.target.value : value); },
+            updateValue(event, value) { this.$store.dispatch('setValue', event ? event.target.value : value); },
             hueToHex(hue) { return '#' + convert.hsv.hex(hue, this.saturationFixed * 100, this.valueFixed * 100); },
             saturationToHex(saturation) { return '#' + convert.hsv.hex(this.hueFixed, saturation * 100, this.valueFixed * 100); },
-            valueToHex(value) { return '#' + convert.hsv.hex(this.hueFixed, this.saturationFixed * 100, value * 100); }
+            valueToHex(value) { return '#' + convert.hsv.hex(this.hueFixed, this.saturationFixed * 100, value * 100); },
+            focus(channel) { this.focused = channel; },
+            applyPreset(preset, channel) {
+                Object.keys(preset.values).forEach(key => {
+                    if(channel === undefined || key === channel) {
+                        this[methodMap[key]](null, preset.values[key]);
+                    }
+                });
+            }
+        },
+        mounted() {
+            document.addEventListener('click', event => {
+                this.focused = null;
+            });
         }
     };
 </script>
@@ -199,9 +289,11 @@
         padding: 0 1rem 0 0;
         font-size: .8rem;
         font-weight: bold;
+        cursor: default;
     }
 
     .channel-value {
+        position: relative;
         flex-grow: 1;
     }
 
@@ -244,6 +336,49 @@
             border-bottom: solid .4rem $text;
             border-left: solid .3rem transparent;
             border-right: solid .3rem transparent;
+        }
+    }
+
+    .channel-color {
+        height: 1.3rem;
+        box-sizing: border-box;
+        padding: 0;
+        border: solid 1px $border;
+        border-top: none;
+        cursor: pointer;
+
+        &::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border: none;
+        }
+
+        &::-webkit-color-swatch {
+            border: none;
+        }
+
+        &::moz-color-swatch {
+            border: none;
+        }
+    }
+
+    .channel-presets {
+        background: $background;
+        width: 100%;
+        list-style: none;
+        position: absolute;
+        z-index: 1;
+        padding: 0;
+        margin: 0;
+        box-shadow: 0 0 2px $shadow;
+
+        .preset {
+            padding: .5rem;
+
+            &:hover {
+                color: $text-light;
+                background: $primary;
+                cursor: pointer;
+            }
         }
     }
 </style>

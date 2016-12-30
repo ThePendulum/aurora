@@ -54,7 +54,13 @@ module.exports = function (leds) {
     wss.transfer('mode', leds.mode);
 
     knex('presets').select().then(function (presets) {
-      wss.transfer('presets', presets);
+      wss.transfer('presets', presets.map(function (preset) {
+        preset.targets = JSON.parse(preset.targets);
+        preset.values = JSON.parse(preset.values);
+        preset.labels = JSON.parse(preset.labels);
+
+        return preset;
+      }));
     }).catch(function (error) {
       note(error);
     });

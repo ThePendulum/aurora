@@ -37,6 +37,10 @@ socket.addEventListener('message', msg => {
             store.commit('setBlue', rgb[2]);
         }
     }
+
+    if(data[0] === 'presets') {
+        store.commit('addPresets', data[1]);
+    }
 });
 
 export default socket;

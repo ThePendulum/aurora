@@ -9,8 +9,12 @@
   },
   "scripts": {
     "build": "webpack -p & babel src -d dist",
-    "watch": "webpack --progress --colors --watch",
-    "babel-watch": "babel src -w -d dist"
+    "webpack": "webpack",
+    "babel": "babel src -d dist",
+    "webpack-watch": "webpack --progress --colors --watch",
+    "babel-watch": "babel src -w -d dist",
+    "add-presets": "knex migrate:latest",
+    "remove-presets": "knex migrate:rollback"
   },
   "keywords": [
     "ws28xx",
