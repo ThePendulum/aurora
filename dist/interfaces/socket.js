@@ -75,7 +75,7 @@ module.exports = function (leds) {
       }
     };
 
-    update();
+    // update();
 
     wss.on('message', function (msg) {
       var data = JSON.parse(msg);

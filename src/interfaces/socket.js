@@ -67,7 +67,7 @@ module.exports = function(leds) {
       }
     };
 
-    update();
+    // update();
 
     wss.on('message', msg => {
       const data = JSON.parse(msg);

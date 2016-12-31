@@ -25,7 +25,5 @@ export default function(context, value) {
         context.commit('setRed', rgb[0]);
         context.commit('setGreen', rgb[1]);
         context.commit('setBlue', rgb[2]);
-
-        socket.send(JSON.stringify(['rgb', pick(context.state, ['red', 'green', 'blue'])]));
     }
 };
