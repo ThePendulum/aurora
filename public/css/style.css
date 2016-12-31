@@ -92,11 +92,24 @@
       cursor: pointer;
 }
 
+.container[data-v-114b0345] {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.content[data-v-114b0345] {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
 .header[data-v-afc61ebe] {
   color: #fff;
   background: #2294ff;
+  width: 100%;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
+  box-sizing: border-box;
   padding: 0 1rem;
 }
 .header-logo[data-v-afc61ebe] {
@@ -109,6 +122,10 @@
   height: 3rem;
 }
 
+.nav[data-v-e41e297e] {
+  overflow-x: auto;
+  white-space: nowrap;
+}
 .nav-item[data-v-e41e297e] {
   display: inline-block;
   padding: 1.5rem;

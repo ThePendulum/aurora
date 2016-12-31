@@ -28,8 +28,11 @@
     .header {
         color: $text-light;
         background: $primary;
+        width: 100%;
         display: flex;
+        flex-shrink: 0;
         align-items: center;
+        box-sizing: border-box;
         padding: 0 1rem;
     }
 

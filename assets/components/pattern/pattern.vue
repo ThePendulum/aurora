@@ -264,9 +264,6 @@
             updateHue: checkValue(function(value) { this.$store.dispatch('setHue', value); }),
             updateSaturation: checkValue(function(value) { this.$store.dispatch('setSaturation', value); }),
             updateValue: checkValue(function(value) { this.$store.dispatch('setValue', value); }),
-            hueToHex(hue) { return '#' + convert.hsv.hex(hue, this.saturationFixed * 100, this.valueFixed * 100); },
-            saturationToHex(saturation) { return '#' + convert.hsv.hex(this.hueFixed, saturation * 100, this.valueFixed * 100); },
-            valueToHex(value) { return '#' + convert.hsv.hex(this.hueFixed, this.saturationFixed * 100, value * 100); },
             applyPreset(preset, channel) {
                 Object.keys(preset.values).forEach(key => {
                     // only apply to source channel, unless none is specified (master)
@@ -274,7 +271,10 @@
                         this[methodMap[key]](null, preset.values[key]);
                     }
                 });
-            }
+            },
+            hueToHex(hue) { return '#' + convert.hsv.hex(hue, this.saturationFixed * 100, this.valueFixed * 100); },
+            saturationToHex(saturation) { return '#' + convert.hsv.hex(this.hueFixed, saturation * 100, this.valueFixed * 100); },
+            valueToHex(value) { return '#' + convert.hsv.hex(this.hueFixed, this.saturationFixed * 100, value * 100); }
         },
         mounted() {
             document.addEventListener('click', event => {

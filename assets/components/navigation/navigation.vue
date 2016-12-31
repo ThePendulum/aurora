@@ -25,6 +25,11 @@
 <style scoped lang="sass">
     @import '../../css/theme';
 
+    .nav {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
     .nav-item {
         display: inline-block;
         padding: 1.5rem;
