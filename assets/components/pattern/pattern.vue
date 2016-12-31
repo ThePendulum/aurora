@@ -260,7 +260,7 @@
             }), 10),
             updateRed: checkValue(function(value) { this.$store.dispatch('setRed', value); }),
             updateGreen: checkValue(function(value) { this.$store.dispatch('setGreen', value); }),
-            updateBlue: checkValue(function(value) { this.$store.dispatch('setRed', value); }),
+            updateBlue: checkValue(function(value) { this.$store.dispatch('setBlue', value); }),
             updateHue: checkValue(function(value) { this.$store.dispatch('setHue', value); }),
             updateSaturation: checkValue(function(value) { this.$store.dispatch('setSaturation', value); }),
             updateValue: checkValue(function(value) { this.$store.dispatch('setValue', value); }),
