@@ -135,6 +135,18 @@
         value: 'updateValue'
     };
 
+    // proxy value from event or value argument, do not fire if value is falsy (prevents defaulting to black when defocusing from calculated, thus empty, channel)
+    const checkValue = function(func) {
+        return function(event, customValue) {
+            const context = this;
+            const value = event ? event.target.value : customValue;
+
+            if(value) {
+                func.apply(context, [value]);
+            }
+        };
+    };
+
     export default {
         data() {
             return {
@@ -238,25 +250,26 @@
             }
         },
         methods: {
-            updateHex: debounce(function(event, value) {
-                const rgb = convert.hex.rgb(event ? event.target.value : value);
+            focus(channel) { this.focused = channel; },
+            updateHex: debounce(checkValue(function(value) {
+                const rgb = convert.hex.rgb(value);
 
                 this.$store.dispatch('setRed', rgb[0]);
                 this.$store.dispatch('setGreen', rgb[1]);
                 this.$store.dispatch('setBlue', rgb[2]);
-            }, 10),
-            updateRed(event, value) { this.$store.dispatch('setRed', event ? event.target.value : value); },
-            updateGreen(event, value) { this.$store.dispatch('setGreen', event ? event.target.value : value); },
-            updateBlue(event, value) { this.$store.dispatch('setBlue', event ? event.target.value : value); },
-            updateHue(event, value) { this.$store.dispatch('setHue', event ? event.target.value : value); },
-            updateSaturation(event, value) { this.$store.dispatch('setSaturation', event ? event.target.value : value); },
-            updateValue(event, value) { this.$store.dispatch('setValue', event ? event.target.value : value); },
+            }), 10),
+            updateRed: checkValue(function(value) { this.$store.dispatch('setRed', value); }),
+            updateGreen: checkValue(function(value) { this.$store.dispatch('setGreen', value); }),
+            updateBlue: checkValue(function(value) { this.$store.dispatch('setRed', value); }),
+            updateHue: checkValue(function(value) { this.$store.dispatch('setHue', value); }),
+            updateSaturation: checkValue(function(value) { this.$store.dispatch('setSaturation', value); }),
+            updateValue: checkValue(function(value) { this.$store.dispatch('setValue', value); }),
             hueToHex(hue) { return '#' + convert.hsv.hex(hue, this.saturationFixed * 100, this.valueFixed * 100); },
             saturationToHex(saturation) { return '#' + convert.hsv.hex(this.hueFixed, saturation * 100, this.valueFixed * 100); },
             valueToHex(value) { return '#' + convert.hsv.hex(this.hueFixed, this.saturationFixed * 100, value * 100); },
-            focus(channel) { this.focused = channel; },
             applyPreset(preset, channel) {
                 Object.keys(preset.values).forEach(key => {
+                    // only apply to source channel, unless none is specified (master)
                     if(channel === undefined || key === channel) {
                         this[methodMap[key]](null, preset.values[key]);
                     }
