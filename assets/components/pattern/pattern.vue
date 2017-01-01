@@ -141,7 +141,7 @@
             const context = this;
             const value = event ? event.target.value : customValue;
 
-            if(value) {
+            if(value !== undefined) {
                 func.apply(context, [value]);
             }
         };
