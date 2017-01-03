@@ -38,6 +38,15 @@ socket.addEventListener('message', msg => {
         }
     }
 
+    if(data[0] === 'meta') {
+        store.commit('setWidth', data[1].width);
+        store.commit('setHeight', data[1].height);
+    }
+
+    if(data[0] === 'pixels') {
+        store.commit('setPixels', data[1]);
+    }
+
     if(data[0] === 'presets') {
         store.commit('addPresets', data[1]);
     }

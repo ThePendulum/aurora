@@ -3,16 +3,19 @@
         <span class="header-logo" v-html="logo"></span>
 
         <vue-navigation />
+        <vue-feedback />
     </div>
 </template>
 
 <script>
     import logo from '../../img/logo.svg';
     import Navigation from '../navigation/navigation.vue';
+    import Feedback from '../feedback/feedback.vue';
 
     export default {
         components: {
-            'vue-navigation': Navigation
+            'vue-navigation': Navigation,
+            'vue-feedback': Feedback
         },
         data() {
             return {
@@ -29,6 +32,7 @@
         color: $text-light;
         background: $primary;
         width: 100%;
+        position: relative;
         display: flex;
         flex-shrink: 0;
         align-items: center;

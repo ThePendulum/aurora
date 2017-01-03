@@ -26,6 +26,7 @@
     @import '../../css/theme';
 
     .nav {
+        flex-grow: 1;
         overflow-x: auto;
         white-space: nowrap;
     }

@@ -45,7 +45,6 @@ module.exports = function (leds) {
         wss.transfer('meta', {
             width: leds.width,
             height: leds.height,
-            pixels: leds.pixels,
             regulator: config.regulator,
             interval: leds.interval
         });
