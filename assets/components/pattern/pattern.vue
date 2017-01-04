@@ -5,7 +5,7 @@
                 <span class="channel-label" title="Master">M</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(hex) ? '' : hex" class="input channel-input" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
+                    <input type="text" :value="Number.isNaN(hex) ? '' : hex" class="input channel-input" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" spellcheck="false" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
 
                     <ul v-if="focused === 'master'" class="channel-presets">
                         <li v-for="preset in masterPresets" class="preset" @click="applyPreset(preset)">{{preset.name}}</li>
@@ -22,7 +22,7 @@
                 <span class="channel-label" title="Red">R</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(redInterpreted) ? '' : redInterpreted" :placeholder="Number.isNaN(redInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('red')" @blur="updateRed" @keyup.enter="updateRed">
+                    <input type="text" :value="Number.isNaN(redInterpreted) ? '' : redInterpreted" :placeholder="Number.isNaN(redInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('red')" @blur="updateRed" @keyup.enter="updateRed">
 
                     <ul v-if="focused === 'red'" class="channel-presets">
                         <li v-for="preset in redPresets" class="preset" @click="applyPreset(preset, 'red')">{{preset.name}}</li>
@@ -38,7 +38,7 @@
                 <span class="channel-label" title="Green">G</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(greenInterpreted) ? '' : greenInterpreted" :placeholder="Number.isNaN(greenInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('green')" @blur="updateGreen" @keyup.enter="updateGreen">
+                    <input type="text" :value="Number.isNaN(greenInterpreted) ? '' : greenInterpreted" :placeholder="Number.isNaN(greenInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('green')" @blur="updateGreen" @keyup.enter="updateGreen">
 
                     <ul v-if="focused === 'green'" class="channel-presets">
                         <li v-for="preset in greenPresets" class="preset" @click="applyPreset(preset, 'green')">{{preset.name}}</li>
@@ -54,7 +54,7 @@
                 <span class="channel-label" title="Blue">B</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(blueInterpreted) ? '' : blueInterpreted" :placeholder="Number.isNaN(blueInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('blue')" @blur="updateBlue" @keyup.enter="updateBlue">
+                    <input type="text" :value="Number.isNaN(blueInterpreted) ? '' : blueInterpreted" :placeholder="Number.isNaN(blueInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('blue')" @blur="updateBlue" @keyup.enter="updateBlue">
 
                     <ul v-if="focused === 'blue'" class="channel-presets">
                         <li v-for="preset in bluePresets" class="preset" @click="applyPreset(preset, 'blue')">{{preset.name}}</li>
@@ -72,7 +72,7 @@
                 <span class="channel-label" title="Hue">H</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(hueInterpreted) ? '' : hueInterpreted" :placeholder="Number.isNaN(hueInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('hue')" @blur="updateHue" @keyup.enter="updateHue">
+                    <input type="text" :value="Number.isNaN(hueInterpreted) ? '' : hueInterpreted" :placeholder="Number.isNaN(hueInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('hue')" @blur="updateHue" @keyup.enter="updateHue">
 
                     <ul v-if="focused === 'hue'" class="channel-presets">
                         <li v-for="preset in huePresets" class="preset" @click="applyPreset(preset, 'hue')">{{preset.name}}</li>
@@ -88,7 +88,7 @@
                 <span class="channel-label" title="Saturation">S</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(saturationInterpreted) ? '' : saturationInterpreted" :placeholder="Number.isNaN(saturationInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('saturation')" @blur="updateSaturation" @keyup.enter="updateSaturation">
+                    <input type="text" :value="Number.isNaN(saturationInterpreted) ? '' : saturationInterpreted" :placeholder="Number.isNaN(saturationInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('saturation')" @blur="updateSaturation" @keyup.enter="updateSaturation">
 
                     <ul v-if="focused === 'saturation'" class="channel-presets">
                         <li v-for="preset in saturationPresets" class="preset" @click="applyPreset(preset, 'saturation')">{{preset.name}}</li>
@@ -104,7 +104,7 @@
                 <span class="channel-label" title="Value">V</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(valueInterpreted) ? '' : valueInterpreted" :placeholder="Number.isNaN(valueInterpreted) ? 'Calculated' : ''" class="input channel-input" @click.stop="focus('value')" @blur="updateValue" @keyup.enter="updateValue">
+                    <input type="text" :value="Number.isNaN(valueInterpreted) ? '' : valueInterpreted" :placeholder="Number.isNaN(valueInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('value')" @blur="updateValue" @keyup.enter="updateValue">
 
                     <ul v-if="focused === 'value'" class="channel-presets">
                         <li v-for="preset in valuePresets" class="preset" @click="applyPreset(preset, 'value')">{{preset.name}}</li>
