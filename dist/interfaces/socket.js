@@ -56,7 +56,7 @@ module.exports = function (leds) {
             wss.transfer('presets', presets.map(function (preset) {
                 preset.targets = JSON.parse(preset.targets);
                 preset.values = JSON.parse(preset.values);
-                preset.labels = JSON.parse(preset.labels);
+                preset.labels = JSON.parse(preset.tags);
 
                 return preset;
             }));
@@ -65,14 +65,18 @@ module.exports = function (leds) {
         });
 
         wss.on('message', function (msg) {
-            var data = JSON.parse(msg);
+            try {
+                var _data = JSON.parse(msg);
 
-            if (data[0] === 'mode') {
-                leds.mode = data[1];
-            }
+                if (_data[0] === 'mode') {
+                    leds.mode = _data[1];
+                }
 
-            if (data[0] === 'interval') {
-                leds.interval = data[1];
+                if (_data[0] === 'interval') {
+                    leds.interval = _data[1];
+                }
+            } catch (error) {
+                note('socket', error);
             }
         });
 

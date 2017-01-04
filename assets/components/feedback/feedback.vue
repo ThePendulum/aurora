@@ -19,8 +19,8 @@
         },
         computed: {
             ...mapState({
-                phantomWidth(state) { return state.meta.width; },
-                phantomHeight(state) { return state.meta.height; },
+                phantomWidth(state) { return state.meta.width || 1; },
+                phantomHeight(state) { return state.meta.height || 1; },
                 pixels(state) {
                     state.meta.pixels.forEach(pixel => {
                         this.phantomCtx.fillStyle = 'rgb(' + pixel.values.map(Math.round).join() + ')';

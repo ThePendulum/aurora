@@ -3,6 +3,7 @@
 var config = require('config');
 var note = require('note-log');
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 
 var port = config.has('web.port') ? config.web.port : 3000;

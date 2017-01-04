@@ -44,36 +44,40 @@ const init = function(leds, ws) {
         }
 
         wss.on('message', msg => {
-            const data = JSON.parse(msg);
+            try {
+                const data = JSON.parse(msg);
 
-            if(data[0] === 'rgb') {
-                try {
-                    Object.keys(data[1]).forEach(prop => {
-                        rgb[prop] = {
-                            value: data[1][prop],
-                            eval: math.compile(data[1][prop]).eval
-                        };
-                    });
+                if(data[0] === 'rgb') {
+                    try {
+                        Object.keys(data[1]).forEach(prop => {
+                            rgb[prop] = {
+                                value: data[1][prop],
+                                eval: math.compile(data[1][prop]).eval
+                            };
+                        });
 
-                    wss.broadcast('rgb', data[1]);
-                } catch(error) {
-                    wss.transfer('error', error.message);
+                        wss.broadcast('rgb', data[1]);
+                    } catch(error) {
+                        wss.transfer('error', error.message);
+                    }
                 }
-            }
 
-            if(data[0] === 'hsv') {
-                try {
-                    Object.keys(data[1]).forEach(prop => {
-                        hsv[prop] = {
-                            value: data[1][prop],
-                            eval: math.compile(data[1][prop]).eval
-                        };
-                    });
+                if(data[0] === 'hsv') {
+                    try {
+                        Object.keys(data[1]).forEach(prop => {
+                            hsv[prop] = {
+                                value: data[1][prop],
+                                eval: math.compile(data[1][prop]).eval
+                            };
+                        });
 
-                    wss.broadcast('hsv', data[1]);
-                } catch(error) {
-                    wss.transfer('error', error.message);
+                        wss.broadcast('hsv', data[1]);
+                    } catch(error) {
+                        wss.transfer('error', error.message);
+                    }
                 }
+            } catch(error) {
+                note('color', error);
             }
         });
     });

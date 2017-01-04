@@ -1,13 +1,5 @@
 'use strict';
 
-const database = {
-    client: 'sqlite3',
-    connection: {
-        filename: './database/aurora.sqlite'
-    },
-    useNullAsDefault: true
-};
-
 const strip = {
     chip: 'ws2812b',
     size: 180,
@@ -15,10 +7,6 @@ const strip = {
     zigzag: false,
     regulator: 1,
     persist: false,
-    socket: {
-        previewInterval: 200
-    },
-    database
 };
 
 const matrix = {
@@ -27,8 +15,7 @@ const matrix = {
     colorIndex: [0, 1, 2],
     zigzag: true,
     regulator: .5,
-    persist: false,
-    database
+    persist: false
 };
 
 const strand = {
@@ -37,8 +24,18 @@ const strand = {
     colorIndex: [0, 2, 1],
     zigzag: false,
     regulator: 1,
-    persist: false,
-    database
+    persist: false
 };
 
-module.exports = strip;
+module.exports = Object.assign({
+    socket: {
+        previewInterval: 200
+    },
+    database: {
+        client: 'sqlite3',
+        connection: {
+            filename: './database/aurora.sqlite'
+        },
+        useNullAsDefault: true
+    }
+}, strip);
