@@ -38,6 +38,10 @@ socket.addEventListener('message', msg => {
         }
     }
 
+    if(data[0] === 'modulation') {
+        store.commit('setModulation', data[1]);
+    }
+
     if(data[0] === 'meta') {
         store.commit('setWidth', data[1].width);
         store.commit('setHeight', data[1].height);

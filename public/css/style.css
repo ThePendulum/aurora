@@ -110,12 +110,19 @@
     opacity: .1;
     margin: 1px;
 }
+.modulation[data-v-f2dc8b7e]:active {
+    cursor: none;
+}
 .modulation-pointer[data-v-f2dc8b7e] {
-  width: .25rem;
-  height: .25rem;
+  background: #2294ff;
+  width: .75rem;
+  height: .75rem;
   position: absolute;
-  border: solid 1px rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
+  border: solid 1px #fff;
   border-radius: 50%;
+  margin: -.375rem;
+  box-shadow: 0 0 4px #2294ff;
 }
 
 .container[data-v-114b0345] {

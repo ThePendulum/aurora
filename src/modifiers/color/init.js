@@ -51,6 +51,11 @@ const init = function(leds, ws) {
             wss.transfer('hsv', {hue: hsv.hue.value, saturation: hsv.saturation.value, value: hsv.value.value});
         }
 
+        wss.transfer('modulation', {
+            x: scope.mx,
+            y: scope.my
+        });
+
         wss.on('message', msg => {
             try {
                 const data = JSON.parse(msg);
@@ -88,6 +93,8 @@ const init = function(leds, ws) {
                 if(data[0] === 'modulation') {
                     scope.mx = data[1].x;
                     scope.my = data[1].y;
+
+                    wss.broadcast('modulation', data[1]);
                 }
             } catch(error) {
                 note('color', error);

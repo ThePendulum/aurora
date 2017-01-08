@@ -2,7 +2,7 @@
     <div>
         <div class="panel">
             <div class="channel">
-                <span class="channel-label" title="Master">Mod</span>
+                <span class="channel-label" title="Modulation">Mod</span>
 
                 <div class="channel-value modulation">
                     <vue-modulation />

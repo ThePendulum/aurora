@@ -46,6 +46,8 @@
 </style>
 
 <style lang="sass">
+    @import '../../css/theme';
+
     .header-logo,
     .header-logo svg {
         width: 3rem;
