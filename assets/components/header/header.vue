@@ -3,7 +3,6 @@
         <span class="header-logo" v-html="logo"></span>
 
         <vue-navigation />
-        <vue-modulation />
         <vue-feedback />
     </div>
 </template>
@@ -11,13 +10,11 @@
 <script>
     import logo from '../../img/logo.svg';
     import Navigation from '../navigation/navigation.vue';
-    import Modulation from '../modulation/modulation.vue';
     import Feedback from '../feedback/feedback.vue';
 
     export default {
         components: {
             'vue-navigation': Navigation,
-            'vue-modulation': Modulation,
             'vue-feedback': Feedback
         },
         data() {

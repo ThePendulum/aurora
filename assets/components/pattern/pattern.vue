@@ -1,7 +1,17 @@
 <template>
     <div>
         <div class="panel">
-            <div class="channel master">
+            <div class="channel">
+                <span class="channel-label" title="Master">Mod</span>
+
+                <div class="channel-value modulation">
+                    <vue-modulation />
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="channel">
                 <span class="channel-label" title="Master">M</span>
 
                 <div class="channel-value">
@@ -18,7 +28,7 @@
 
         <div class="panel">
 
-            <div class="channel red">
+            <div class="channel">
                 <span class="channel-label" title="Red">R</span>
 
                 <div class="channel-value">
@@ -34,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="channel green">
+            <div class="channel">
                 <span class="channel-label" title="Green">G</span>
 
                 <div class="channel-value">
@@ -50,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="channel blue">
+            <div class="channel">
                 <span class="channel-label" title="Blue">B</span>
 
                 <div class="channel-value">
@@ -68,7 +78,7 @@
         </div>
 
         <div class="panel">
-            <div class="channel hue">
+            <div class="channel">
                 <span class="channel-label" title="Hue">H</span>
 
                 <div class="channel-value">
@@ -84,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="channel saturation">
+            <div class="channel">
                 <span class="channel-label" title="Saturation">S</span>
 
                 <div class="channel-value">
@@ -100,7 +110,7 @@
                 </div>
             </div>
 
-            <div class="channel value">
+            <div class="channel">
                 <span class="channel-label" title="Value">V</span>
 
                 <div class="channel-value">
@@ -125,6 +135,8 @@
 
     import debounce from '../../js/utils/debounce.js';
 
+    import Modulation from '../modulation/modulation.vue';
+
     const methodMap = {
         hex: 'updateHex',
         red: 'updateRed',
@@ -148,6 +160,9 @@
     };
 
     export default {
+        components: {
+            'vue-modulation': Modulation
+        },
         data() {
             return {
                 focused: null

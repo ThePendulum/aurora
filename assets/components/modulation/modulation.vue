@@ -1,5 +1,5 @@
 <template>
-    <div class="modulation noselect" ref="modulation" @mousemove="modulate" @mouseout="modulating = false">
+    <div class="modulation noselect" ref="modulation" @mousemove="modulate" @touchmove.prevent="modulate">
         <div class="modulation-pointer" :style="{top: x * width, left: y * height}"></div>
     </div>
 </template>
@@ -26,12 +26,15 @@
         },
         methods: {
             modulate(event) {
-                if(this.modulating) {
+                if(this.modulating || event.type === 'touchmove') {
                     const {top, left, width, height} = this.$refs.modulation.getBoundingClientRect();
 
+                    const clientX = event.clientX || event.touches[0].clientX;
+                    const clientY = event.clientY || event.touches[0].clientY;
+
                     this.$store.dispatch('setModulation', {
-                        x: (event.clientX - left) / width,
-                        y: (event.clientY - top) / height
+                        x: (clientX - left) / width,
+                        y: (clientY - top) / height
                     });
                 }
             }
@@ -52,13 +55,23 @@
     @import '../../css/theme';
 
     .modulation {
-        width: 10rem;
-        height: 2rem;
+        width: 100%;
+        height: 3rem;
         display: inline-block;
         position: relative;
-        border: solid 1px $edge;
+        border: solid 1px $border;
         overflow: hidden;
         cursor: crosshair;
+
+        &:before {
+            content: '';
+            background: url('/img/dots.png');
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: .1;
+            margin: 1px;
+        }
     }
 
     .modulation-pointer {
