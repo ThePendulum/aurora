@@ -48,6 +48,8 @@
         methods: {
             modulate(event) {
                 if(this.modulating || event.type === 'click' || event.type === 'touchmove') {
+                    event.preventDefault();
+
                     const {top, left, width, height} = this.$refs.modulation.getBoundingClientRect();
 
                     this.width = width;
