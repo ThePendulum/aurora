@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="noselect">
         <div class="panel">
             <div class="channel">
                 <span class="channel-label" title="Modulation">Mod</span>
@@ -15,7 +15,7 @@
                 <span class="channel-label" title="Master">M</span>
 
                 <div class="channel-value">
-                    <input type="text" :value="Number.isNaN(hex) ? '' : hex" class="input channel-input" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" spellcheck="false" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
+                    <input type="text" :value="Number.isNaN(hex) ? '' : hex" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
 
                     <ul v-if="focused === 'master'" class="channel-presets">
                         <li v-for="preset in masterPresets" class="preset" @click="applyPreset(preset)">{{preset.name}}</li>
@@ -27,7 +27,6 @@
         </div>
 
         <div class="panel">
-
             <div class="channel">
                 <span class="channel-label" title="Red">R</span>
 
@@ -330,6 +329,7 @@
     }
 
     .channel-picker {
+        height: 1.25rem;
         border: solid 1px $border;
         border-top: none;
     }
@@ -338,7 +338,6 @@
         width: calc(100% + .4rem); /* allow thumb center to touch end */
         -webkit-appearance: none;
         background: none;
-        height: 1rem;
         margin: 0 0 0 -.2rem;
         cursor: crosshair;
 
@@ -353,7 +352,7 @@
             border-bottom: solid .4rem $text;
             border-left: solid .3rem transparent;
             border-right: solid .3rem transparent;
-            margin: 1.1rem 0 0;
+            margin: 1rem 0 0;
         }
 
         &::-moz-range-thumb {
@@ -364,6 +363,7 @@
             border-bottom: solid .4rem $text;
             border-left: solid .3rem transparent;
             border-right: solid .3rem transparent;
+            margin: 3rem 0 0 0
         }
     }
 

@@ -22,6 +22,7 @@
   width: 100%;
 }
 .channel-picker[data-v-052d04e3] {
+  height: 1.25rem;
   border: solid 1px #ddd;
   border-top: none;
 }
@@ -30,7 +31,6 @@
   /* allow thumb center to touch end */
   -webkit-appearance: none;
   background: none;
-  height: 1rem;
   margin: 0 0 0 -.2rem;
   cursor: crosshair;
 }
@@ -44,7 +44,7 @@
     border-bottom: solid 0.4rem #333;
     border-left: solid .3rem transparent;
     border-right: solid .3rem transparent;
-    margin: 1.1rem 0 0;
+    margin: 1rem 0 0;
 }
 .channel-slider[data-v-052d04e3]::-moz-range-thumb {
     background: none;
@@ -54,6 +54,7 @@
     border-bottom: solid 0.4rem #333;
     border-left: solid .3rem transparent;
     border-right: solid .3rem transparent;
+    margin: 3rem 0 0 0;
 }
 .channel-color[data-v-052d04e3] {
   height: 1.3rem;
@@ -95,7 +96,8 @@
 .modulation[data-v-f2dc8b7e] {
   width: 100%;
   height: 3rem;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   position: relative;
   border: solid 1px #ddd;
   overflow: hidden;
@@ -107,11 +109,22 @@
     width: 100%;
     height: 100%;
     position: absolute;
+    z-index: -1;
     opacity: .1;
     margin: 1px;
 }
 .modulation[data-v-f2dc8b7e]:active {
     cursor: none;
+}
+.modulation-label[data-v-f2dc8b7e] {
+  color: #bbb;
+  padding: .25rem;
+  font-size: .75rem;
+  text-shadow: 0 0 1px #fff;
+  user-select: none;
+}
+.modulation-x[data-v-f2dc8b7e] {
+  align-self: center;
 }
 .modulation-pointer[data-v-f2dc8b7e] {
   background: #2294ff;
@@ -123,6 +136,27 @@
   border-radius: 50%;
   margin: -.375rem;
   box-shadow: 0 0 4px #2294ff;
+}
+
+.modulation-lock {
+  cursor: pointer;
+}
+.modulation-lock.icon svg {
+    fill: #bbb;
+    width: .75rem;
+    height: .75rem;
+}
+.modulation-lock.icon.locked svg {
+    fill: #2294ff;
+}
+
+.icon {
+  fill: #333;
+  display: inline-block;
+}
+.icon svg {
+    width: 1rem;
+    height: 1rem;
 }
 
 .container[data-v-114b0345] {
@@ -585,8 +619,11 @@ textarea {
   font-weight: bold;
   font-style: italic; }
 
-input:focus {
+:focus {
   outline: none; }
+
+::-moz-focus-inner {
+  border: none; }
 
 .input {
   box-sizing: border-box;
@@ -595,6 +632,12 @@ input:focus {
   border: solid 1px #ddd; }
   .input:focus {
     border: solid 1px #2294ff; }
+
+.noselect {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
 body {
   background: #fff;

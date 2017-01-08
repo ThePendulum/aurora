@@ -1,18 +1,39 @@
 <template>
-    <div class="modulation noselect" ref="modulation" @mousedown="modulating = true" @mousemove="modulate" @touchmove.prevent="modulate">
-        <div class="modulation-pointer" :style="{top: y * height + 'px', left: x * width + 'px'}"><div>
+    <div class="modulation" ref="modulation" @mousedown="modulating = true" @click="modulate">
+        <span class="modulation-label modulation-x">
+            x: {{x.toFixed(2)}}
+
+            <vue-icon v-show="lockedX" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedX = false" />
+            <vue-icon v-show="!lockedX" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedX = true" />
+        </span>
+
+        <span class="modulation-label modulation-y">
+            y: {{y.toFixed(2)}}
+
+            <vue-icon v-show="lockedY" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedY = false" />
+            <vue-icon v-show="!lockedY" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedY = true" />
+        </span>
+
+        <div class="modulation-pointer noselect" :style="{top: y * height + 'px', left: x * width + 'px'}"><div>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex';
 
+    import Icon from '../icon/icon.vue';
+
     export default {
+        components: {
+            'vue-icon': Icon
+        },
         data() {
             return {
                 width: 0,
                 height: 0,
-                modulating: false
+                modulating: false,
+                lockedX: false,
+                lockedY: false
             };
         },
         computed: {
@@ -22,33 +43,41 @@
                 }
             }),
             x() { return this.modulation.x; },
-            y() { return this.modulation.y; },
+            y() { return this.modulation.y; }
         },
         methods: {
             modulate(event) {
-                if(this.modulating || event.type === 'touchmove') {
+                if(this.modulating || event.type === 'click' || event.type === 'touchmove') {
                     const {top, left, width, height} = this.$refs.modulation.getBoundingClientRect();
 
                     this.width = width;
                     this.height = height;
 
-                    const clientX = event.clientX || event.touches[0].clientX;
-                    const clientY = event.clientY || event.touches[0].clientY;
+                    const clientX = event.clientX || (event.touches ? event.touches[0].clientX : null);
+                    const clientY = event.clientY || (event.touches ? event.touches[0].clientY : null);
+
+                    const x = this.lockedX ? this.x : (clientX - left) / width;
+                    const y = this.lockedY ? this.y : (clientY - top) / (height - 2); // compensate for border? unexplained .02 offset without
+
+                    const xCapped = Math.max(Math.min(x, 1), 0);
+                    const yCapped = Math.max(Math.min(y, 1), 0);
 
                     this.$store.dispatch('setModulation', {
-                        x: (clientX - left) / width,
-                        y: (clientY - top) / height
+                        x: xCapped,
+                        y: yCapped
                     });
                 }
             }
         },
         mounted() {
-            document.addEventListener('mouseup', event => this.modulating = false);
-
             const {width, height} = this.$refs.modulation.getBoundingClientRect();
 
             this.width = width;
             this.height = height;
+
+            document.addEventListener('mouseup', event => this.modulating = false);
+            document.addEventListener('mousemove', this.modulate);
+            document.addEventListener('touchmove', this.modulate);
         }
     };
 </script>
@@ -59,7 +88,8 @@
     .modulation {
         width: 100%;
         height: 3rem;
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
         position: relative;
         border: solid 1px $border;
         overflow: hidden;
@@ -71,6 +101,7 @@
             width: 100%;
             height: 100%;
             position: absolute;
+            z-index: -1;
             opacity: .1;
             margin: 1px;
         }
@@ -78,6 +109,18 @@
         &:active {
             cursor: none;
         }
+    }
+
+    .modulation-label {
+        color: $grey2;
+        padding: .25rem;
+        font-size: .75rem;
+        text-shadow: 0 0 1px $background;
+        user-select: none;
+    }
+
+    .modulation-x {
+        align-self: center;
     }
 
     .modulation-pointer {
@@ -90,5 +133,25 @@
         border-radius: 50%;
         margin: -.375rem;
         box-shadow: 0 0 4px $primary;
+    }
+</style>
+
+<style lang="sass">
+    @import '../../css/theme';
+
+    .modulation-lock {
+        cursor: pointer;
+
+        &.icon {
+            svg {
+                fill: $grey2;
+                width: .75rem;
+                height: .75rem;
+            }
+
+            &.locked svg {
+                fill: $primary;
+            }
+        }
     }
 </style>

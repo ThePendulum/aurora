@@ -13,7 +13,21 @@
             };
         },
         beforeMount() {
-            this.logo = require('../../img/' + this.icon + '.svg');
+            this.svg = require('../../img/' + this.icon + '.svg');
         }
     };
 </script>
+
+<style lang="sass">
+    @import '../../css/theme';
+
+    .icon {
+        fill: $text;
+        display: inline-block;
+
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+</style>
