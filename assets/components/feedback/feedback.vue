@@ -14,12 +14,14 @@
                 phantom: null,
                 phantomCtx: null,
                 feedback: null,
-                feedbackCtx: null
+                feedbackCtx: null,
+                feedbackWidth: 1,
+                feedbackHeight: 1
             }
         },
         computed: {
             ...mapState({
-                phantomWidth(state) { return state.meta.width || 1; },
+                phantomWidth(state) { return state.meta.width || 1; }, // default to 1 to prevent InvalidStateError for canvases with 0 width or height in Firefox
                 phantomHeight(state) { return state.meta.height || 1; },
                 pixels(state) {
                     state.meta.pixels.forEach(pixel => {
@@ -35,13 +37,7 @@
                         this.feedbackCtx.msImageSmoothingEnabled = false;
                     }
                 }
-            }),
-            feedbackWidth() {
-                return this.phantomWidth;
-            },
-            feedbackHeight() {
-                return this.phantomHeight;
-            }
+            })
         },
         mounted() {
             this.phantom = this.$refs.phantom;
@@ -49,6 +45,10 @@
 
             this.feedback = this.$refs.feedback;
             this.feedbackCtx = this.feedback.getContext('2d');
+
+            this.feedbackDimensions = this.$refs.feedback.getBoundingClientRect();
+            this.feedbackWidth = this.feedbackDimensions.width;
+            this.feedbackHeight = this.feedbackDimensions.height;
         }
     };
 </script>

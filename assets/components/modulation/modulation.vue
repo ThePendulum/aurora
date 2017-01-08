@@ -1,17 +1,17 @@
 <template>
     <div class="modulation" ref="modulation" @mousedown="modulating = true" @click="modulate">
-        <span class="modulation-label modulation-x">
-            x: {{x.toFixed(2)}}
-
-            <vue-icon v-show="lockedX" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedX = false" />
-            <vue-icon v-show="!lockedX" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedX = true" />
-        </span>
-
         <span class="modulation-label modulation-y">
             y: {{y.toFixed(2)}}
 
             <vue-icon v-show="lockedY" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedY = false" />
             <vue-icon v-show="!lockedY" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedY = true" />
+        </span>
+
+        <span class="modulation-label modulation-x">
+            x: {{x.toFixed(2)}}
+
+            <vue-icon v-show="lockedX" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedX = false" />
+            <vue-icon v-show="!lockedX" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedX = true" />
         </span>
 
         <div class="modulation-pointer noselect" :style="{top: y * height + 'px', left: x * width + 'px'}"><div>
@@ -89,7 +89,6 @@
         width: 100%;
         height: 3rem;
         display: flex;
-        flex-direction: column;
         position: relative;
         border: solid 1px $border;
         overflow: hidden;
@@ -113,13 +112,14 @@
 
     .modulation-label {
         color: $grey2;
+        flex-grow: 1;
         padding: .25rem;
         font-size: .75rem;
         text-shadow: 0 0 1px $background;
         user-select: none;
     }
 
-    .modulation-x {
+    .modulation-y {
         align-self: center;
     }
 
