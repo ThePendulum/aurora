@@ -11,8 +11,9 @@ var _require$argv = require('yargs').argv;
 var username = _require$argv.username;
 var password = _require$argv.password;
 var type = _require$argv.type;
+var u = _require$argv.u;
+var p = _require$argv.p;
+var t = _require$argv.t;
 
 
-(0, _createUser2.default)(username, password, type).then(function (result) {
-    console.log(result);
-});
+(0, _createUser2.default)(username || u, password || p, type || t);

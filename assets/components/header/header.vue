@@ -1,8 +1,9 @@
 <template>
-    <div class="header">
+    <div class="header noselect">
         <span class="header-logo" v-html="logo"></span>
 
         <vue-navigation />
+        <vue-modulation />
         <vue-feedback />
     </div>
 </template>
@@ -10,11 +11,13 @@
 <script>
     import logo from '../../img/logo.svg';
     import Navigation from '../navigation/navigation.vue';
+    import Modulation from '../modulation/modulation.vue';
     import Feedback from '../feedback/feedback.vue';
 
     export default {
         components: {
             'vue-navigation': Navigation,
+            'vue-modulation': Modulation,
             'vue-feedback': Feedback
         },
         data() {
@@ -37,7 +40,7 @@
         flex-shrink: 0;
         align-items: center;
         box-sizing: border-box;
-        padding: 0 1rem;
+        padding: 0 4rem 0 1rem;
     }
 
     .header-logo {

@@ -6,7 +6,7 @@ const note = require('note-log');
 const WebSocket = require('ws').Server;
 const uuid = require('uuid');
 const math = require('mathjs');
-const knex = require('../knex.js');
+const knex = require('./knex.js');
 
 const port = config.has('socket.port') ? config.socket.port : 3001;
 

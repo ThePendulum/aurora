@@ -19,6 +19,9 @@ export default {
     setValue(state, value) {
         state.value = value;
     },
+    setModulation(state, modulation) {
+        state.modulation = modulation;
+    },
     setSync(state, sync) {
         state.sync = sync;
     }

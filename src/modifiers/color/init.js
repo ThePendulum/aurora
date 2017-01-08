@@ -36,6 +36,14 @@ const init = function(leds, ws) {
         }
     };
 
+    const scope = {};
+
+    scope.length = scope.l = leds.pixels.length;
+    scope.width = scope.w = config.size[0] || config.size;
+    scope.height = scope.h = config.size[1] || 1;
+    scope.mx = 0;
+    scope.my = 0;
+
     ws.on('connection', wss => {
         if(leds.mode === 'rgb') {
             wss.transfer('rgb', {red: rgb.red.value, green: rgb.green.value, blue: rgb.blue.value});
@@ -76,17 +84,16 @@ const init = function(leds, ws) {
                         wss.transfer('error', error.message);
                     }
                 }
+
+                if(data[0] === 'modulation') {
+                    scope.mx = data[1].x;
+                    scope.my = data[1].y;
+                }
             } catch(error) {
                 note('color', error);
             }
         });
     });
-
-    const scope = {};
-
-    scope.length = scope.l = leds.pixels.length;
-    scope.width = scope.w = config.size[0] || config.size;
-    scope.height = scope.h = config.size[1] || 1;
 
     return {rgb, hsv, scope};
 };

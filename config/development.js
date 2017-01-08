@@ -37,5 +37,13 @@ module.exports = Object.assign({
             filename: './database/aurora.sqlite'
         },
         useNullAsDefault: true
-    }
+    },
+    session: {
+        secret: 'w1NKhdUy8i3txXvf0jO6159VNk5zV614',
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            secure: false
+        }
+    },
 }, strip);
