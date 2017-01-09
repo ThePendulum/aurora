@@ -1,5 +1,5 @@
 <template>
-    <div ref="modulation" class="modulation" :style="{height: enlarged ? '20rem' : '3rem'}" @mousedown="modulating = true" @click="modulate">
+    <div ref="modulation" class="modulation" :style="{height: enlarged ? '20rem' : '3rem'}" @mousedown="modulating = true" @touchstart="modulating = true" @click="modulate">
         <span class="modulation-label modulation-y">
             y: {{y.toFixed(2)}}
 
@@ -51,8 +51,10 @@
         },
         methods: {
             modulate(event) {
-                if(this.modulating || event.type === 'click' || event.type === 'touchmove') {
-                    event.preventDefault();
+                if(this.modulating || event.type === 'click') {
+                    if(this.modulating) {
+                        event.preventDefault();
+                    }
 
                     const {top, left, width, height} = this.$refs.modulation.getBoundingClientRect();
 
@@ -92,6 +94,8 @@
             this.height = height;
 
             document.addEventListener('mouseup', event => this.modulating = false);
+            document.addEventListener('touchend', event => this.modulating = false);
+
             document.addEventListener('mousemove', this.modulate);
             document.addEventListener('touchmove', this.modulate);
         }

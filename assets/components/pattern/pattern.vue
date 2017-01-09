@@ -2,7 +2,7 @@
     <div class="noselect">
         <div class="panel">
             <div class="channel">
-                <span class="channel-label" title="Modulation">Mod</span>
+                <span class="channel-label" title="Modulation">M</span>
 
                 <div class="channel-value modulation">
                     <vue-modulation />
@@ -12,7 +12,7 @@
 
         <div class="panel">
             <div class="channel">
-                <span class="channel-label" title="Master">M</span>
+                <span class="channel-label" title="Master">#</span>
 
                 <div class="channel-value">
                     <input type="text" :value="Number.isNaN(hex) ? '' : hex" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
