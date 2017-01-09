@@ -1,6 +1,6 @@
 <template>
     <div class="header noselect">
-        <span class="header-logo" v-html="logo"></span>
+        <span class="header-logo" :class="{off: !on}" v-html="logo" @click="toggle"></span>
 
         <vue-navigation />
         <vue-feedback />
@@ -8,6 +8,8 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     import logo from '../../img/logo.svg';
     import Navigation from '../navigation/navigation.vue';
     import Feedback from '../feedback/feedback.vue';
@@ -21,6 +23,18 @@
             return {
                 logo
             };
+        },
+        computed: {
+            ...mapState({
+                on(state) {
+                    return state.meta.on;
+                }
+            })
+        },
+        methods: {
+            toggle(event) {
+                this.$store.dispatch('toggle', !this.on);
+            }
         }
     };
 </script>
@@ -42,15 +56,22 @@
 
     .header-logo {
         margin: .5rem 1rem .5rem 0;
+        cursor: pointer;
     }
 </style>
 
 <style lang="sass">
     @import '../../css/theme';
 
-    .header-logo,
-    .header-logo svg {
-        width: 3rem;
-        height: 3rem;
+    .header-logo {
+        svg {
+            fill: $text-light;
+            width: 3rem;
+            height: 3rem;
+        }
+
+        &.off svg {
+            fill: $shadow;
+        }
     }
 </style>

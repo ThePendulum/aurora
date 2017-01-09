@@ -9,5 +9,8 @@ export default {
     },
     setPixels(state, pixels) {
         state.pixels = pixels;
+    },
+    toggle(state, on) {
+        state.on = on;
     }
 };

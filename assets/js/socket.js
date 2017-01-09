@@ -47,6 +47,10 @@ socket.addEventListener('message', msg => {
         store.commit('setHeight', data[1].height);
     }
 
+    if(data[0] === 'toggle') {
+        store.commit('toggle', data[1]);
+    }
+
     if(data[0] === 'pixels') {
         store.commit('setPixels', data[1]);
     }

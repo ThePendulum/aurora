@@ -43,6 +43,7 @@ module.exports = function(leds) {
 
         wss.transfer('interval', leds.interval);
         wss.transfer('mode', leds.mode);
+        wss.transfer('toggle', leds.on);
 
         knex('presets').select().then(presets => {
             wss.transfer('presets', presets.map(preset => {
@@ -62,6 +63,12 @@ module.exports = function(leds) {
 
                 if(data[0] === 'mode') {
                     leds.mode = data[1];
+                }
+
+                if(data[0] === 'toggle') {
+                    leds.on = data[1];
+
+                    wss.broadcast('toggle', data[1]);
                 }
 
                 if(data[0] === 'interval') {

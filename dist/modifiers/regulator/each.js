@@ -6,7 +6,7 @@ var util = require('util');
 
 var each = function each(pixel, leds) {
   return pixel.values.map(function (value) {
-    return value * (config.regulator || 1);
+    return value * (leds.on ? config.regulator || 1 : 0);
   });
 };
 

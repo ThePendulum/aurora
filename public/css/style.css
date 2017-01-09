@@ -182,12 +182,16 @@
 }
 .header-logo[data-v-afc61ebe] {
   margin: .5rem 1rem .5rem 0;
+  cursor: pointer;
 }
 
-.header-logo,
 .header-logo svg {
+  fill: #fff;
   width: 3rem;
   height: 3rem;
+}
+.header-logo.off svg {
+  fill: rgba(0, 0, 0, 0.25);
 }
 
 .nav[data-v-e41e297e] {

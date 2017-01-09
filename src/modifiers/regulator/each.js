@@ -5,7 +5,7 @@ const note = require('note-log');
 const util = require('util');
 
 const each = function(pixel, leds) {
-  return pixel.values.map(value => value * (config.regulator || 1));
+  return pixel.values.map(value => value * (leds.on ? config.regulator || 1 : 0));
 };
 
 module.exports = each;
