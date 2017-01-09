@@ -1,6 +1,6 @@
 <template>
     <div class="header noselect">
-        <span class="header-logo" :class="{off: !on}" v-html="logo" @click="toggle"></span>
+        <span :title="'Turn LEDs ' + (on ? 'off' : 'on')" class="header-logo" :class="{off: !on}" v-html="logo" @click="toggle"></span>
 
         <vue-navigation />
         <vue-feedback />
@@ -64,6 +64,9 @@
     @import '../../css/theme';
 
     .header-logo {
+        width: 3rem;
+        height: 3rem;
+
         svg {
             fill: $text-light;
             width: 3rem;

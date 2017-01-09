@@ -138,16 +138,24 @@
   box-shadow: 0 0 4px #2294ff;
 }
 
-.modulation-lock {
+.modulation-lock,
+.modulation-enlarge {
   cursor: pointer;
 }
-.modulation-lock.icon svg {
+.modulation-lock.icon svg,
+  .modulation-enlarge.icon svg {
     fill: #bbb;
     width: .75rem;
     height: .75rem;
 }
-.modulation-lock.icon.locked svg {
+.modulation-lock.icon.locked svg,
+  .modulation-lock.icon.enlarged svg,
+  .modulation-enlarge.icon.locked svg,
+  .modulation-enlarge.icon.enlarged svg {
     fill: #2294ff;
+}
+.modulation-enlarge {
+  padding: .25rem;
 }
 
 .icon {
@@ -185,13 +193,17 @@
   cursor: pointer;
 }
 
-.header-logo svg {
-  fill: #fff;
+.header-logo {
   width: 3rem;
   height: 3rem;
 }
+.header-logo svg {
+    fill: #fff;
+    width: 3rem;
+    height: 3rem;
+}
 .header-logo.off svg {
-  fill: rgba(0, 0, 0, 0.25);
+    fill: rgba(0, 0, 0, 0.25);
 }
 
 .nav[data-v-e41e297e] {

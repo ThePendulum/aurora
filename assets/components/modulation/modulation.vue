@@ -1,5 +1,5 @@
 <template>
-    <div class="modulation" ref="modulation" @mousedown="modulating = true" @click="modulate">
+    <div ref="modulation" class="modulation" :style="{height: enlarged ? '20rem' : '3rem'}" @mousedown="modulating = true" @click="modulate">
         <span class="modulation-label modulation-y">
             y: {{y.toFixed(2)}}
 
@@ -13,6 +13,9 @@
             <vue-icon v-show="lockedX" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedX = false" />
             <vue-icon v-show="!lockedX" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedX = true" />
         </span>
+
+        <vue-icon v-show="enlarged" icon="shrink" label="Shrink modulation pad" class="modulation-enlarge enlarged" @click.native.stop="enlarge(false)" />
+        <vue-icon v-show="!enlarged" icon="enlarge" label="Enlarge modulation pad" class="modulation-enlarge" @click.native.stop="enlarge(true)" />
 
         <div class="modulation-pointer noselect" :style="{top: y * height + 'px', left: x * width + 'px'}"><div>
     </div>
@@ -33,7 +36,8 @@
                 height: 0,
                 modulating: false,
                 lockedX: false,
-                lockedY: false
+                lockedY: false,
+                enlarged: false
             };
         },
         computed: {
@@ -69,6 +73,16 @@
                         y: yCapped
                     });
                 }
+            },
+            enlarge(enlarged, event) {
+                this.enlarged = enlarged;
+
+                this.$nextTick(() => {
+                    const {width, height} = this.$refs.modulation.getBoundingClientRect();
+
+                    this.width = width;
+                    this.height = height;
+                });
             }
         },
         mounted() {
@@ -141,7 +155,8 @@
 <style lang="sass">
     @import '../../css/theme';
 
-    .modulation-lock {
+    .modulation-lock,
+    .modulation-enlarge  {
         cursor: pointer;
 
         &.icon {
@@ -151,9 +166,14 @@
                 height: .75rem;
             }
 
-            &.locked svg {
+            &.locked svg,
+            &.enlarged svg {
                 fill: $primary;
             }
         }
+    }
+
+    .modulation-enlarge {
+        padding: .25rem;
     }
 </style>
