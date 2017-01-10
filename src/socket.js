@@ -97,7 +97,7 @@ module.exports = function(leds) {
 
         setTimeout(() => {
             update();
-        }, config.has('socket.previewInterval') ? config.socket.previewInterval : 1000);
+        }, config.has('feedbackInterval') ? config.feedbackInterval : 1000);
     };
 
     update();
