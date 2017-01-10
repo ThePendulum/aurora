@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>aurora | login</title>
+
+        <link href="/img/favicon.ico" sizes="16x16 24x24 32x32 48x48 64x64 110x110 114x114" rel="icon">
+        <link href="/css/style.css" rel="stylesheet">
+
+        <script src="/js/login.js" defer></script>
+    </head>
+
+    <body>
+        <div class="auth-container">
+            <div class="auth-panel">
+                <h2 class="auth-header">aurora</h2>
+
+                <form action="/api/login" method="post" class="auth-form">
+                    <input type="text" id="loginUsername" name="username" placeholder="Username" class="input">
+                    <input type="password" name="password" placeholder="Password" class="input">
+
+                    <input type="submit" value="Login" class="submit">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

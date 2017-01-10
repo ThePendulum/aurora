@@ -6,9 +6,12 @@ const ExtractText = require('extract-text-webpack-plugin');
 const cssnext = require('postcss-cssnext');
 
 const config = {
-    entry: path.join(__dirname, 'assets/js/main.js'),
+    entry: {
+        main: path.join(__dirname, 'assets/js/main.js'),
+        login: path.join(__dirname, 'assets/js/login.js')
+    },
     output: {
-        filename: path.join(__dirname, 'public/js/bundle.js')
+        filename: path.join(__dirname, 'public/js/[name].js')
     },
     plugins: [
         new ExtractText(path.join(__dirname, 'public/css/style.css')),

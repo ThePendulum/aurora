@@ -2,7 +2,7 @@
 
 exports.seed = function(knex, Promise) {
     return knex('presets').where({
-        factory: true
+        user: 'aurora'
     }).delete().then(() => {
         return knex('presets').insert([{
             name: 'White',
@@ -10,7 +10,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hex: '#ffffff'
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Warm White',
@@ -18,17 +18,17 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hex: '#ffcc99'
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
-            name: 'Color Fade',
+            name: 'Color Cycle',
             targets: JSON.stringify(['master', 'hue']),
             values: JSON.stringify({
                 hue: 'b',
                 saturation: 1,
                 value: 1
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Flowing Rainbow',
@@ -38,8 +38,18 @@ exports.seed = function(knex, Promise) {
                 saturation: 1,
                 value: 1
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
+        }, {
+            name: 'Rainbow Master',
+            targets: JSON.stringify(['master', 'hue']),
+            values: JSON.stringify({
+                hue: 'i * (1 + 2my) + 360mx',
+                saturation: 1,
+                value: 1
+            }),
+            user: 'aurora',
+            tags: JSON.stringify(['1d', '2d', 'modulation'])
         }, {
             name: 'Spectrum',
             targets: JSON.stringify(['master', 'hue']),
@@ -48,7 +58,7 @@ exports.seed = function(knex, Promise) {
                 saturation: 1,
                 value: 1
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d'])
         }, {
             name: 'Full',
@@ -56,7 +66,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 saturation: 1
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Full',
@@ -64,7 +74,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 value: 1
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Chase',
@@ -74,25 +84,33 @@ exports.seed = function(knex, Promise) {
                 saturation: .4,
                 value: 'sin(i + b)'
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Strobe',
-            targets: JSON.stringify(['master', 'value']),
+            targets: JSON.stringify(['value']),
             values: JSON.stringify({
                 hue: 0,
                 saturation: 0,
                 value: 'b % 2'
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
-            name: 'Fade',
+            name: 'Y Modulation',
+            targets: JSON.stringify(['value']),
+            values: JSON.stringify({
+                value: 'my'
+            }),
+            user: 'aurora',
+            tags: JSON.stringify(['1d', '2d'])
+        }, {
+            name: 'Pulse',
             targets: JSON.stringify(['value']),
             values: JSON.stringify({
                 value: '.5 + .5sin(.1b)'
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Alert',
@@ -102,7 +120,7 @@ exports.seed = function(knex, Promise) {
                 saturation: 1,
                 value: 'sin(.3b)',
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Lightning',
@@ -112,7 +130,7 @@ exports.seed = function(knex, Promise) {
                 saturation: 0,
                 value: 'sin(.05b) * r[1] * (.5 + .5sin(.05i * r[2]))'
             }),
-            factory: true,
+            user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
         }]);
     });

@@ -1,6 +1,8 @@
 'use strict';
 
 require('../css/style.scss');
+require('../css/login.scss');
+
 require('babel-polyfill');
 
 import Vue from 'vue';

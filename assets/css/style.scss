@@ -4,6 +4,11 @@
 @import 'inputs';
 @import 'states';
 
+html,
+body {
+    height: 100%;
+}
+
 body {
     background: $background;
     color: $text;

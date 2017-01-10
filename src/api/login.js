@@ -1,13 +1,15 @@
 'use strict';
 
-const note = require('note-log');
-const util = require('util');
-const login = require('../auth/login.js');
+import note from 'note-log';
+import util from 'util';
+import login from '../auth/login.js';
 
-module.exports = function(req, res) {
+export default function(req, res) {
     return login(req.body.username, req.body.password).then(results => {
         req.session.authenticated = true;
 
-        res.send(results);
+        res.redirect('/');
+    }).catch(error => {
+        res.redirect('/login');
     });
 };

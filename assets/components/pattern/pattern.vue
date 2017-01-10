@@ -18,7 +18,13 @@
                     <input type="text" :value="Number.isNaN(hex) ? '' : hex" :placeholder="Number.isNaN(hex) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('master')" @blur="updateHex" @keyup.enter="updateHex">
 
                     <ul v-if="focused === 'master'" class="channel-presets">
-                        <li v-for="preset in masterPresets" class="preset" @click="applyPreset(preset)">{{preset.name}}</li>
+                        <li v-for="preset in masterPresets" class="preset" @click="applyPreset(preset)">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <input type="color" :value="Number.isNaN(hex) ? '#ffffff' : hex" class="channel-color channel-input" @input="updateHex">
@@ -34,7 +40,13 @@
                     <input type="text" :value="Number.isNaN(redInterpreted) ? '' : redInterpreted" :placeholder="Number.isNaN(redInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('red')" @blur="updateRed" @keyup.enter="updateRed">
 
                     <ul v-if="focused === 'red'" class="channel-presets">
-                        <li v-for="preset in redPresets" class="preset" @click="applyPreset(preset, 'red')">{{preset.name}}</li>
+                        <li v-for="preset in redPresets" class="preset" @click="applyPreset(preset, 'red')">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="channel-picker" :style="redGradient">
@@ -50,7 +62,13 @@
                     <input type="text" :value="Number.isNaN(greenInterpreted) ? '' : greenInterpreted" :placeholder="Number.isNaN(greenInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('green')" @blur="updateGreen" @keyup.enter="updateGreen">
 
                     <ul v-if="focused === 'green'" class="channel-presets">
-                        <li v-for="preset in greenPresets" class="preset" @click="applyPreset(preset, 'green')">{{preset.name}}</li>
+                        <li v-for="preset in greenPresets" class="preset" @click="applyPreset(preset, 'green')">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="channel-picker" :style="greenGradient">
@@ -66,7 +84,13 @@
                     <input type="text" :value="Number.isNaN(blueInterpreted) ? '' : blueInterpreted" :placeholder="Number.isNaN(blueInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('blue')" @blur="updateBlue" @keyup.enter="updateBlue">
 
                     <ul v-if="focused === 'blue'" class="channel-presets">
-                        <li v-for="preset in bluePresets" class="preset" @click="applyPreset(preset, 'blue')">{{preset.name}}</li>
+                        <li v-for="preset in bluePresets" class="preset" @click="applyPreset(preset, 'blue')">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="channel-picker" :style="blueGradient">
@@ -84,7 +108,13 @@
                     <input type="text" :value="Number.isNaN(hueInterpreted) ? '' : hueInterpreted" :placeholder="Number.isNaN(hueInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('hue')" @blur="updateHue" @keyup.enter="updateHue">
 
                     <ul v-if="focused === 'hue'" class="channel-presets">
-                        <li v-for="preset in huePresets" class="preset" @click="applyPreset(preset, 'hue')">{{preset.name}}</li>
+                        <li v-for="preset in huePresets" class="preset" @click="applyPreset(preset, 'hue')">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="channel-picker" :style="hueGradient">
@@ -100,7 +130,13 @@
                     <input type="text" :value="Number.isNaN(saturationInterpreted) ? '' : saturationInterpreted" :placeholder="Number.isNaN(saturationInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('saturation')" @blur="updateSaturation" @keyup.enter="updateSaturation">
 
                     <ul v-if="focused === 'saturation'" class="channel-presets">
-                        <li v-for="preset in saturationPresets" class="preset" @click="applyPreset(preset, 'saturation')">{{preset.name}}</li>
+                        <li v-for="preset in saturationPresets" class="preset" @click="applyPreset(preset, 'saturation')">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="channel-picker" :style="saturationGradient">
@@ -116,7 +152,13 @@
                     <input type="text" :value="Number.isNaN(valueInterpreted) ? '' : valueInterpreted" :placeholder="Number.isNaN(valueInterpreted) ? 'Calculated' : ''" spellcheck="false" class="input channel-input" @click.stop="focus('value')" @blur="updateValue" @keyup.enter="updateValue">
 
                     <ul v-if="focused === 'value'" class="channel-presets">
-                        <li v-for="preset in valuePresets" class="preset" @click="applyPreset(preset, 'value')">{{preset.name}}</li>
+                        <li v-for="preset in valuePresets" class="preset" @click="applyPreset(preset, 'value')">
+                            <span class="preset-name">{{preset.name}}</span>
+
+                            <ul class="preset-tags">
+                                <li v-for="tag in preset.tags" class="tag">{{tag}}</li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="channel-picker" :style="valueGradient">
@@ -338,6 +380,7 @@
         width: calc(100% + .4rem); /* allow thumb center to touch end */
         -webkit-appearance: none;
         background: none;
+        border: none;
         margin: 0 0 0 -.2rem;
         cursor: crosshair;
 
@@ -400,12 +443,41 @@
         box-shadow: 0 0 2px $shadow;
 
         .preset {
+            display: flex;
             padding: .5rem;
 
             &:hover {
                 color: $text-light;
                 background: $primary;
                 cursor: pointer;
+
+                .tag {
+                    color: $primary;
+                    background: $background;
+                }
+            }
+        }
+
+        .preset-name {
+            flex-grow: 1;
+        }
+
+        .preset-tags {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            .tag {
+                color: $grey2;
+                background: $grey;
+                display: inline-block;
+                padding: .25rem;
+                border-radius: .25rem;
+                font-size: .75rem;
+
+                &:not(:last-child) {
+                    margin: 0 .25rem 0 0;
+                }
             }
         }
     }

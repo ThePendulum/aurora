@@ -1,21 +1,21 @@
 <template>
     <div ref="modulation" class="modulation" :style="{height: enlarged ? '20rem' : '3rem'}" @mousedown="modulating = true" @touchstart="modulating = true" @click="modulate">
         <span class="modulation-label modulation-y">
-            y: {{y.toFixed(2)}}
+            my: {{y.toFixed(2)}}
 
             <vue-icon v-show="lockedY" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedY = false" />
             <vue-icon v-show="!lockedY" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedY = true" />
         </span>
 
         <span class="modulation-label modulation-x">
-            x: {{x.toFixed(2)}}
+            mx: {{x.toFixed(2)}}
 
             <vue-icon v-show="lockedX" icon="lock" label="Unlock axis" class="modulation-lock locked" @click.native.stop="lockedX = false" />
             <vue-icon v-show="!lockedX" icon="unlocked" label="Lock axis" class="modulation-lock" @click.native.stop="lockedX = true" />
         </span>
 
-        <vue-icon v-show="enlarged" icon="shrink" label="Shrink modulation pad" class="modulation-enlarge enlarged" @click.native.stop="enlarge(false)" />
-        <vue-icon v-show="!enlarged" icon="enlarge" label="Enlarge modulation pad" class="modulation-enlarge" @click.native.stop="enlarge(true)" />
+        <vue-icon v-show="enlarged" icon="enlarge" label="Shrink modulation pad" class="modulation-enlarge enlarged" @click.native.stop="enlarge(false)" />
+        <vue-icon v-show="!enlarged" icon="shrink" label="Enlarge modulation pad" class="modulation-enlarge" @click.native.stop="enlarge(true)" />
 
         <div class="modulation-pointer noselect" :style="{top: y * height + 'px', left: x * width + 'px'}"><div>
     </div>
@@ -143,6 +143,11 @@
         align-self: center;
     }
 
+    .modulation-enlarge {
+        user-select: none;
+        padding: .25rem;
+    }
+
     .modulation-pointer {
         background: $primary;
         width: .75rem;
@@ -175,9 +180,5 @@
                 fill: $primary;
             }
         }
-    }
-
-    .modulation-enlarge {
-        padding: .25rem;
     }
 </style>

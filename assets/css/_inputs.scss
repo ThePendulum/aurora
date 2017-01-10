@@ -15,3 +15,17 @@
         border: solid 1px $primary;
     }
 }
+
+.submit {
+    background: none;
+    color: $primary;
+    padding: .5rem;
+    border: none;
+    font-weight: bold;
+
+    &:hover {
+        color: $text-light;
+        background:  $primary;
+        cursor: pointer;
+    }
+}

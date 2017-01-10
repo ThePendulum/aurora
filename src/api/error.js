@@ -1,8 +1,8 @@
 'use strict';
 
-const note = require('note-log');
+import note from 'note-log';
 
-module.exports = function(error, req, res, next) {
+export default function(error, req, res, next) {
     note('api', error);
 
     res.status(error.httpStatus || 500).send(error.message);

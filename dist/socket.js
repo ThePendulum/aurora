@@ -57,7 +57,7 @@ module.exports = function (leds) {
             wss.transfer('presets', presets.map(function (preset) {
                 preset.targets = JSON.parse(preset.targets);
                 preset.values = JSON.parse(preset.values);
-                preset.labels = JSON.parse(preset.tags);
+                preset.tags = JSON.parse(preset.tags);
 
                 return preset;
             }));
