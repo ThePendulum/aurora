@@ -26,6 +26,10 @@ var _expressSession = require('express-session');
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
+var _expressWs = require('express-ws');
+
+var _expressWs2 = _interopRequireDefault(_expressWs);
+
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
@@ -53,6 +57,7 @@ var port = _config2.default.has('web.port') ? _config2.default.web.port : 3000;
 module.exports = function (leds) {
     var app = (0, _express2.default)();
     var router = (0, _expressPromiseRouter2.default)();
+    var ws = (0, _expressWs2.default)(app);
 
     app.use((0, _expressSession2.default)(_extends({
         genid: _uuid2.default
@@ -75,6 +80,14 @@ module.exports = function (leds) {
     });
 
     router.post('/api/login', _login2.default);
+
+    router.ws('/socket', function (ws, req) {
+        (0, _noteLog2.default)('web', 0, _util2.default.inspect(ws), _util2.default.inspect(req.session));
+
+        ws.on('message', function (msg) {
+            (0, _noteLog2.default)('socket', 0, _util2.default.inspect(msg));
+        });
+    });
 
     router.get('*', function (req, res) {
         if (!_config2.default.requireAuth || req.session.authenticated) {

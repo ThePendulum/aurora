@@ -20,17 +20,11 @@ const heart = function(leds, ws) {
             }
         });
 
-        leds.pixels = leds.pixels.map(pixel => {
-            pixel.values = modifiers.reduce((values, modifier, index) => {
-                if(modifier.each) {
-                    return modifier.each(Object.assign(pixel, {values}), leds, preResults[index], initResults[index]);
-                }
-
-                return values;
-            }, pixel.values);
-
-            return pixel;
-        });
+        for(let pixelIndex = 0; pixelIndex < leds.pixels.length; pixelIndex++) {
+            for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
+                modifiers[modifierIndex].each(leds.pixels[pixelIndex], leds, preResults[modifierIndex], initResults[modifierIndex]);
+            }
+        }
 
         const postResults = modifiers.map((modifier, index) => {
             if(modifier.post) {
@@ -40,9 +34,7 @@ const heart = function(leds, ws) {
 
         leds.beat += 1;
 
-        setTimeout(function() {
-            beat();
-        }, leds.interval);
+        setTimeout(beat, leds.interval);
     };
 
     beat();

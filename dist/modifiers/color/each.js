@@ -6,66 +6,66 @@ var util = require('util');
 var hsv2rgb = require('../../utils/hsv2rgb.js');
 
 var each = function each(pixel, leds, pre, init) {
-  var scope = pre;
+    var scope = pre;
 
-  scope.index = scope.i = pixel.index;
-  scope.x = pixel.x;
-  scope.y = pixel.y;
-  scope.pixelRandom = scope.pr = Math.random();
-  scope.previous = scope.p = pixel.values;
+    scope.index = scope.i = pixel.index;
+    scope.x = pixel.x;
+    scope.y = pixel.y;
+    scope.pixelRandom = scope.pr = Math.random();
+    scope.previous = scope.p = pixel.values;
 
-  if (leds.mode === 'hsv') {
-    var hue = void 0,
-        saturation = void 0,
-        value = void 0;
+    if (leds.mode === 'hsv') {
+        var hue = void 0,
+            saturation = void 0,
+            value = void 0;
 
-    try {
-      hue = init.hsv.hue.eval(scope);
-      saturation = init.hsv.saturation.eval(scope);
-      value = init.hsv.value.eval(scope);
+        try {
+            hue = init.hsv.hue.eval(scope);
+            saturation = init.hsv.saturation.eval(scope);
+            value = init.hsv.value.eval(scope);
+        } catch (error) {
+            note('color', 2, error.message);
+        }
 
-      // Use default when empty. Use first of multiple results
-      if (typeof hue === 'undefined') {
-        hue = 0;
-      } else if (hue.entries) {
-        hue = hue.entries[0];
-      }
+        // Use default when empty. Use first of multiple results
+        if (typeof hue === 'undefined') {
+            hue = 0;
+        } else if (hue.entries) {
+            hue = hue.entries[0];
+        }
 
-      if (typeof saturation === 'undefined') {
-        saturation = 0;
-      } else if (saturation.entries) {
-        saturation = saturation.entries[0];
-      }
+        if (typeof saturation === 'undefined') {
+            saturation = 0;
+        } else if (saturation.entries) {
+            saturation = saturation.entries[0];
+        }
 
-      if (typeof value === 'undefined') {
-        value = 0;
-      } else if (value.entries) {
-        value = value.entries[0];
-      }
-    } catch (error) {
-      note('color', 2, error.message);
+        if (typeof value === 'undefined') {
+            value = 0;
+        } else if (value.entries) {
+            value = value.entries[0];
+        }
+
+        pixel.values = hsv2rgb(hue, saturation, value);
     }
 
-    return hsv2rgb(hue, saturation, value);
-  }
+    if (leds.mode === 'rgb') {
+        var r = void 0,
+            g = void 0,
+            b = void 0;
 
-  if (leds.mode === 'rgb') {
-    var r = void 0,
-        g = void 0,
-        b = void 0;
+        try {
+            r = Math.max(0, Math.min(255, init.rgb.red.eval(scope)));
+            g = Math.max(0, Math.min(255, init.rgb.green.eval(scope)));
+            b = Math.max(0, Math.min(255, init.rgb.blue.eval(scope)));
+        } catch (error) {
+            note(error);
+        }
 
-    try {
-      r = Math.max(0, Math.min(255, init.rgb.red.eval(scope)));
-      g = Math.max(0, Math.min(255, init.rgb.green.eval(scope)));
-      b = Math.max(0, Math.min(255, init.rgb.blue.eval(scope)));
-    } catch (error) {
-      note(error);
+        pixel.values[0] = r;
+        pixel.values[1] = g;
+        pixel.values[2] = b;
     }
-
-    return [r, g, b];
-  }
-
-  return pixel.values;
 };
 
 module.exports = each;

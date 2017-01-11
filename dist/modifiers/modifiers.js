@@ -8,5 +8,5 @@ var regulator = require('./regulator/regulator.js');
 var render = require('./render/render.js');
 
 module.exports = function (leds) {
-  return [color(leds), draw(leds), regulator(leds), render(leds)];
+    return [color(leds), regulator(leds), render(leds)];
 };

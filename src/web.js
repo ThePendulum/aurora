@@ -6,6 +6,7 @@ import note from 'note-log';
 import express from 'express';
 import Router from 'express-promise-router';
 import session from 'express-session';
+import expressWs from 'express-ws';
 import bodyParser from 'body-parser';
 import path from 'path';
 import uuid from 'uuid';
@@ -18,6 +19,7 @@ import login from './api/login.js';
 module.exports = function(leds) {
     const app = express();
     const router = Router();
+    const ws = expressWs(app);
 
     app.use(session({
         genid: uuid,
@@ -41,6 +43,14 @@ module.exports = function(leds) {
     });
 
     router.post('/api/login', login);
+
+    router.ws('/socket', (ws, req) => {
+        note('web', 0, util.inspect(ws), util.inspect(req.session));
+
+        ws.on('message', msg => {
+            note('socket', 0, util.inspect(msg));
+        });
+    });
 
     router.get('*', (req, res) => {
         if(!config.requireAuth || req.session.authenticated) {

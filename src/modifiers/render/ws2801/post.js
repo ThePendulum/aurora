@@ -1,7 +1,7 @@
 'use strict';
 
 const post = function(leds, pre, init) {
-  init.write(new Buffer(pre));
+    init.render.write(new Buffer(init.buffer));
 };
 
 module.exports = post;

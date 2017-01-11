@@ -43,6 +43,7 @@
     "express": "^4.13.4",
     "express-promise-router": "^1.1.1",
     "express-session": "^1.14.2",
+    "express-ws": "^2.0.0",
     "immutable": "^3.8.1",
     "knex": "^0.12.6",
     "mathjs": "^3.2.1",

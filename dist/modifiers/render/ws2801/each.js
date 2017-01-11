@@ -9,9 +9,11 @@ var g = colorIndex[1];
 var b = colorIndex[2];
 
 var each = function each(pixel, leds, pre, init) {
-  pre.push('0x' + Number(pixel.values[r] & 0xff).toString(16), '0x' + Number(pixel.values[g] & 0xff).toString(16), '0x' + Number(pixel.values[b] & 0xff).toString(16));
+    var index = pixel.index * 3;
 
-  return pixel.values;
+    init.buffer[index] = '0x' + Number(pixel.values[r] & 0xff).toString(16);
+    init.buffer[index + 1] = '0x' + Number(pixel.values[r] & 0xff).toString(16);
+    init.buffer[index + 2] = '0x' + Number(pixel.values[r] & 0xff).toString(16);
 };
 
 module.exports = each;
