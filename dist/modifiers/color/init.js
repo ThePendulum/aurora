@@ -3,48 +3,38 @@
 var config = require('config');
 var note = require('note-log');
 var util = require('util');
-var math = require('mathjs');
+var Parser = require('expr-eval').Parser;
+
+var parser = new Parser();
 
 var init = function init(leds, ws) {
     var rgb = {
         red: {
             value: 255,
-            eval: function _eval() {
-                return 255;
-            }
+            eval: Parser.parse('255')
         },
         green: {
             value: 0,
-            eval: function _eval() {
-                return 0;
-            }
+            eval: Parser.parse('0')
         },
         blue: {
             value: 0,
-            eval: function _eval() {
-                return 0;
-            }
+            eval: Parser.parse('0')
         }
     };
 
     var hsv = {
         hue: {
             value: 0,
-            eval: function _eval() {
-                return 0;
-            }
+            eval: Parser.parse('0')
         },
         saturation: {
             value: 1,
-            eval: function _eval() {
-                return 1;
-            }
+            eval: Parser.parse('1')
         },
         value: {
             value: 1,
-            eval: function _eval() {
-                return 1;
-            }
+            eval: Parser.parse('1')
         }
     };
 
@@ -74,33 +64,25 @@ var init = function init(leds, ws) {
                     var data = JSON.parse(msg);
 
                     if (data[0] === 'rgb') {
-                        try {
-                            Object.keys(data[1]).forEach(function (prop) {
-                                rgb[prop] = {
-                                    value: data[1][prop],
-                                    eval: math.compile(data[1][prop]).eval
-                                };
-                            });
+                        Object.keys(rgb).forEach(function (prop) {
+                            rgb[prop] = {
+                                value: data[1][prop],
+                                eval: parser.parse(data[1][prop].toString())
+                            };
+                        });
 
-                            wss.broadcast('rgb', data[1]);
-                        } catch (error) {
-                            wss.transfer('error', error.message);
-                        }
+                        wss.broadcast('rgb', data[1]);
                     }
 
                     if (data[0] === 'hsv') {
-                        try {
-                            Object.keys(data[1]).forEach(function (prop) {
-                                hsv[prop] = {
-                                    value: data[1][prop],
-                                    eval: math.compile(data[1][prop]).eval
-                                };
-                            });
+                        Object.keys(hsv).forEach(function (prop) {
+                            hsv[prop] = {
+                                value: data[1][prop],
+                                eval: parser.parse(data[1][prop].toString())
+                            };
+                        });
 
-                            wss.broadcast('hsv', data[1]);
-                        } catch (error) {
-                            wss.transfer('error', error.message);
-                        }
+                        wss.broadcast('rgb', data[1]);
                     }
 
                     if (data[0] === 'modulation') {

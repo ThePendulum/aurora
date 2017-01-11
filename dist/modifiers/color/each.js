@@ -2,6 +2,7 @@
 
 var note = require('note-log');
 var util = require('util');
+var vm = require('vm');
 
 var hsv2rgb = require('../../utils/hsv2rgb.js');
 
@@ -20,51 +21,32 @@ var each = function each(pixel, leds, pre, init) {
             value = void 0;
 
         try {
-            hue = init.hsv.hue.eval(scope);
-            saturation = init.hsv.saturation.eval(scope);
-            value = init.hsv.value.eval(scope);
+            hue = init.hsv.hue.eval.evaluate(scope);
+            saturation = init.hsv.saturation.eval.evaluate(scope);
+            value = init.hsv.value.eval.evaluate(scope);
         } catch (error) {
             note('color', 2, error.message);
-        }
-
-        // Use default when empty. Use first of multiple results
-        if (typeof hue === 'undefined') {
-            hue = 0;
-        } else if (hue.entries) {
-            hue = hue.entries[0];
-        }
-
-        if (typeof saturation === 'undefined') {
-            saturation = 0;
-        } else if (saturation.entries) {
-            saturation = saturation.entries[0];
-        }
-
-        if (typeof value === 'undefined') {
-            value = 0;
-        } else if (value.entries) {
-            value = value.entries[0];
         }
 
         pixel.values = hsv2rgb(hue, saturation, value);
     }
 
     if (leds.mode === 'rgb') {
-        var r = void 0,
-            g = void 0,
-            b = void 0;
+        var red = void 0,
+            green = void 0,
+            blue = void 0;
 
         try {
-            r = Math.max(0, Math.min(255, init.rgb.red.eval(scope)));
-            g = Math.max(0, Math.min(255, init.rgb.green.eval(scope)));
-            b = Math.max(0, Math.min(255, init.rgb.blue.eval(scope)));
+            red = init.rgb.red.eval.evaluate(scope);
+            green = init.rgb.green.eval.evaluate(scope);
+            blue = init.rgb.blue.eval.evaluate(scope);
         } catch (error) {
             note(error);
         }
 
-        pixel.values[0] = r;
-        pixel.values[1] = g;
-        pixel.values[2] = b;
+        pixel.values[0] = red;
+        pixel.values[1] = green;
+        pixel.values[2] = blue;
     }
 };
 

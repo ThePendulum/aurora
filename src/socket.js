@@ -84,23 +84,5 @@ module.exports = function(leds) {
         });
     });
 
-    const update = function() {
-        ws.clients.forEach(client => {
-            if(client.readyState === 1) {
-                client.send(JSON.stringify(['pixels', leds.pixels.map(pixel => {
-                    pixel.values = pixel.values.map(value => value * (1 / config.regulator));
-
-                    return pixel
-                })]));
-            }
-        });
-
-        setTimeout(() => {
-            update();
-        }, config.has('feedbackInterval') ? config.feedbackInterval : 1000);
-    };
-
-    update();
-
     return ws;
 };

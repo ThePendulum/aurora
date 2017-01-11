@@ -13,12 +13,15 @@ const heart = function(leds, ws) {
         }
     });
 
+    let preResults = Array.from({length: modifiers.length});
+
     const beat = function() {
-        const preResults = modifiers.map((modifier, index) => {
-            if(modifier.pre) {
-                return modifier.pre(leds, initResults[index]);
+        // performance critical, abstractions too slow
+        for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
+            if(modifiers[modifierIndex].pre) {
+                preResults[modifierIndex] = modifiers[modifierIndex].pre(leds, initResults[modifierIndex]);
             }
-        });
+        }
 
         for(let pixelIndex = 0; pixelIndex < leds.pixels.length; pixelIndex++) {
             for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
@@ -26,11 +29,11 @@ const heart = function(leds, ws) {
             }
         }
 
-        const postResults = modifiers.map((modifier, index) => {
-            if(modifier.post) {
-                return modifier.post(leds, preResults[index], initResults[index]);
+        for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
+            if(modifiers[modifierIndex].post) {
+                modifiers[modifierIndex].post(leds, preResults[modifierIndex], initResults[modifierIndex]);
             }
-        });
+        }
 
         leds.beat += 1;
 

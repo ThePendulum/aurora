@@ -44,7 +44,7 @@ exports.seed = function(knex, Promise) {
             name: 'Rainbow Master',
             targets: JSON.stringify(['master', 'hue']),
             values: JSON.stringify({
-                hue: 'i * (1 + 2my) + 360mx',
+                hue: 'i * (1 + 2 * my) + 360 * mx',
                 saturation: 1,
                 value: 1
             }),
@@ -54,7 +54,7 @@ exports.seed = function(knex, Promise) {
             name: 'Spectrum',
             targets: JSON.stringify(['master', 'hue']),
             values: JSON.stringify({
-                hue: '60i',
+                hue: '60 * i',
                 saturation: 1,
                 value: 1
             }),
@@ -108,7 +108,7 @@ exports.seed = function(knex, Promise) {
             name: 'Pulse',
             targets: JSON.stringify(['value']),
             values: JSON.stringify({
-                value: '.5 + .5sin(.1b)'
+                value: '.5 + .5 * sin(.1 * b)'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
@@ -118,7 +118,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hue: 0,
                 saturation: 1,
-                value: 'sin(.3b)',
+                value: 'sin(.3 * b)',
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
@@ -128,7 +128,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hue: 0,
                 saturation: 0,
-                value: 'sin(.05b) * r[1] * (.5 + .5sin(.05i * r[2]))'
+                value: 'sin(.05 * b) * r[1] * (.5 + .5 * sin(.05 * i * r[2]))'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])

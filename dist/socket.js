@@ -92,25 +92,5 @@ module.exports = function (leds) {
         });
     });
 
-    var update = function update() {
-        ws.clients.forEach(function (client) {
-            if (client.readyState === 1) {
-                client.send(JSON.stringify(['pixels', leds.pixels.map(function (pixel) {
-                    pixel.values = pixel.values.map(function (value) {
-                        return value * (1 / config.regulator);
-                    });
-
-                    return pixel;
-                })]));
-            }
-        });
-
-        setTimeout(function () {
-            update();
-        }, config.has('feedbackInterval') ? config.feedbackInterval : 1000);
-    };
-
-    update();
-
     return ws;
 };

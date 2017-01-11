@@ -3,36 +3,38 @@
 const config = require('config');
 const note = require('note-log');
 const util = require('util');
-const math = require('mathjs');
+const Parser = require('expr-eval').Parser;
+
+const parser = new Parser();
 
 const init = function(leds, ws) {
     const rgb = {
         red: {
             value: 255,
-            eval: () => 255
+            eval: Parser.parse('255')
         },
         green: {
             value: 0,
-            eval: () => 0
+            eval: Parser.parse('0')
         },
         blue: {
             value: 0,
-            eval: () => 0
+            eval: Parser.parse('0')
         }
     };
 
     const hsv = {
         hue: {
             value: 0,
-            eval: () => 0
+            eval: Parser.parse('0')
         },
         saturation: {
             value: 1,
-            eval: () => 1
+            eval: Parser.parse('1')
         },
         value: {
             value: 1,
-            eval: () => 1
+            eval: Parser.parse('1')
         }
     };
 
@@ -61,33 +63,25 @@ const init = function(leds, ws) {
                 const data = JSON.parse(msg);
 
                 if(data[0] === 'rgb') {
-                    try {
-                        Object.keys(data[1]).forEach(prop => {
-                            rgb[prop] = {
-                                value: data[1][prop],
-                                eval: math.compile(data[1][prop]).eval
-                            };
-                        });
+                    Object.keys(rgb).forEach(prop => {
+                        rgb[prop] = {
+                            value: data[1][prop],
+                            eval: parser.parse(data[1][prop].toString())
+                        };
+                    });
 
-                        wss.broadcast('rgb', data[1]);
-                    } catch(error) {
-                        wss.transfer('error', error.message);
-                    }
+                    wss.broadcast('rgb', data[1]);
                 }
 
                 if(data[0] === 'hsv') {
-                    try {
-                        Object.keys(data[1]).forEach(prop => {
-                            hsv[prop] = {
-                                value: data[1][prop],
-                                eval: math.compile(data[1][prop]).eval
-                            };
-                        });
+                    Object.keys(hsv).forEach(prop => {
+                        hsv[prop] = {
+                            value: data[1][prop],
+                            eval: parser.parse(data[1][prop].toString())
+                        };
+                    });
 
-                        wss.broadcast('hsv', data[1]);
-                    } catch(error) {
-                        wss.transfer('error', error.message);
-                    }
+                    wss.broadcast('rgb', data[1]);
                 }
 
                 if(data[0] === 'modulation') {
