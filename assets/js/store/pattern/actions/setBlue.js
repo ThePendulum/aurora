@@ -16,8 +16,8 @@ export default function(context, blue) {
         context.commit('setGreen', 0);
     }
 
-    socket.send(JSON.stringify(['mode', 'rgb']));
-    socket.send(JSON.stringify(['rgb', pick(context.state, ['red', 'green', 'blue'])]));
+    socket.transmit('mode', 'rgb');
+    socket.transmit('rgb', pick(context.state, ['red', 'green', 'blue']));
 
     const hsv = convert.rgb.hsv.raw(Number(context.state.red), Number(context.state.green), Number(context.state.blue));
 

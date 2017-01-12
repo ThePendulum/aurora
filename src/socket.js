@@ -15,7 +15,7 @@ const getPresets = require('./presets/get.js');
 const port = config.has('socket.port') ? config.socket.port : 3001;
 
 module.exports = function(leds) {
-    const ws = new WebSocket({port});
+    const wss = new WebSocket({port});
     const socket = {};
 
     note('wss', 'Socket server listening on port ' + port);
@@ -42,7 +42,7 @@ module.exports = function(leds) {
     };
 
     socket.broadcast = function(namespace, data, exclude) {
-        ws.clients.forEach(client => {
+        wss.clients.forEach(client => {
             if(client.readyState === 1 && client.id !== exclude) {
                 client.send(JSON.stringify([namespace, data]));
             }
@@ -73,14 +73,14 @@ module.exports = function(leds) {
         listeners[namespace] = [proxyHandler];
     };
 
-    ws.on('connection', wss => {
-        note('socket', 0, `Established websocket with '${wss.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}'`);
+    wss.on('connection', ws => {
+        note('socket', 0, `Established websocket with \'${ws.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}\'`);
 
-        wss.id = uuid();
+        ws.id = uuid();
 
-        wss.transmit = function(namespace, data) {
-            if(wss.readyState === 1) {
-                wss.send(JSON.stringify([namespace, data]));
+        ws.transmit = function(namespace, data) {
+            if(ws.readyState === 1) {
+                ws.send(JSON.stringify([namespace, data]));
             }
         };
 
@@ -89,11 +89,11 @@ module.exports = function(leds) {
                 // init function may return value or promise
                 return init[handler]();
             }).then(result => {
-                wss.transmit(handler, result);
+                ws.transmit(handler, result);
             });
         });
 
-        wss.on('message', msg => {
+        ws.on('message', msg => {
             try {
                 const [namespace, data] = JSON.parse(msg);
 
@@ -106,15 +106,15 @@ module.exports = function(leds) {
         });
 
         const ping = function() {
-            wss.transmit('ping');
+            ws.transmit('ping');
 
-            setTimeout(ping, 1000);
+            setTimeout(ping, 5000);
         };
 
         ping();
 
-        wss.on('close', () => {
-            note('socket', 0, `Closed websocket with '${wss.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}'`);
+        ws.on('close', () => {
+            note('socket', 0, `Closed websocket with '${ws.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}'`);
         });
     });
 

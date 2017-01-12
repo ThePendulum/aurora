@@ -54,7 +54,7 @@ module.exports = function() {
     });
 
     leds.beat = 0;
-    leds.interval = config.interval || 30;
+    leds.interval = config.fps ? Math.round(1000 / config.fps) : (config.interval || 30);
     leds.mode = 'hsv';
 
     return leds;

@@ -16,8 +16,8 @@ export default function(context, hue) {
         context.commit('setValue', 1);
     }
 
-    socket.send(JSON.stringify(['mode', 'hsv']));
-    socket.send(JSON.stringify(['hsv', pick(context.state, ['hue', 'saturation', 'value'])]));
+    socket.transmit('mode', 'hsv');
+    socket.transmit('hsv', pick(context.state, ['hue', 'saturation', 'value']));
 
     const rgb = convert.hsv.rgb.raw(Number(context.state.hue), Number(context.state.saturation) * 100, Number(context.state.value) * 100) || [NaN, NaN, NaN];
 
