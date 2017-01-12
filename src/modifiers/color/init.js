@@ -3,11 +3,11 @@
 const config = require('config');
 const note = require('note-log');
 const util = require('util');
-const Parser = require('expr-eval').Parser;
 
+const Parser = require('expr-eval').Parser;
 const parser = new Parser();
 
-const init = function(leds, ws) {
+const init = function(leds, socket) {
     const rgb = {
         red: {
             value: 255,
@@ -46,54 +46,50 @@ const init = function(leds, ws) {
     scope.mx = 0;
     scope.my = 0;
 
-    ws.on('connection', wss => {
-        if(leds.mode === 'rgb') {
-            wss.transfer('rgb', {red: rgb.red.value, green: rgb.green.value, blue: rgb.blue.value});
-        } else if(leds.mode === 'hsv') {
-            wss.transfer('hsv', {hue: hsv.hue.value, saturation: hsv.saturation.value, value: hsv.value.value});
-        }
+    socket.init('rgb', () => {
+        return {
+            red: rgb.red.value,
+            green: rgb.green.value,
+            blue: rgb.blue.value
+        };
+    });
 
-        wss.transfer('modulation', {
+    socket.init('hsv', () => {
+        return {
+            hue: hsv.hue.value,
+            saturation: hsv.saturation.value,
+            value: hsv.value.value
+        };
+    });
+
+    socket.init('modulation', () => {
+        return {
             x: scope.mx,
             y: scope.my
+        };
+    });
+
+    socket.listen('rgb', newRgb => {
+        Object.keys(rgb).forEach(prop => {
+            rgb[prop] = {
+                value: newRgb[prop],
+                eval: parser.parse(newRgb[prop].toString())
+            };
         });
+    });
 
-        wss.on('message', msg => {
-            try {
-                const data = JSON.parse(msg);
-
-                if(data[0] === 'rgb') {
-                    Object.keys(rgb).forEach(prop => {
-                        rgb[prop] = {
-                            value: data[1][prop],
-                            eval: parser.parse(data[1][prop].toString())
-                        };
-                    });
-
-                    wss.broadcast('rgb', data[1]);
-                }
-
-                if(data[0] === 'hsv') {
-                    Object.keys(hsv).forEach(prop => {
-                        hsv[prop] = {
-                            value: data[1][prop],
-                            eval: parser.parse(data[1][prop].toString())
-                        };
-                    });
-
-                    wss.broadcast('rgb', data[1]);
-                }
-
-                if(data[0] === 'modulation') {
-                    scope.mx = data[1].x;
-                    scope.my = data[1].y;
-
-                    wss.broadcast('modulation', data[1]);
-                }
-            } catch(error) {
-                note('color', error);
-            }
+    socket.listen('hsv', newHsv => {
+        Object.keys(hsv).forEach(prop => {
+            hsv[prop] = {
+                value: newHsv[prop],
+                eval: parser.parse(newHsv[prop].toString())
+            };
         });
+    });
+
+    socket.listen('modulation', newModulation => {
+        scope.mx = newModulation.x;
+        scope.my = newModulation.y;
     });
 
     return {rgb, hsv, scope};

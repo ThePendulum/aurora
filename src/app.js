@@ -3,8 +3,7 @@
 require('babel-polyfill');
 
 const leds = require('./init.js')();
+const socket = require('./socket.js')(leds);
 
-const ws = require('./socket.js')(leds);
-require('./web.js')(leds);
-
-require('./heart.js')(leds, ws);
+require('./web.js')(leds, socket);
+require('./heart.js')(leds, socket);

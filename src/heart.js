@@ -4,12 +4,12 @@ const config = require('config');
 const note = require('note-log');
 const util = require('util');
 
-const heart = function(leds, ws) {
+const heart = function(leds, socket) {
     const modifiers = require('./modifiers/modifiers.js')(leds);
 
     const initResults = modifiers.map((modifier, index) => {
         if(modifier.init) {
-            return modifier.init(leds, ws);
+            return modifier.init(leds, socket);
         }
     });
 
@@ -19,19 +19,21 @@ const heart = function(leds, ws) {
         // performance critical, abstractions too slow
         for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
             if(modifiers[modifierIndex].pre) {
-                preResults[modifierIndex] = modifiers[modifierIndex].pre(leds, initResults[modifierIndex]);
+                preResults[modifierIndex] = modifiers[modifierIndex].pre(leds, initResults[modifierIndex], socket);
             }
         }
 
         for(let pixelIndex = 0; pixelIndex < leds.pixels.length; pixelIndex++) {
             for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
-                modifiers[modifierIndex].each(leds.pixels[pixelIndex], leds, preResults[modifierIndex], initResults[modifierIndex]);
+                if(modifiers[modifierIndex].each) {
+                    modifiers[modifierIndex].each(leds.pixels[pixelIndex], leds, preResults[modifierIndex], initResults[modifierIndex]);
+                }
             }
         }
 
         for(let modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
             if(modifiers[modifierIndex].post) {
-                modifiers[modifierIndex].post(leds, preResults[modifierIndex], initResults[modifierIndex]);
+                modifiers[modifierIndex].post(leds, preResults[modifierIndex], initResults[modifierIndex], socket);
             }
         }
 
