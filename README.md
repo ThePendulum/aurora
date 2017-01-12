@@ -1,9 +1,12 @@
-# aurora ws28xx Remote for Raspberry Pi
+# aurora
+aurora is an addressable LED controller for the Raspberry Pi. It provides an easy to use web interface backed by a power mathematical expression parser.
 
 ## Installation
 aurora relies on Node.js, which is best installed through [nvm](https://github.com/creationix/nvm). Node.js comes with a package manager npm, which is used to install aurora's dependencies:
 
-`npm install`
+```
+npm install
+```
 
 After initial installation, the database (for users and presets) will need to be set up. Optionally, the database can be filled with default presets for common effects. This is also done through npm:
 
@@ -20,7 +23,9 @@ npm run build
 
 Finally, to run aurora:
 
-`npm start`
+```
+npm start
+```
 
 ## Configuration
 An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and open it in your favorite text editor.
@@ -37,7 +42,7 @@ The HSV channels represent hue, saturation and value, a [cylindrical representat
 ## Mathematical expressions
 A static color can look cozy, but to make things more exciting, each color channel is powered by a mathematical expression parser that provides access to [lots of mathematical operations](https://github.com/silentmatt/expr-eval#expression-syntax), which become especially powerful in combination with the variables aurora makes available.
 
-## Presets
+### Presets
 Mathematical expressions are versatile, but they can be inconvenient to use. Common effects are provided as presets, and are listed below a channel on focus. The master channel lists presets that affect multiple other channels
 
 ## Variables
