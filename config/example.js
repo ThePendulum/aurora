@@ -5,8 +5,8 @@ module.exports = {
     size: 300,
     colorIndex: [0, 1, 2],
     zigzag: false,
-    fps: 30,
     regulator: 1,
+    interval: 30,
     feedbackInterval: 200
     persist: false,
     requireAuth: true,

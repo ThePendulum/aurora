@@ -8,6 +8,7 @@ aurora is an addressable LED controller for the Raspberry Pi. It provides an eas
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Color channels](#color-channels)
+  - [Master](#master)
   - [RGB](#rgb)
   - [HSV](#hsv)
 - [Mathematical expressions](#mathematical-expressions)
@@ -50,13 +51,16 @@ npm start
 An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and open it in your favorite text editor.
 
 ## Color channels
-There are Master, RGB, HSV color channels available. When one of the RGB channels gets modified, the HSV channels will be ignored. Likewise, when an HSV channel gets modified, the RGB channels will be ignored. The master channel takes a hexadecimal color value and, when avaible, will show the web browser's native color input.
+The color channels on the web interface are the primary way of setting what your LEDs will display. There are seven channels: Master, RGB (Red, Green Blue) and HSV (Hue, Saturation, Value). When a channel from either the RGB or HSV channel group gets updated, the other channel group will be ignored. The Master channel is linked to the RGB channel group in this behavior.
+
+### Master
+The master channel takes a hexadecimal color value and, when available, will show the web browser's native color input.
 
 ### RGB
-The RGB channels represent red, green and blue respectively. Each channel accepts a value between 0 and 255. By combining all three channels, over 16 million colors can be created. All RGB channels are capped, meaning values above 255 will be truncated to 255.
+The RGB channels represent red, green and blue respectively. Each channel ranges between 0 and 255 and exceeding values will be capped. By combining all three channels, over 16 million colors can be created.
 
 ### HSV
-The HSV channels represent hue, saturation and value, a [cylindrical representation](http://i.imgur.com/iYzgRRI.png) of the RGB color model. The hue channel accepts a value between 0 and 360 (degrees) on a [color wheel](http://i.imgur.com/5UpyIGh.png). The saturation and value channels accept a value between 0 and 1, and represent the colorfulness and brightness respectively. The HSV channels are most suitable for e.g. color cycling and brightness fading and pulsing, as a single HSV channel can affect all colors of the RGB color model at once. The hue channel refers to a color wheel and values above 360 degrees will simply reset to 0 degrees, while the saturation and value channels are capped to 1.
+The HSV channels represent hue, saturation and value, a [cylindrical representation](http://i.imgur.com/iYzgRRI.png) of the RGB color model. The hue channel represents a value between 0 and 360 (degrees) on a [color wheel](http://i.imgur.com/5UpyIGh.png). Values exceeding 360 will wrap around from 0 (380 will be equal to 20, 12490 to 250, and so on). The saturation and value channels accept a value between 0 and 1, and represent the colorfulness and brightness respectively. Values exceeding 1 will be capped to 1. The HSV channels are most suitable for e.g. color cycling, brightness fading and pulsing, as a single HSV channel can affect all colors of the RGB color model at once.
 
 ## Mathematical expressions
 A static color can look cozy, but to make things more exciting, each color channel is powered by a mathematical expression parser that provides access to [lots of mathematical operations](https://github.com/silentmatt/expr-eval#expression-syntax), which become especially powerful in combination with the variables aurora makes available.
