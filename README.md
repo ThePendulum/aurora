@@ -60,18 +60,18 @@ The master channel takes a hexadecimal color value and, when available, will sho
 The RGB channels represent red, green and blue respectively. Each channel ranges between 0 and 255 and exceeding values will be capped. By combining all three channels, over 16 million colors can be created.
 
 ### HSV
-The HSV channels represent hue, saturation and value, a [cylindrical representation](http://i.imgur.com/iYzgRRI.png) of the RGB color model. The hue channel represents a value between 0 and 360 (degrees) on a [color wheel](http://i.imgur.com/5UpyIGh.png). Values exceeding 360 will wrap around from 0 (380 will be equal to 20, 12490 to 250, and so on). The saturation and value channels accept a value between 0 and 1, and represent the colorfulness and brightness respectively. Values exceeding 1 will be capped to 1. The HSV channels are most suitable for e.g. color cycling, brightness fading and pulsing, as a single HSV channel can affect all colors of the RGB color model at once.
+The HSV channels represent hue, saturation and value, a [cylindrical representation](http://i.imgur.com/iYzgRRI.png) of the RGB color model. The hue channel represents a value between 0 and 360 (degrees) on a [color wheel](http://i.imgur.com/5UpyIGh.png). Values exceeding 360 will wrap around from 0 (380 will be equal to 20, 12490 to 250, and so on). The saturation and value channels accept a value between 0 and 1, and represent the colorfulness and brightness respectively. Values exceeding 1 will be capped. The HSV channels are most suitable for e.g. color cycling, brightness fading and pulsing, as a single HSV channel can affect all colors of the RGB color model at once.
 
 ## Mathematical expressions
 A static color can look cozy, but to make things more exciting, each color channel is powered by a mathematical expression parser that provides access to [lots of mathematical operations](https://github.com/silentmatt/expr-eval#expression-syntax), which become especially powerful in combination with the variables aurora makes available.
 
 ### Presets
-Of course, composing expressions is not everyone's favorite pastime. Therefore, expressions for common effects are provided as presets, and are listed below a channel on focus. The master channel lists presets that affect multiple other channels.
+Of course, composing expressions is not everyone's favorite pastime. Therefore, expressions for common effects are provided as presets, and are listed below a channel on focus. The master channel lists presets that affect multiple other channels. When applying a preset, its expression will be visible, demonstrating how variables can be used to create various effects.
 
 ## Variables
-The following variables can be used in expressions on all color channels:
+The following variables may be used in expressions on all color channels:
 
-### Dimensions and positions
+### Dimensions and coordinates
 * `length` or `l`: The total number of LEDs.
 * `index` or `i`: The sequential position of a LED.
 * `width` or `w`: The width of the matrix. Equivalent to `length` on a strip.
@@ -86,7 +86,7 @@ The following variables can be used in expressions on all color channels:
 * `mx` and `my`: The x- and y-position of the pointer on the modulation pad, mapped to values between 0 and 1.
 
 ### Time
-* `time` or `t`: Numbers of milliseconds since January 1, 1970 00:00:00 GMT.
+* `time` or `t`: Numbers of milliseconds since January 1, 1970 00:00:00 GMT (Unix epoch).
 * `year` or `yr`: The current year in four digits.
 * `month` or `mo`: The current month between 1 and 12.
 * `date` or `d`: The current date or day of the month.
