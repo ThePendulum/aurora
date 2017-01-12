@@ -1,25 +1,24 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [aurora](#aurora)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Color channels](#color-channels)
-    - [RGB](#rgb)
-    - [HSV](#hsv)
-  - [Mathematical expressions](#mathematical-expressions)
-    - [Presets](#presets)
-  - [Variables](#variables)
-    - [Dimensions and positions](#dimensions-and-positions)
-    - [Animation seeds](#animation-seeds)
-    - [Modulation pad](#modulation-pad)
-    - [Time](#time)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # aurora
 aurora is an addressable LED controller for the Raspberry Pi. It provides an easy to use web interface backed by a power mathematical expression parser.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Color channels](#color-channels)
+  - [RGB](#rgb)
+  - [HSV](#hsv)
+- [Mathematical expressions](#mathematical-expressions)
+  - [Presets](#presets)
+- [Variables](#variables)
+  - [Dimensions and positions](#dimensions-and-positions)
+  - [Animation seeds](#animation-seeds)
+  - [Modulation pad](#modulation-pad)
+  - [Time](#time)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
 aurora relies on Node.js, which is best installed through [nvm](https://github.com/creationix/nvm). Node.js comes with a package manager npm, which is used to install aurora's dependencies:

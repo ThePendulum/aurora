@@ -14,7 +14,7 @@
     "babel": "babel src -d dist",
     "watch-webpack": "webpack --progress --colors --watch",
     "watch-babel": "babel src -w -d dist",
-    "doctoc": "doctoc .",
+    "doctoc": "doctoc . --notitle",
     "database-setup": "knex migrate:latest",
     "database-drop": "knex migrate:rollback",
     "database-fill": "knex seed:run",
