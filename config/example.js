@@ -5,9 +5,11 @@ module.exports = {
     size: 300,
     colorIndex: [0, 1, 2],
     zigzag: false,
+    fps: 30,
     regulator: 1,
-    persist: false,
     feedbackInterval: 200
+    persist: false,
+    requireAuth: true,
     database: {
         client: 'sqlite3',
         connection: {
@@ -15,7 +17,6 @@ module.exports = {
         },
         useNullAsDefault: true
     },
-    requireAuth: true,
     session: {
         secret: 'w1NKhdUy8i3txXvf0jO6159VNk5zV614',
         resave: false,
