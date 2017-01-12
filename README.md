@@ -1,3 +1,23 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [aurora](#aurora)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Color channels](#color-channels)
+    - [RGB](#rgb)
+    - [HSV](#hsv)
+  - [Mathematical expressions](#mathematical-expressions)
+    - [Presets](#presets)
+  - [Variables](#variables)
+    - [Dimensions and positions](#dimensions-and-positions)
+    - [Animation seeds](#animation-seeds)
+    - [Modulation pad](#modulation-pad)
+    - [Time](#time)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # aurora
 aurora is an addressable LED controller for the Raspberry Pi. It provides an easy to use web interface backed by a power mathematical expression parser.
 
@@ -53,8 +73,7 @@ The following variables can be used in expressions on all color channels:
 * `index` or `i`: The sequential position of a LED.
 * `width` or `w`: The width of the matrix. Equivalent to `length` on a strip.
 * `height` or `h`: The height of the matrix. Always 1 on a strip.
-* `x`: The x-coordinate of an LED in a matrix. Equivalent to `i` on a strip.
-* `y`: The y-coordinate of an LED in a matrix. Always 0 on a strip.
+* `x` and `y`: The x- and y-coordinate of an LED in a matrix. On a strip, they are equivalent to `i` and 0 respectively.
 
 ### Animation seeds
 * `beat` or `b`: An incremental value that ticks every update cycle.
