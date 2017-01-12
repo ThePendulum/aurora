@@ -43,7 +43,7 @@
         computed: {
             ...mapState({
                 modulation(state) {
-                    return state.pattern.modulation;
+                    return state.meta.modulation;
                 }
             }),
             x() { return this.modulation.x; },
@@ -70,7 +70,7 @@
                     const xCapped = Math.max(Math.min(x, 1), 0);
                     const yCapped = Math.max(Math.min(y, 1), 0);
 
-                    this.$store.dispatch('setModulation', {
+                    this.$store.dispatch('modulation', {
                         x: xCapped,
                         y: yCapped
                     });

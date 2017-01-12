@@ -1,19 +1,17 @@
 'use strict';
 
-import setRed from './setRed.js';
-import setGreen from './setGreen.js';
-import setBlue from './setBlue.js';
-import setHue from './setHue.js';
-import setSaturation from './setSaturation.js';
-import setValue from './setValue.js';
-import setModulation from './setModulation.js';
+import red from './red.js';
+import green from './green.js';
+import blue from './blue.js';
+import hue from './hue.js';
+import saturation from './saturation.js';
+import value from './value.js';
 
 export default {
-    setRed,
-    setGreen,
-    setBlue,
-    setHue,
-    setSaturation,
-    setValue,
-    setModulation
+    red,
+    green,
+    blue,
+    hue,
+    saturation,
+    value
 };

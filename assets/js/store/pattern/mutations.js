@@ -1,26 +1,23 @@
 'use strict';
 
 export default {
-    setRed(state, red) {
+    red(state, red) {
         state.red = red;
     },
-    setGreen(state, green) {
+    green(state, green) {
         state.green = green;
     },
-    setBlue(state, blue) {
+    blue(state, blue) {
         state.blue = blue;
     },
-    setHue(state, hue) {
+    hue(state, hue) {
         state.hue = hue;
     },
-    setSaturation(state, saturation) {
+    saturation(state, saturation) {
         state.saturation = saturation;
     },
-    setValue(state, value) {
+    value(state, value) {
         state.value = value;
-    },
-    setModulation(state, modulation) {
-        state.modulation = modulation;
     },
     setSync(state, sync) {
         state.sync = sync;

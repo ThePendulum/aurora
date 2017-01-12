@@ -310,16 +310,16 @@
             updateHex: debounce(checkValue(function(value) {
                 const rgb = convert.hex.rgb(value);
 
-                this.$store.dispatch('setRed', rgb[0]);
-                this.$store.dispatch('setGreen', rgb[1]);
-                this.$store.dispatch('setBlue', rgb[2]);
+                this.$store.dispatch('red', rgb[0]);
+                this.$store.dispatch('green', rgb[1]);
+                this.$store.dispatch('blue', rgb[2]);
             }), 10),
-            updateRed: checkValue(function(value) { this.$store.dispatch('setRed', value); }),
-            updateGreen: checkValue(function(value) { this.$store.dispatch('setGreen', value); }),
-            updateBlue: checkValue(function(value) { this.$store.dispatch('setBlue', value); }),
-            updateHue: checkValue(function(value) { this.$store.dispatch('setHue', value); }),
-            updateSaturation: checkValue(function(value) { this.$store.dispatch('setSaturation', value); }),
-            updateValue: checkValue(function(value) { this.$store.dispatch('setValue', value); }),
+            updateRed: checkValue(function(value) { this.$store.dispatch('red', value); }),
+            updateGreen: checkValue(function(value) { this.$store.dispatch('green', value); }),
+            updateBlue: checkValue(function(value) { this.$store.dispatch('blue', value); }),
+            updateHue: checkValue(function(value) { this.$store.dispatch('hue', value); }),
+            updateSaturation: checkValue(function(value) { this.$store.dispatch('saturation', value); }),
+            updateValue: checkValue(function(value) { this.$store.dispatch('value', value); }),
             applyPreset(preset, channel) {
                 Object.keys(preset.values).forEach(key => {
                     // only apply to source channel, unless none is specified (master)

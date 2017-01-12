@@ -3,6 +3,6 @@
 import socket from '../../../socket.js';
 
 export default function(context, modulation) {
-    context.commit('setModulation', modulation);
+    context.commit('modulation', modulation);
     socket.transmit('modulation', modulation);
 };

@@ -7,39 +7,39 @@ import store from './store';
 
 const handlers = {
     rgb(rgb) {
-        store.commit('setRed', rgb.red);
-        store.commit('setGreen', rgb.green);
-        store.commit('setBlue', rgb.blue);
+        store.commit('red', rgb.red);
+        store.commit('green', rgb.green);
+        store.commit('blue', rgb.blue);
 
         const hsv = convert.rgb.hsv.raw(Number(rgb.red), Number(rgb.green), Number(rgb.blue));
 
         if(store.state.pattern.sync) {
-            store.commit('setHue', hsv[0]);
-            store.commit('setSaturation', hsv[1] / 100);
-            store.commit('setValue', hsv[2] / 100);
+            store.commit('hue', hsv[0]);
+            store.commit('saturation', hsv[1] / 100);
+            store.commit('value', hsv[2] / 100);
         }
     },
     hsv(hsv) {
-        store.commit('setHue', hsv.hue);
-        store.commit('setSaturation', hsv.saturation);
-        store.commit('setValue', hsv.value);
+        store.commit('hue', hsv.hue);
+        store.commit('saturation', hsv.saturation);
+        store.commit('value', hsv.value);
 
         const rgb = convert.hsv.rgb.raw(Number(hsv.hue), Number(hsv.saturation) * 100, Number(hsv.value) * 100) || [NaN, NaN, NaN];
 
         if(store.state.pattern.sync) {
-            store.commit('setRed', rgb[0]);
-            store.commit('setGreen', rgb[1]);
-            store.commit('setBlue', rgb[2]);
+            store.commit('red', rgb[0]);
+            store.commit('green', rgb[1]);
+            store.commit('blue', rgb[2]);
         }
     },
     meta(meta) {
-        store.commit('setWidth', meta.width);
-        store.commit('setHeight', meta.height);
+        store.commit('width', meta.width);
+        store.commit('height', meta.height);
     },
-    modulation(modulation) { store.commit('setModulation', modulation); },
+    modulation(modulation) { store.commit('modulation', modulation); },
     toggle(on) { store.commit('toggle', on); },
     presets(presets) { store.commit('addPresets', presets); },
-    pixels(pixels) { store.commit('setPixels', pixels); }
+    pixels(pixels) { store.commit('pixels', pixels); }
 };
 
 const ws = new WebSocket(config.socket.host);

@@ -1,16 +1,19 @@
 'use strict';
 
 export default {
-    setWidth(state, width) {
+    width(state, width) {
         state.width = width;
     },
-    setHeight(state, height) {
+    height(state, height) {
         state.height = height;
     },
-    setPixels(state, pixels) {
+    pixels(state, pixels) {
         state.pixels = pixels;
     },
     toggle(state, on) {
         state.on = on;
+    },
+    modulation(state, modulation) {
+        state.modulation = modulation;
     }
 };
