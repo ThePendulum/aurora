@@ -24,5 +24,5 @@ module.exports = {
         cookie: {
             secure: false
         }
-    },
+    }
 };
