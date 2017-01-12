@@ -43,7 +43,7 @@ The HSV channels represent hue, saturation and value, a [cylindrical representat
 A static color can look cozy, but to make things more exciting, each color channel is powered by a mathematical expression parser that provides access to [lots of mathematical operations](https://github.com/silentmatt/expr-eval#expression-syntax), which become especially powerful in combination with the variables aurora makes available.
 
 ### Presets
-Mathematical expressions are versatile, but they can be inconvenient to use. Common effects are provided as presets, and are listed below a channel on focus. The master channel lists presets that affect multiple other channels
+Of course, composing expressions is not everyone's favorite pastime. Therefore, expressions for common effects are provided as presets, and are listed below a channel on focus. The master channel lists presets that affect multiple other channels.
 
 ## Variables
 The following variables can be used in expressions on all color channels:
