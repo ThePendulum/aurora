@@ -1,11 +1,11 @@
 
-.channel[data-v-3aee9121] {
+.channel[data-v-052d04e3] {
   display: flex;
 }
-.channel[data-v-3aee9121]:not(:last-child) {
+.channel[data-v-052d04e3]:not(:last-child) {
     margin: 0 0 1rem 0;
 }
-.channel-label[data-v-3aee9121] {
+.channel-label[data-v-052d04e3] {
   color: #bbb;
   display: flex;
   align-items: center;
@@ -14,19 +14,19 @@
   font-weight: bold;
   cursor: default;
 }
-.channel-value[data-v-3aee9121] {
+.channel-value[data-v-052d04e3] {
   position: relative;
   flex-grow: 1;
 }
-.channel-input[data-v-3aee9121] {
+.channel-input[data-v-052d04e3] {
   width: 100%;
 }
-.channel-picker[data-v-3aee9121] {
+.channel-picker[data-v-052d04e3] {
   height: 1.25rem;
   border: solid 1px #ddd;
   border-top: none;
 }
-.channel-slider[data-v-3aee9121] {
+.channel-slider[data-v-052d04e3] {
   width: calc(100% + .4rem);
   /* allow thumb center to touch end */
   -webkit-appearance: none;
@@ -35,10 +35,10 @@
   margin: 0 0 0 -.2rem;
   cursor: crosshair;
 }
-.channel-slider[data-v-3aee9121]::-moz-range-track {
+.channel-slider[data-v-052d04e3]::-moz-range-track {
     background: none;
 }
-.channel-slider[data-v-3aee9121]::-webkit-slider-thumb {
+.channel-slider[data-v-052d04e3]::-webkit-slider-thumb {
     width: 0;
     height: 0;
     -webkit-appearance: none;
@@ -47,7 +47,7 @@
     border-right: solid .3rem transparent;
     margin: 1rem 0 0;
 }
-.channel-slider[data-v-3aee9121]::-moz-range-thumb {
+.channel-slider[data-v-052d04e3]::-moz-range-thumb {
     background: none;
     width: 0;
     height: 0;
@@ -57,7 +57,7 @@
     border-right: solid .3rem transparent;
     margin: 3rem 0 0 0;
 }
-.channel-color[data-v-3aee9121] {
+.channel-color[data-v-052d04e3] {
   height: 1.3rem;
   box-sizing: border-box;
   padding: 0;
@@ -65,17 +65,17 @@
   border-top: none;
   cursor: pointer;
 }
-.channel-color[data-v-3aee9121]::-webkit-color-swatch-wrapper {
+.channel-color[data-v-052d04e3]::-webkit-color-swatch-wrapper {
     padding: 0;
     border: none;
 }
-.channel-color[data-v-3aee9121]::-webkit-color-swatch {
+.channel-color[data-v-052d04e3]::-webkit-color-swatch {
     border: none;
 }
-.channel-color[data-v-3aee9121]::moz-color-swatch {
+.channel-color[data-v-052d04e3]::moz-color-swatch {
     border: none;
 }
-.channel-presets[data-v-3aee9121] {
+.channel-presets[data-v-052d04e3] {
   background: #fff;
   width: 100%;
   list-style: none;
@@ -85,28 +85,28 @@
   margin: 0;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
 }
-.channel-presets .preset[data-v-3aee9121] {
+.channel-presets .preset[data-v-052d04e3] {
     display: flex;
     padding: .5rem;
 }
-.channel-presets .preset[data-v-3aee9121]:hover {
+.channel-presets .preset[data-v-052d04e3]:hover {
       color: #fff;
       background: #2294ff;
       cursor: pointer;
 }
-.channel-presets .preset:hover .tag[data-v-3aee9121] {
+.channel-presets .preset:hover .tag[data-v-052d04e3] {
         color: #2294ff;
         background: #fff;
 }
-.channel-presets .preset-name[data-v-3aee9121] {
+.channel-presets .preset-name[data-v-052d04e3] {
     flex-grow: 1;
 }
-.channel-presets .preset-tags[data-v-3aee9121] {
+.channel-presets .preset-tags[data-v-052d04e3] {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-.channel-presets .preset-tags .tag[data-v-3aee9121] {
+.channel-presets .preset-tags .tag[data-v-052d04e3] {
       color: #bbb;
       background: #eee;
       display: inline-block;
@@ -114,11 +114,11 @@
       border-radius: .25rem;
       font-size: .75rem;
 }
-.channel-presets .preset-tags .tag[data-v-3aee9121]:not(:last-child) {
+.channel-presets .preset-tags .tag[data-v-052d04e3]:not(:last-child) {
         margin: 0 .25rem 0 0;
 }
 
-.modulation[data-v-5fbc9fff] {
+.modulation[data-v-f2dc8b7e] {
   width: 100%;
   height: 3rem;
   display: flex;
@@ -127,7 +127,7 @@
   overflow: hidden;
   cursor: crosshair;
 }
-.modulation[data-v-5fbc9fff]:before {
+.modulation[data-v-f2dc8b7e]:before {
     content: '';
     background: url("/img/dots.png");
     width: 100%;
@@ -137,10 +137,10 @@
     opacity: .1;
     margin: 1px;
 }
-.modulation[data-v-5fbc9fff]:active {
+.modulation[data-v-f2dc8b7e]:active {
     cursor: none;
 }
-.modulation-label[data-v-5fbc9fff] {
+.modulation-label[data-v-f2dc8b7e] {
   color: #bbb;
   flex-grow: 1;
   padding: .25rem;
@@ -148,14 +148,14 @@
   text-shadow: 0 0 1px #fff;
   user-select: none;
 }
-.modulation-y[data-v-5fbc9fff] {
+.modulation-y[data-v-f2dc8b7e] {
   align-self: center;
 }
-.modulation-enlarge[data-v-5fbc9fff] {
+.modulation-enlarge[data-v-f2dc8b7e] {
   user-select: none;
   padding: .25rem;
 }
-.modulation-pointer[data-v-5fbc9fff] {
+.modulation-pointer[data-v-f2dc8b7e] {
   background: #2294ff;
   width: .75rem;
   height: .75rem;
@@ -193,17 +193,17 @@
     height: 1rem;
 }
 
-.container[data-v-36d04083] {
+.container[data-v-114b0345] {
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
-.content[data-v-36d04083] {
+.content[data-v-114b0345] {
   flex-grow: 1;
   overflow-y: auto;
 }
 
-.header[data-v-969f1742] {
+.header[data-v-afc61ebe] {
   color: #fff;
   background: #2294ff;
   width: 100%;
@@ -214,7 +214,7 @@
   box-sizing: border-box;
   padding: 0 4rem 0 1rem;
 }
-.header-logo[data-v-969f1742] {
+.header-logo[data-v-afc61ebe] {
   margin: .5rem 1rem .5rem 0;
   cursor: pointer;
 }
@@ -232,40 +232,40 @@
     fill: rgba(0, 0, 0, 0.25);
 }
 
-.nav[data-v-671bd0ff] {
+.nav[data-v-e41e297e] {
   flex-grow: 1;
   overflow-x: auto;
   white-space: nowrap;
 }
-.nav-item[data-v-671bd0ff] {
+.nav-item[data-v-e41e297e] {
   display: inline-block;
   padding: 1.5rem;
 }
-.nav-item[data-v-671bd0ff]:hover {
+.nav-item[data-v-e41e297e]:hover {
     color: #2294ff;
     background: #fff;
 }
-.nav-item.selected[data-v-671bd0ff] {
+.nav-item.selected[data-v-e41e297e] {
     font-weight: bold;
 }
 
-.phantom[data-v-501026df] {
+.phantom[data-v-f6fe9bbe] {
   display: none;
 }
-.feedback-container[data-v-501026df] {
+.feedback-container[data-v-f6fe9bbe] {
   position: absolute;
   top: 1rem;
   right: 1rem;
   z-index: 1;
 }
-.feedback[data-v-501026df] {
+.feedback[data-v-f6fe9bbe] {
   height: 2rem;
   width: 2rem;
   border: solid 1px rgba(255, 255, 255, 0.5);
   cursor: pointer;
   transition: all .2s ease;
 }
-.feedback[data-v-501026df]:hover {
+.feedback[data-v-f6fe9bbe]:hover {
     width: 15rem;
     height: 15rem;
     border: solid 1px #fff;

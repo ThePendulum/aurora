@@ -50,7 +50,8 @@ module.exports = function () {
             values: [0, 0, 0],
             index: index,
             x: x,
-            y: y
+            y: y,
+            previous: {}
         };
     });
 

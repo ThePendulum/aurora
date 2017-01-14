@@ -80,7 +80,7 @@ The following variables may be used in expressions on all color channels:
 
 ### Animation seeds
 * `beat` or `b`: An incremental value that ticks every update cycle.
-* `pixelRandom` or `pr`: A random value between 0 and 1 unique for every LED for every update cycle.
+* `randomPixel` or `rp`: A random value between 0 and 1 unique for every LED for every update cycle.
 
 ### Modulation pad
 * `mx` and `my`: The x- and y-position of the pointer on the modulation pad, mapped to values between 0 and 1.
@@ -95,3 +95,11 @@ The following variables may be used in expressions on all color channels:
 * `minute` or `m`: The current minute of the hour.
 * `second` or `s`: The current second of the minute.
 * `millisecond` or `ms`: The current millisecond of the second.
+
+### Previous
+* `previousHue` or `ph`: Previous hue value.
+* `previousSaturation` or `ps`: Previous saturation value.
+* `previousValue` or `pv`: Previous value value.
+* `previousRed` or `pr`: Previous red value.
+* `previousGreen` or `pg`: Previous green value.
+* `previousBlue` or `pb`: Previous blue value.

@@ -12,8 +12,13 @@ var each = function each(pixel, leds, pre, init) {
     scope.index = scope.i = pixel.index;
     scope.x = pixel.x;
     scope.y = pixel.y;
-    scope.pixelRandom = scope.pr = Math.random();
-    scope.previous = scope.p = pixel.values;
+    scope.randomPixel = scope.rp = Math.random();
+    scope.previousHue = scope.ph = pixel.previous.hue;
+    scope.previousSaturation = scope.ps = pixel.previous.saturation;
+    scope.previousValue = scope.pv = pixel.previous.value;
+    scope.previousRed = scope.pr = pixel.previous.red;
+    scope.previousGreen = scope.pg = pixel.previous.green;
+    scope.previousBlue = scope.pb = pixel.previous.blue;
 
     if (leds.mode === 'hsv') {
         var hue = void 0,
@@ -27,6 +32,10 @@ var each = function each(pixel, leds, pre, init) {
         } catch (error) {
             note('color', 2, error.message);
         }
+
+        pixel.previous.hue = hue;
+        pixel.previous.saturation = saturation;
+        pixel.previous.value = value;
 
         pixel.values = hsv2rgb(hue, saturation, value);
     }
@@ -43,6 +52,10 @@ var each = function each(pixel, leds, pre, init) {
         } catch (error) {
             note(error);
         }
+
+        pixel.previous.red = red;
+        pixel.previous.green = green;
+        pixel.previous.blue = blue;
 
         pixel.values[0] = red;
         pixel.values[1] = green;
