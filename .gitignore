@@ -1,4 +1,5 @@
 node_modules/
 database/*
+!database/README.md
 config/*
 !config/example.js
