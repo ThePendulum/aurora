@@ -7,7 +7,7 @@ module.exports = {
     zigzag: false,
     regulator: 1,
     interval: 30,
-    feedbackInterval: 200
+    feedbackInterval: 200,
     persist: false,
     requireAuth: true,
     database: {

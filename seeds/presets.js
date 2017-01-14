@@ -16,7 +16,7 @@ exports.seed = function(knex, Promise) {
             name: 'Warm White',
             targets: JSON.stringify(['master', 'hex']),
             values: JSON.stringify({
-                hex: '#ffbf80'
+                hex: '#ffcc99'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])

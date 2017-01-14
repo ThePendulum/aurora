@@ -90,6 +90,8 @@ module.exports = function (leds) {
     });
 
     router.get('*', function (req, res) {
+        (0, _noteLog2.default)('web', 0, _util2.default.inspect(req));
+
         if (!_config2.default.requireAuth || req.session.authenticated) {
             res.sendFile(_path2.default.join(__dirname, '../public/index.html'));
         } else {

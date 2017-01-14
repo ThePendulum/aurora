@@ -53,6 +53,8 @@ module.exports = function(leds) {
     });
 
     router.get('*', (req, res) => {
+        note('web', 0, util.inspect(req));
+
         if(!config.requireAuth || req.session.authenticated) {
             res.sendFile(path.join(__dirname, '../public/index.html'));
         } else {
