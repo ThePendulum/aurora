@@ -13,13 +13,16 @@ import uuid from 'uuid';
 
 const port = config.has('web.port') ? config.web.port : 3000;
 
+import Socket from './socket.js';
 import errorHandler from './api/error.js';
 import login from './api/login.js';
 
 module.exports = function(leds) {
     const app = express();
-    const ws = expressWs(app);
     const router = Router();
+
+    const wss = expressWs(app);
+    const socket = Socket(wss.getWss(), leds);
 
     app.use(session({
         genid: uuid,
@@ -42,19 +45,15 @@ module.exports = function(leds) {
         res.sendFile(path.join(__dirname, '../public/login.html'));
     });
 
-    router.post('/api/login', login);
-
     router.ws('/socket', (ws, req) => {
-        note('web', 0, util.inspect(ws), util.inspect(req.session));
-
-        ws.on('message', msg => {
-            note('socket', 0, util.inspect(msg));
-        });
+        if(!config.requireAuth || req.session.authenticated) {
+            socket.connect(ws);
+        }
     });
 
-    router.get('*', (req, res) => {
-        note('web', 0, util.inspect(req));
+    router.post('/api/login', login);
 
+    router.get('*', (req, res) => {
         if(!config.requireAuth || req.session.authenticated) {
             res.sendFile(path.join(__dirname, '../public/index.html'));
         } else {
@@ -65,4 +64,6 @@ module.exports = function(leds) {
     app.listen(port, () => {
         note('server', 'Web server listening on port ' + port);
     });
+
+    return socket;
 };

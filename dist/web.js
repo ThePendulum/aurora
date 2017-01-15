@@ -42,6 +42,10 @@ var _uuid = require('uuid');
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
+var _socket = require('./socket.js');
+
+var _socket2 = _interopRequireDefault(_socket);
+
 var _error = require('./api/error.js');
 
 var _error2 = _interopRequireDefault(_error);
@@ -56,8 +60,10 @@ var port = _config2.default.has('web.port') ? _config2.default.web.port : 3000;
 
 module.exports = function (leds) {
     var app = (0, _express2.default)();
-    var ws = (0, _expressWs2.default)(app);
     var router = (0, _expressPromiseRouter2.default)();
+
+    var wss = (0, _expressWs2.default)(app);
+    var socket = (0, _socket2.default)(wss.getWss(), leds);
 
     app.use((0, _expressSession2.default)(_extends({
         genid: _uuid2.default
@@ -79,19 +85,15 @@ module.exports = function (leds) {
         res.sendFile(_path2.default.join(__dirname, '../public/login.html'));
     });
 
-    router.post('/api/login', _login2.default);
-
     router.ws('/socket', function (ws, req) {
-        (0, _noteLog2.default)('web', 0, _util2.default.inspect(ws), _util2.default.inspect(req.session));
-
-        ws.on('message', function (msg) {
-            (0, _noteLog2.default)('socket', 0, _util2.default.inspect(msg));
-        });
+        if (!_config2.default.requireAuth || req.session.authenticated) {
+            socket.connect(ws);
+        }
     });
 
-    router.get('*', function (req, res) {
-        (0, _noteLog2.default)('web', 0, _util2.default.inspect(req));
+    router.post('/api/login', _login2.default);
 
+    router.get('*', function (req, res) {
         if (!_config2.default.requireAuth || req.session.authenticated) {
             res.sendFile(_path2.default.join(__dirname, '../public/index.html'));
         } else {
@@ -102,4 +104,6 @@ module.exports = function (leds) {
     app.listen(port, function () {
         (0, _noteLog2.default)('server', 'Web server listening on port ' + port);
     });
+
+    return socket;
 };

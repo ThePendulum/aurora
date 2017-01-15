@@ -2,32 +2,47 @@
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var config = require('config');
-var util = require('util');
-var note = require('note-log');
-var WebSocket = require('ws').Server;
-var uuid = require('uuid');
-var math = require('mathjs');
+var _config = require('config');
 
-var leds = require('./init.js');
-var knex = require('./knex.js');
+var _config2 = _interopRequireDefault(_config);
 
-var getPresets = require('./presets/get.js');
+var _util = require('util');
 
-var port = config.has('socket.port') ? config.socket.port : 3001;
+var _util2 = _interopRequireDefault(_util);
 
-module.exports = function (leds) {
-    var wss = new WebSocket({ port: port });
+var _noteLog = require('note-log');
+
+var _noteLog2 = _interopRequireDefault(_noteLog);
+
+var _ws = require('ws');
+
+var _uuid = require('uuid');
+
+var _uuid2 = _interopRequireDefault(_uuid);
+
+var _init = require('./init.js');
+
+var _init2 = _interopRequireDefault(_init);
+
+var _knex = require('./knex.js');
+
+var _knex2 = _interopRequireDefault(_knex);
+
+var _get = require('./presets/get.js');
+
+var _get2 = _interopRequireDefault(_get);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = function (wss, leds) {
     var socket = {};
-
-    note('wss', 'Socket server listening on port ' + port);
 
     var init = {
         meta: function meta() {
             return {
                 width: leds.width,
                 height: leds.height,
-                regulator: config.regulator,
+                regulator: _config2.default.regulator,
                 interval: leds.interval
             };
         },
@@ -38,7 +53,7 @@ module.exports = function (leds) {
             return leds.on;
         },
         presets: function presets() {
-            return getPresets();
+            return (0, _get2.default)();
         }
     };
 
@@ -61,7 +76,7 @@ module.exports = function (leds) {
 
     socket.init = function (namespace, handler) {
         if (init[namespace]) {
-            note('socket', 1, 'Init handler for \'' + namespace + '\' is set twice and will be overwritten.');
+            (0, _noteLog2.default)('socket', 1, 'Init handler for \'' + namespace + '\' is set twice and will be overwritten.');
         }
 
         init[namespace] = handler;
@@ -83,10 +98,8 @@ module.exports = function (leds) {
         listeners[namespace] = [proxyHandler];
     };
 
-    wss.on('connection', function (ws) {
-        note('socket', 0, 'Established websocket with \'' + (ws.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress) + '\'');
-
-        ws.id = uuid();
+    socket.connect = function (ws) {
+        ws.id = (0, _uuid2.default)();
 
         ws.transmit = function (namespace, data) {
             if (ws.readyState === 1) {
@@ -121,7 +134,7 @@ module.exports = function (leds) {
                     }
                 })();
             } catch (error) {
-                note('socket', error);
+                (0, _noteLog2.default)('socket', error);
             }
         });
 
@@ -132,11 +145,7 @@ module.exports = function (leds) {
         };
 
         ping();
-
-        ws.on('close', function () {
-            note('socket', 0, 'Closed websocket with \'' + (ws.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress) + '\'');
-        });
-    });
+    };
 
     return socket;
 };

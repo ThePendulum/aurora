@@ -333,7 +333,7 @@
 /* 49 */
 /***/ function(module, exports) {
 
-	eval("'use strict';\n\nmodule.exports = {\n    socket: {\n        host: 'ws://socket.aurora.unknown.name'\n    }\n};//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hc3NldHMvanMvY29uZmlnLmpzP2NkODkiXSwibmFtZXMiOlsibW9kdWxlIiwiZXhwb3J0cyIsInNvY2tldCIsImhvc3QiXSwibWFwcGluZ3MiOiJBQUFBOztBQUVBQSxPQUFPQyxPQUFQLEdBQWlCO0FBQ2JDLFlBQVE7QUFDSkMsY0FBTTtBQURGO0FBREssQ0FBakIiLCJmaWxlIjoiNDkuanMiLCJzb3VyY2VzQ29udGVudCI6WyIndXNlIHN0cmljdCc7XG5cbm1vZHVsZS5leHBvcnRzID0ge1xuICAgIHNvY2tldDoge1xuICAgICAgICBob3N0OiAnd3M6Ly9zb2NrZXQuYXVyb3JhLnVua25vd24ubmFtZSdcbiAgICB9XG59O1xuXG5cblxuLyoqIFdFQlBBQ0sgRk9PVEVSICoqXG4gKiogLi9hc3NldHMvanMvY29uZmlnLmpzXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	eval("'use strict';\n\nmodule.exports = {\n    socket: {\n        host: 'ws://aurora.unknown.name/socket'\n    }\n};//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hc3NldHMvanMvY29uZmlnLmpzP2NkODkiXSwibmFtZXMiOlsibW9kdWxlIiwiZXhwb3J0cyIsInNvY2tldCIsImhvc3QiXSwibWFwcGluZ3MiOiJBQUFBOztBQUVBQSxPQUFPQyxPQUFQLEdBQWlCO0FBQ2JDLFlBQVE7QUFDSkMsY0FBTTtBQURGO0FBREssQ0FBakIiLCJmaWxlIjoiNDkuanMiLCJzb3VyY2VzQ29udGVudCI6WyIndXNlIHN0cmljdCc7XG5cbm1vZHVsZS5leHBvcnRzID0ge1xuICAgIHNvY2tldDoge1xuICAgICAgICBob3N0OiAnd3M6Ly9hdXJvcmEudW5rbm93bi5uYW1lL3NvY2tldCdcbiAgICB9XG59O1xuXG5cblxuLyoqIFdFQlBBQ0sgRk9PVEVSICoqXG4gKiogLi9hc3NldHMvanMvY29uZmlnLmpzXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
 
 /***/ },
 /* 50 */

@@ -1,24 +1,18 @@
 'use strict';
 
-const config = require('config');
-const util = require('util');
-const note = require('note-log');
-const WebSocket = require('ws').Server;
-const uuid = require('uuid');
-const math = require('mathjs');
+import config from 'config';
+import util from 'util';
+import note from 'note-log';
+import {Server as WebSocket} from 'ws';
+import uuid from 'uuid';
 
-const leds = require('./init.js');
-const knex = require('./knex.js');
+import leds from './init.js';
+import knex from './knex.js';
 
-const getPresets = require('./presets/get.js');
+import getPresets from './presets/get.js';
 
-const port = config.has('socket.port') ? config.socket.port : 3001;
-
-module.exports = function(leds) {
-    const wss = new WebSocket({port});
+module.exports = function(wss, leds) {
     const socket = {};
-
-    note('wss', 'Socket server listening on port ' + port);
 
     const init = {
         meta() {
@@ -71,9 +65,7 @@ module.exports = function(leds) {
         listeners[namespace] = [proxyHandler];
     };
 
-    wss.on('connection', ws => {
-        note('socket', 0, `Established websocket with \'${ws.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}\'`);
-
+    socket.connect = ws => {
         ws.id = uuid();
 
         ws.transmit = function(namespace, data) {
@@ -110,11 +102,7 @@ module.exports = function(leds) {
         };
 
         ping();
-
-        ws.on('close', () => {
-            note('socket', 0, `Closed websocket with '${ws.upgradeReq.headers['x-forwarded-for'] || ws.upgradeReq.connection.remoteAddress}'`);
-        });
-    });
+    };
 
     return socket;
 };
