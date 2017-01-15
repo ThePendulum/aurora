@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(func, wait, immediate) {
+export default function(func, wait, immediate = true) {
     let timeout;
 
     return function(...args) {

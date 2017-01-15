@@ -56,8 +56,8 @@ var port = _config2.default.has('web.port') ? _config2.default.web.port : 3000;
 
 module.exports = function (leds) {
     var app = (0, _express2.default)();
-    var router = (0, _expressPromiseRouter2.default)();
     var ws = (0, _expressWs2.default)(app);
+    var router = (0, _expressPromiseRouter2.default)();
 
     app.use((0, _expressSession2.default)(_extends({
         genid: _uuid2.default

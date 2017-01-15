@@ -3,40 +3,41 @@
 const config = require('config');
 const note = require('note-log');
 const util = require('util');
+const pick = require('object.pick');
 
 const Parser = require('expr-eval').Parser;
 const parser = new Parser();
 
 const init = function(leds, socket) {
     const rgb = {
-        red: {
-            value: 255,
-            eval: Parser.parse('255')
-        },
-        green: {
-            value: 0,
-            eval: Parser.parse('0')
-        },
-        blue: {
-            value: 0,
-            eval: Parser.parse('0')
-        }
+        red: { value: 255 },
+        green: { value: 0 },
+        blue: { value: 0 }
     };
 
     const hsv = {
-        hue: {
-            value: 0,
-            eval: Parser.parse('0')
-        },
-        saturation: {
-            value: 1,
-            eval: Parser.parse('1')
-        },
-        value: {
-            value: 1,
-            eval: Parser.parse('1')
-        }
+        hue: { value: 0 },
+        saturation: { value: 1 },
+        value: { value: 1 }
     };
+
+    if(config.init) {
+        if(config.init.red) { rgb.red.value = config.init.red; }
+        if(config.init.green) { rgb.green.value = config.init.green; }
+        if(config.init.blue) { rgb.blue.value = config.init.blue; }
+
+        if(config.init.hue) { hsv.hue.value = config.init.hue; }
+        if(config.init.saturation) { hsv.saturation.value = config.init.saturation; }
+        if(config.init.value) { hsv.value.value = config.init.value; }
+    }
+
+    rgb.red.eval = Parser.parse(rgb.red.value.toString());
+    rgb.green.eval = Parser.parse(rgb.green.value.toString());
+    rgb.blue.eval = Parser.parse(rgb.blue.value.toString());
+
+    hsv.hue.eval = Parser.parse(hsv.hue.value.toString());
+    hsv.saturation.eval = Parser.parse(hsv.saturation.value.toString());
+    hsv.value.eval = Parser.parse(hsv.value.value.toString());
 
     const scope = {};
 

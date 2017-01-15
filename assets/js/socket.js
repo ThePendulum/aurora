@@ -4,6 +4,10 @@ import config from 'config';
 import convert from 'color-convert';
 
 import store from './store';
+import debounce from './utils/debounce.js';
+
+const ws = new WebSocket(config.socket.host);
+const socket = {};
 
 const handlers = {
     rgb(rgb) {
@@ -41,9 +45,6 @@ const handlers = {
     presets(presets) { store.commit('addPresets', presets); },
     pixels(pixels) { store.commit('pixels', pixels); }
 };
-
-const ws = new WebSocket(config.socket.host);
-const socket = {};
 
 socket.transmit = function(namespace, data) {
     ws.send(JSON.stringify([namespace, data]));

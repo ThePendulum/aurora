@@ -18,8 +18,8 @@ import login from './api/login.js';
 
 module.exports = function(leds) {
     const app = express();
-    const router = Router();
     const ws = expressWs(app);
+    const router = Router();
 
     app.use(session({
         genid: uuid,
