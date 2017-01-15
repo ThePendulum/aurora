@@ -30,13 +30,11 @@ module.exports = function(leds) {
             };
         },
         interval() { return leds.interval; },
-        mode() { return leds.mode; },
         toggle() { return leds.on; },
         presets() { return getPresets(); }
     };
 
     const listeners = {
-        mode: [mode => { leds.mode = mode; }],
         toggle: [on => leds.on = on],
         interval: [interval => leds.interval = interval]
     };

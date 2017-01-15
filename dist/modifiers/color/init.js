@@ -9,6 +9,10 @@ var Parser = require('expr-eval').Parser;
 var parser = new Parser();
 
 var init = function init(leds, socket) {
+    var options = {
+        mode: 'rgb'
+    };
+
     var rgb = {
         red: { value: 255 },
         green: { value: 0 },
@@ -22,6 +26,10 @@ var init = function init(leds, socket) {
     };
 
     if (config.init) {
+        if (config.init.red || config.init.green || config.init.blue) {
+            options.mode = 'rgb';
+        }
+
         if (config.init.red) {
             rgb.red.value = config.init.red;
         }
@@ -30,6 +38,10 @@ var init = function init(leds, socket) {
         }
         if (config.init.blue) {
             rgb.blue.value = config.init.blue;
+        }
+
+        if (config.init.hue || config.init.saturation || config.init.value) {
+            options.mode = 'hsv';
         }
 
         if (config.init.hue) {
@@ -75,6 +87,10 @@ var init = function init(leds, socket) {
         };
     });
 
+    socket.init('mode', function () {
+        return options.mode;
+    });
+
     socket.init('modulation', function () {
         return {
             x: scope.mx,
@@ -100,12 +116,16 @@ var init = function init(leds, socket) {
         });
     });
 
+    socket.listen('mode', function (mode) {
+        options.mode = mode;
+    });
+
     socket.listen('modulation', function (newModulation) {
         scope.mx = newModulation.x;
         scope.my = newModulation.y;
     });
 
-    return { rgb: rgb, hsv: hsv, scope: scope };
+    return { rgb: rgb, hsv: hsv, scope: scope, options: options };
 };
 
 module.exports = init;

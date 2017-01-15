@@ -34,9 +34,6 @@ module.exports = function (leds) {
         interval: function interval() {
             return leds.interval;
         },
-        mode: function mode() {
-            return leds.mode;
-        },
         toggle: function toggle() {
             return leds.on;
         },
@@ -46,9 +43,6 @@ module.exports = function (leds) {
     };
 
     var listeners = {
-        mode: [function (mode) {
-            leds.mode = mode;
-        }],
         toggle: [function (on) {
             return leds.on = on;
         }],

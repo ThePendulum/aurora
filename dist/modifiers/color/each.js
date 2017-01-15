@@ -20,7 +20,7 @@ var each = function each(pixel, leds, pre, init) {
     scope.previousGreen = scope.pg = pixel.previous.green;
     scope.previousBlue = scope.pb = pixel.previous.blue;
 
-    if (leds.mode === 'hsv') {
+    if (init.options.mode === 'hsv') {
         var hue = void 0,
             saturation = void 0,
             value = void 0;
@@ -40,7 +40,7 @@ var each = function each(pixel, leds, pre, init) {
         pixel.values = hsv2rgb(hue, saturation, value);
     }
 
-    if (leds.mode === 'rgb') {
+    if (init.options.mode === 'rgb') {
         var red = void 0,
             green = void 0,
             blue = void 0;
