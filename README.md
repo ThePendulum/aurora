@@ -14,10 +14,11 @@ aurora is an addressable LED controller for the Raspberry Pi. It provides an eas
 - [Mathematical expressions](#mathematical-expressions)
   - [Presets](#presets)
 - [Variables](#variables)
-  - [Dimensions and positions](#dimensions-and-positions)
+  - [Dimensions and coordinates](#dimensions-and-coordinates)
   - [Animation seeds](#animation-seeds)
   - [Modulation pad](#modulation-pad)
   - [Time](#time)
+  - [Previous](#previous)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
