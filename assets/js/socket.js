@@ -43,7 +43,8 @@ const handlers = {
     modulation(modulation) { store.commit('modulation', modulation); },
     toggle(on) { store.commit('toggle', on); },
     presets(presets) { store.commit('addPresets', presets); },
-    pixels(pixels) { store.commit('pixels', pixels); }
+    pixels(pixels) { store.commit('pixels', pixels); },
+    error(error) { console.error(error); }
 };
 
 socket.transmit = function(namespace, data) {

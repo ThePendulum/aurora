@@ -88,6 +88,8 @@ module.exports = function (leds) {
     router.ws('/socket', function (ws, req) {
         if (!_config2.default.requireAuth || req.session.authenticated) {
             socket.connect(ws);
+        } else {
+            ws.send(JSON.stringify(['error', 'Not authorized']));
         }
     });
 
