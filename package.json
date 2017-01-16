@@ -18,7 +18,8 @@
     "database-setup": "knex migrate:latest",
     "database-drop": "knex migrate:rollback",
     "database-fill": "knex seed:run",
-    "user-add": "node dist/cli/createUser.js"
+    "user-add": "node dist/cli/createUser.js",
+    "postinstall": "knex migrate:latest"
   },
   "keywords": [
     "ws28xx",

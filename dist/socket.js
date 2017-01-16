@@ -119,13 +119,10 @@ module.exports = function (wss, leds) {
         ws.on('message', function (msg) {
             try {
                 (function () {
-                    var _JSON$parse = JSON.parse(msg);
-
-                    var _JSON$parse2 = _slicedToArray(_JSON$parse, 2);
-
-                    var namespace = _JSON$parse2[0];
-                    var data = _JSON$parse2[1];
-
+                    var _JSON$parse = JSON.parse(msg),
+                        _JSON$parse2 = _slicedToArray(_JSON$parse, 2),
+                        namespace = _JSON$parse2[0],
+                        data = _JSON$parse2[1];
 
                     if (listeners[namespace]) {
                         listeners[namespace].forEach(function (listener) {

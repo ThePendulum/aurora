@@ -20,8 +20,8 @@ exports.default = function (username, password) {
             return { user: user, hash: hash };
         });
     }).then(function (_ref) {
-        var user = _ref.user;
-        var hash = _ref.hash;
+        var user = _ref.user,
+            hash = _ref.hash;
 
         return {
             id: user.id,
