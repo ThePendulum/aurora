@@ -8,6 +8,7 @@ aurora is an addressable LED controller for the Raspberry Pi. It provides an eas
 - [Installation](#installation)
   - [Configuration](#configuration)
   - [Database setup](#database-setup)
+    - [Adding default presets](#adding-default-presets)
     - [Adding users](#adding-users)
   - [Running aurora](#running-aurora)
 - [Color channels](#color-channels)
