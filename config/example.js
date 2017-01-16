@@ -9,7 +9,7 @@ module.exports = {
     interval: 30,
     feedbackInterval: 200,
     persist: false,
-    requireAuth: true,
+    requireAuth: false,
     database: {
         client: 'sqlite3',
         connection: {
