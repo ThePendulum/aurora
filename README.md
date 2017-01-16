@@ -29,17 +29,13 @@ aurora relies on Node.js, which is best installed through [nvm](https://github.c
 npm install
 ```
 
-After initial installation, the database (for users and presets) will need to be set up. Optionally, the database can be filled with default presets for common effects. This is also done through npm:
+**Please walk through the [configuration section](#configuration) before proceeding.**
+
+After initial installation and configuration, the database (for users and presets) will need to be set up. Optionally, the database can be filled with default presets for common effects. This is also done through npm:
 
 ```
 npm run database-setup
 npm run database-fill
-```
-
-aurora needs to be built once after installation, and after every reconfiguration. Please check out the configuration section before building:
-
-```
-npm run build
 ```
 
 Finally, to run aurora:

@@ -6,6 +6,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import Pattern from '../components/pattern/pattern.vue';
+import Draw from '../components/draw/draw.vue';
 
 const routes = [{
     path: '/',
@@ -17,6 +18,10 @@ const routes = [{
     path: '/pattern',
     name: 'pattern',
     component: Pattern
+}, {
+    path: '/draw',
+    name: 'draw',
+    component: Draw
 }];
 
 export default new VueRouter({

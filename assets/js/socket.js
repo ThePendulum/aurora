@@ -1,12 +1,11 @@
 'use strict';
 
-import config from 'config';
 import convert from 'color-convert';
 
 import store from './store';
 import debounce from './utils/debounce.js';
 
-const ws = new WebSocket(config.socket.host);
+const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/socket');
 const socket = {};
 
 const handlers = {

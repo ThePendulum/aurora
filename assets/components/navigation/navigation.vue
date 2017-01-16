@@ -1,6 +1,7 @@
 <template>
     <nav class="nav">
         <router-link :to="{name: 'pattern'}" class="nav-item" :class="{selected: selected === 'pattern'}">Pattern</router-link>
+        <router-link :to="{name: 'draw'}" class="nav-item" :class="{selected: selected === 'draw'}">Draw</router-link>
     </nav>
 </template>
 
@@ -27,21 +28,18 @@
 
     .nav {
         flex-grow: 1;
-        overflow-x: auto;
         white-space: nowrap;
     }
 
     .nav-item {
         display: inline-block;
         padding: 1.5rem;
+        margin: 0;
 
-        &:hover {
+        &:hover,
+        &.selected {
             color: $primary;
             background: $background;
-        }
-
-        &.selected {
-            font-weight: bold;
         }
     }
 </style>

@@ -234,19 +234,16 @@
 
 .nav[data-v-e41e297e] {
   flex-grow: 1;
-  overflow-x: auto;
   white-space: nowrap;
 }
 .nav-item[data-v-e41e297e] {
   display: inline-block;
   padding: 1.5rem;
+  margin: 0;
 }
-.nav-item[data-v-e41e297e]:hover {
+.nav-item[data-v-e41e297e]:hover, .nav-item.selected[data-v-e41e297e] {
     color: #2294ff;
     background: #fff;
-}
-.nav-item.selected[data-v-e41e297e] {
-    font-weight: bold;
 }
 
 .phantom[data-v-f6fe9bbe] {
