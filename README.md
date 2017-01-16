@@ -6,18 +6,10 @@ aurora is an addressable LED controller for the Raspberry Pi. It provides an eas
 
 
 - [Installation](#installation)
-  - [Setting up the local database](#setting-up-the-local-database)
-  - [Running aurora](#running-aurora)
-- [Configuration](#configuration)
-  - [chip](#chip)
-  - [size](#size)
-  - [colorIndex](#colorindex)
-  - [zigzag](#zigzag)
-  - [regulator](#regulator)
-  - [fps and interval](#fps-and-interval)
-  - [requireAuth](#requireauth)
+  - [Configuration](#configuration)
+  - [Database setup](#database-setup)
     - [Adding users](#adding-users)
-  - [Session secret](#session-secret)
+  - [Running aurora](#running-aurora)
 - [Color channels](#color-channels)
   - [Master](#master)
   - [RGB](#rgb)
@@ -40,46 +32,40 @@ aurora relies on Node.js, which is best installed [as root](#running-aurora) thr
 npm install
 ```
 
-### Setting up the local database
-Please walk through the [configuration introduction](#configuration) before proceeding.
+### Configuration
+An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and change it where necessary in your favorite text editor. If you do not wish to make changes to the default database configuration, you may proceed with the database section of the installation procedure.
 
+**chip**
+This is the chip type your LED strip uses. Currently supported are `ws2801`, `ws2811`, `ws2812` and `ws2812b`.
+
+**size**
+This is the length of a strip, or dimensions of a matrix. The length of a strip is defined as an integer (e.g. `300` for 300 pixels), and the dimensions of a matrix are defined as an array (e.g. `[16, 16]` for a 16 by 16 matrix).
+
+**colorIndex**
+Not all chips expect color values in the order R, G, B. The `colorIndex` determines the order in which values are sent to the chip. For example, `[0, 2, 1]` is red, blue, green, and `[1, 0, 2]` is green, red, blue.
+
+**zigzag**
+Some, but not all, are wired in a snake or zigzag pattern. For example, in an 8 by 8 matrix, the 8th LED in series will be at the end of the first row, and the 9th LED in series will be at the end of the second row, going back. When `zigzag` is `false` or left undefined, it will be assumed all rows are in parallel, and the 9th LED in the example will be below the 1st LED at the start of the row. When `true`, a zigzag layout will be used.
+
+**regulator**
+The `regulator` allows the global brightness to be reduced. The values of each pixel will be multiplied with this value before being sent to the LEDs. For example, to (absolutely) half the brightness, the regulator would be `.5`.
+
+**fps and interval**
+The `fps` or `interval` defines how frequently a new frame is rendered. The `fps` defines the number of frames per second, while the `interval` defines after how many milliseconds a new frame is rendered. A fps of 30 is equal to an interval of 1000 / 30 = ~33 milliseconds. Likewise, an interval of 20 milliseconds is equal to an fps of 1000 / 20 = 50 frames.
+
+**requireAuth**
+The aurora web interface can be made accessible on the Internet. This may call for a password to prevent unwanted access. When `requireAuth` is set to `true`, the web interface will prompt a login panel.
+
+**session.secret**
+The session secret is used to provide secure authenticated access, and should be replaced with a long random token. The example token is public information, and may help unauthorized guests gaining access to your setup when authenticated is required.
+
+### Database setup
 After initial installation and configuration, a database for users and presets will need to be set up. Optionally, the database can be filled with default presets for common effects. This is also done through npm:
 
 ```
 npm run database-setup
-npm run database-fill // optional
+npm run database-fill  // optional
 ```
-
-### Running aurora
-Unfortunately, aurora requires to be run as root as to access the hardware interface to control the LEDs. As root, aurora can be started through npm:
-
-```
-npm start
-```
-
-## Configuration
-An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and change it where necessary in your favorite text editor. If you do not wish to make changes to the default database configuration, you may proceed with the database section of the installation procedure.
-
-### chip
-This is the chip type your LED strip uses. Currently supported are `ws2801`, `ws2811`, `ws2812` and `ws2812b`.
-
-### size
-This is the length of a strip, or dimensions of a matrix. The length of a strip is defined as an integer (e.g. `300` for 300 pixels), and the dimensions of a matrix are defined as an array (e.g. `[16, 16]` for a 16 by 16 matrix).
-
-### colorIndex
-Not all chips expect color values in the order R, G, B. The `colorIndex` determines the order in which values are sent to the chip. For example, `[0, 2, 1]` is red, blue, green, and `[1, 0, 2]` is green, red, blue.
-
-### zigzag
-Some, but not all, are wired in a snake or zigzag pattern. For example, in an 8 by 8 matrix, the 8th LED in series will be at the end of the first row, and the 9th LED in series will be at the end of the second row, going back. When `zigzag` is `false` or left undefined, it will be assumed all rows are in parallel, and the 9th LED in the example will be below the 1st LED at the start of the row. When `true`, a zigzag layout will be used.
-
-### regulator
-The `regulator` allows the global brightness to be reduced. The values of each pixel will be multiplied with this value before being sent to the LEDs. For example, to (absolutely) half the brightness, the regulator would be `.5`.
-
-### fps and interval
-The `fps` or `interval` defines how frequently a new frame is rendered. The `fps` defines the number of frames per second, while the `interval` defines after how many milliseconds a new frame is rendered. A fps of 30 is equal to an interval of 1000 / 30 = ~33 milliseconds. Likewise, an interval of 20 milliseconds is equal to an fps of 1000 / 20 = 50 frames.
-
-### requireAuth
-The aurora web interface can be made accessible on the Internet. This may call for a password to prevent unwanted access. When `requireAuth` is set to `true`, the web interface will prompt a login panel.
 
 #### Adding users
 A user may be added or removed from the command line through npm, as follows:
@@ -90,8 +76,12 @@ npm run user-add -- --username USERNAME --pasword PASSWORD --role ROLE
 
 Accepted roles are `admin`, `guest` or `user` (default). Currently, there are no uses for roles, but in the future each may receive different privileges.
 
-### Session secret
-The session secret is used to provide secure authenticated access, and should be replaced with a long random token. The example token is public information, and may help unauthorized guests gaining access to your setup when authenticated is required.
+### Running aurora
+Unfortunately, aurora requires to be run as root as to access the hardware interface to control the LEDs. As root, aurora can be started through npm:
+
+```
+npm start
+```
 
 ## Color channels
 The color channels on the web interface are the primary way of setting what your LEDs will display. There are seven channels: Master, RGB (Red, Green Blue) and HSV (Hue, Saturation, Value). When a channel from either the RGB or HSV channel group gets updated, the other channel group will be ignored. The Master channel is linked to the RGB channel group in this behavior.
