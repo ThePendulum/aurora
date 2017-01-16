@@ -33,7 +33,7 @@ npm install
 ```
 
 ### Configuration
-An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and change it where necessary in your favorite text editor. If you do not wish to make changes to the default database configuration, you may proceed with the database section of the installation procedure.
+An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and change it where necessary in your favorite text editor.
 
 * `chip`: This is the chip type your LED strip uses. Currently supported are `ws2801`, `ws2811`, `ws2812` and `ws2812b`.
 * `size`: This is the length of a strip, or dimensions of a matrix. The length of a strip is defined as an integer (e.g. `300` for 300 pixels), and the dimensions of a matrix are defined as an array (e.g. `[16, 16]` for a 16 by 16 matrix).
@@ -45,11 +45,17 @@ An example configuration file can be found at `config/example.js`. This file is 
 * `session.secret`: The session secret is used to provide secure authenticated access, and should be replaced with a long random token. The example token is public information, and may help unauthorized guests gaining access to your setup when authenticated is required.
 
 ### Database setup
-After initial installation and configuration, a database for users and presets will need to be set up. Optionally, the database can be filled with default presets for common effects. This is also done through npm:
+After initial installation and configuration, a database for users and presets will need to be set up. This is also done through npm:
 
 ```
 npm run database-setup
-npm run database-fill  // optional
+```
+
+#### Adding default presets
+As you may wish to run aurora without any presets, default presets are added separately:
+
+```
+npm run database-fill
 ```
 
 #### Adding users
