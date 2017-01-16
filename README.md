@@ -11,8 +11,8 @@ aurora is an addressable LED controller for the Raspberry Pi. It provides an eas
   - [Meta](#meta)
   - [Rendering](#rendering)
   - [Authentication](#authentication)
-  - [Default presets](#default-presets)
   - [Users](#users)
+  - [Default presets](#default-presets)
 - [Color channels](#color-channels)
   - [Master](#master)
   - [RGB](#rgb)
@@ -59,13 +59,6 @@ An example configuration file can be found at `config/example.js`. This file is 
 * `requireAuth`: The aurora web interface can be made accessible on the Internet. This may call for a password to prevent unwanted access. When `requireAuth` is set to `true`, the web interface will prompt a login panel.
 * `session.secret`: The session secret is used to provide secure authenticated access, and should be replaced with a long random token. The example token is public information, and may help unauthorized guests gaining access to your setup when authenticated is required.
 
-### Default presets
-As you may wish to run aurora without any presets, default presets are added manually:
-
-```
-npm run database-fill
-```
-
 ### Users
 For authentication, at least 1 user is required. A user is added as follows:
 
@@ -74,6 +67,13 @@ npm run user-add -- --username USERNAME --pasword PASSWORD --role ROLE
 ```
 
 Accepted roles are `admin`, `guest` or `user` (default). Currently, there are no uses for roles, but in the future each may receive different privileges.
+
+### Default presets
+As you may wish to run aurora without any [presets](#presets), default presets are added manually:
+
+```
+npm run database-fill
+```
 
 ## Color channels
 The color channels on the web interface are the primary way of setting what your LEDs will display. There are seven channels: Master, RGB (Red, Green Blue) and HSV (Hue, Saturation, Value). When a channel from either the RGB or HSV channel group gets updated, the other channel group will be ignored. The Master channel is linked to the RGB channel group in this behavior.
