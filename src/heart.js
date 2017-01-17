@@ -5,7 +5,7 @@ const note = require('note-log');
 const util = require('util');
 
 const heart = function(leds, socket) {
-    const modifiers = require('./modifiers/modifiers.js')(leds);
+    const modifiers = require('./modifiers')(leds);
 
     const initResults = modifiers.map((modifier, index) => {
         if(modifier.init) {

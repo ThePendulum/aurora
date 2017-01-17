@@ -5,7 +5,7 @@ var note = require('note-log');
 var util = require('util');
 
 var heart = function heart(leds, socket) {
-    var modifiers = require('./modifiers/modifiers.js')(leds);
+    var modifiers = require('./modifiers')(leds);
 
     var initResults = modifiers.map(function (modifier, index) {
         if (modifier.init) {
