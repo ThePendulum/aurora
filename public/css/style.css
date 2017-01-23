@@ -205,6 +205,7 @@
   flex-grow: 1;
 }
 .draw[data-v-58c3d081] {
+  max-width: 100%;
   min-height: 2rem;
   border: solid 1px #ddd;
 }

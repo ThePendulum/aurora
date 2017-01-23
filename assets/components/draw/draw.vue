@@ -152,6 +152,7 @@
     }
 
     .draw {
+        max-width: 100%;
         min-height: 2rem;
         border: solid 1px $border;
     }
