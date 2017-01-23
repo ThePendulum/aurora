@@ -4,11 +4,13 @@ var note = require('note-log');
 var util = require('util');
 
 var each = function each(pixel, leds, pre, init) {
-  var pencil = init.canvas[pixel.index];
+    var pencil = init.canvas[pixel.x][pixel.y];
 
-  return pencil.values.map(function (value, index) {
-    return (1 - pencil.opacity) * pixel.values[index] + pencil.opacity * value;
-  });
+    if (pencil) {
+        pixel.values[0] = pencil[0];
+        pixel.values[1] = pencil[1];
+        pixel.values[2] = pencil[2];
+    }
 };
 
 module.exports = each;

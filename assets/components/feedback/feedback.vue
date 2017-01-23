@@ -1,7 +1,7 @@
 <template>
     <div class="feedback-container">
-        <canvas :width="phantomWidth" :height="phantomHeight" ref="phantom" class="phantom">{{pixels}}</canvas>
-        <canvas :width="feedbackWidth" :height="feedbackHeight" ref="feedback" class="feedback"></canvas>
+        <vue-phantom ref="phantom" />
+        <canvas :width="feedbackWidth" :height="feedbackHeight" ref="feedback" class="feedback">{{pixels}}</canvas>
     </div>
 </template>
 
@@ -11,8 +11,6 @@
     export default {
         data() {
             return {
-                phantom: null,
-                phantomCtx: null,
                 feedback: null,
                 feedbackCtx: null,
                 feedbackWidth: 1,
@@ -21,14 +19,7 @@
         },
         computed: {
             ...mapState({
-                phantomWidth(state) { return state.meta.width || 1; }, // default to 1 to prevent InvalidStateError for canvases with 0 width or height in Firefox
-                phantomHeight(state) { return state.meta.height || 1; },
                 pixels(state) {
-                    state.meta.pixels.forEach(pixel => {
-                        this.phantomCtx.fillStyle = 'rgb(' + pixel.values.map(Math.round).join() + ')';
-                        this.phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
-                    });
-
                     if(this.feedbackCtx) {
                         this.feedbackCtx.drawImage(this.phantom, 0, 0, this.feedbackWidth, this.feedbackHeight);
 
@@ -36,11 +27,13 @@
                         this.feedbackCtx.mozImageSmoothingEnabled = false;
                         this.feedbackCtx.msImageSmoothingEnabled = false;
                     }
+
+                    return state.meta.pixels;
                 }
             })
         },
         mounted() {
-            this.phantom = this.$refs.phantom;
+            this.phantom = this.$refs.phantom.$el;
             this.phantomCtx = this.phantom.getContext('2d')
 
             this.feedback = this.$refs.feedback;
@@ -55,10 +48,6 @@
 
 <style scoped lang="sass">
     @import '../../css/theme';
-
-    .phantom {
-        display: none;
-    }
 
     .feedback-container {
         position: absolute;

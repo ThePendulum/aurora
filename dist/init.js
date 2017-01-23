@@ -36,7 +36,7 @@ module.exports = function () {
         if (Array.isArray(size)) {
             y = Math.floor(index / leds.height);
 
-            if (zigzag && y % 2 === 0) {
+            if (zigzag && y % 2) {
                 x = index % leds.width;
             } else {
                 x = leds.width - 1 - index % leds.width;

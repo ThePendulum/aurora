@@ -3,41 +3,34 @@
 var note = require('note-log');
 var util = require('util');
 
-var init = function init(leds, ws) {
-    var init = {
-        canvas: Array.apply(null, new Array(leds.pixels.length)).map(function (value) {
-            return {
-                values: [0, 0, 0],
-                opacity: 0
-            };
-        })
-    };
-
-    ws.on('connection', function (wss) {
-        wss.on('message', function (msg) {
-            try {
-                (function () {
-                    var data = JSON.parse(msg);
-
-                    if (data[0] === 'draw') {
-                        var index = data[1].y * config.size[1] + (data[1].y % 2 ? config.size[0] - 1 - data[1].x : data[1].x);
-
-                        init.canvas[index] = data[1];
-                    }
-
-                    if (data[0] === 'fill') {
-                        init.canvas = init.canvas.map(function (value) {
-                            return data[1];
-                        });
-                    }
-                })();
-            } catch (error) {
-                note('draw', error);
-            }
+var init = function init(leds, socket) {
+    var canvas = Array.from({
+        length: leds.width
+    }, function (value, index) {
+        return Array.from({
+            length: leds.height
+        }, function (pixel) {
+            return null;
         });
     });
 
-    return init;
+    socket.init('canvas', function () {
+        return canvas;
+    });
+
+    socket.listen('draw', function (pencil) {
+        canvas[pencil.x][pencil.y] = pencil.pencil;
+    });
+
+    socket.listen('fill', function (pencil) {
+        canvas.forEach(function (column, columnIndex) {
+            column.forEach(function (row, rowIndex) {
+                canvas[columnIndex][rowIndex] = pencil;
+            });
+        });
+    });
+
+    return { canvas: canvas };
 };
 
 module.exports = init;

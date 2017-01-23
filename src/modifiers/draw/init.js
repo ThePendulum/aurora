@@ -3,37 +3,34 @@
 const note = require('note-log');
 const util = require('util');
 
-const init = function(leds, ws) {
-    const init = {
-        canvas: Array.apply(null, new Array(leds.pixels.length)).map(value => {
-            return {
-                values: [0, 0, 0],
-                opacity: 0
-            };
-        })
-    };
-
-    ws.on('connection', wss => {
-        wss.on('message', msg => {
-            try {
-                const data = JSON.parse(msg);
-
-                if(data[0] === 'draw') {
-                    const index = data[1].y * config.size[1] + (data[1].y % 2 ? config.size[0] - 1 - data[1].x : data[1].x);
-
-                    init.canvas[index] = data[1];
-                }
-
-                if(data[0] === 'fill') {
-                    init.canvas = init.canvas.map(value => data[1]);
-                }
-            } catch(error) {
-                note('draw', error);
-            }
+const init = function(leds, socket) {
+    const canvas = Array.from({
+        length: leds.width
+    }, (value, index) => {
+        return Array.from({
+            length: leds.height
+        }, pixel => {
+            return null;
         });
     });
 
-    return init;
+    socket.init('canvas', () => {
+        return canvas;
+    });
+
+    socket.listen('draw', pencil => {
+        canvas[pencil.x][pencil.y] = pencil.pencil;
+    });
+
+    socket.listen('fill', pencil => {
+        canvas.forEach((column, columnIndex) => {
+            column.forEach((row, rowIndex) => {
+                canvas[columnIndex][rowIndex] = pencil;
+            });
+        });
+    });
+
+    return {canvas};
 };
 
 module.exports = init;

@@ -29,3 +29,11 @@
         cursor: pointer;
     }
 }
+
+.button {
+    color: $text-light;
+    background: $primary;
+    padding: .5rem;
+    border: none;
+    cursor: pointer;
+}

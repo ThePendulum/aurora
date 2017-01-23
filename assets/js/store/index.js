@@ -5,14 +5,16 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import pattern from './pattern';
-import presets from './presets';
 import meta from './meta';
+import presets from './presets';
+import pattern from './pattern';
+import draw from './draw';
 
 export default new Vuex.Store({
     modules: {
-        pattern,
+        meta,
         presets,
-        meta
+        pattern,
+        draw
     }
 });
