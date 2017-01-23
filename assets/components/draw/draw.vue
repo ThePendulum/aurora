@@ -2,24 +2,11 @@
     <div class="draw-container noselect">
         <div class="panel">
             <div class="draw-toolbar">
-                <button class="button clear" @click="clear">Clear</button>
-                <button class="button fill" @click="fill">Fill</button>
-                <button class="button eraser" @click="pencil = null">Eraser</button>
+                <button title="Erase" class="swatch" :class="{selected: isPencil(null)}" style="background: url('/img/transparency.png')" @click="pencil = null">Eraser</button>
+                <button v-for="swatch in palette" :title="swatch.name" class="swatch" :class="{selected: isPencil(swatch.color)}" :style="{background: 'rgb(' + swatch.color.join() + ')'}" @click="pencil = swatch.color">{{swatch.name}}</button>
 
-                <button title="Black" class="swatch" style="background: rgb(0, 0, 0)" @click="pencil = [0, 0, 0]">Black</button>
-                <button title="White" class="swatch" style="background: rgb(255, 255, 255)" @click="pencil = [255, 255, 255]">White</button>
-                <button title="Red" class="swatch" style="background: rgb(255, 0, 0)" @click="pencil = [255, 0, 0]">Red</button>
-                <button title="Green" class="swatch" style="background: rgb(0, 255, 0)" @click="pencil = [0, 255, 0]">Green</button>
-                <button title="Blue" class="swatch" style="background: rgb(0, 0, 255)" @click="pencil = [0, 0, 255]">Blue</button>
-                <button title="Yellow" class="swatch" style="background: rgb(255, 255, 0)" @click="pencil = [255, 255, 0]">Yellow</button>
-                <button title="Cyan" class="swatch" style="background: rgb(0, 255, 255)" @click="pencil = [0, 255, 255]">Cyan</button>
-                <button title="Magenta" class="swatch" style="background: rgb(255, 0, 255)" @click="pencil = [255, 0, 255]">Magenta</button>
-                <button title="Orange" class="swatch" style="background: rgb(255, 127, 0)" @click="pencil = [255, 127, 0]">Orange</button>
-                <button title="Chartreuse" class="swatch" style="background: rgb(127, 255, 0)" @click="pencil = [127, 255, 0]">Chartreuse</button>
-                <button title="Spring Green" class="swatch" style="background: rgb(0, 255, 127)" @click="pencil = [0, 255, 127]">Spring Green</button>
-                <button title="Azure" class="swatch" style="background: rgb(0, 127, 255)" @click="pencil = [0, 127, 255]">Azure</button>
-                <button title="Violet" class="swatch" style="background: rgb(127, 0, 255)" @click="pencil = [127, 0, 255]">Violet</button>
-                <button title="Rose" class="swatch" style="background: rgb(255, 0, 127)" @click="pencil = [255, 0, 127]">Rose</button>
+                <button class="button fill" @click="fill">Fill</button>
+                <button class="button clear" @click="clear">Clear</button>
             </div>
         </div>
 
@@ -36,6 +23,8 @@
 <script>
     import {mapState} from 'vuex';
 
+    import palette from './palette.js';
+
     export default {
         data() {
             return {
@@ -45,6 +34,7 @@
                 drawWidth: 1,
                 drawHeight: 1,
                 drawing: false,
+                palette,
                 pencil: null
             };
         },
@@ -114,6 +104,13 @@
             },
             fill(event) {
                 this.$store.dispatch('fill', this.pencil);
+            },
+            isPencil(value) {
+                if(value && this.pencil) {
+                    return this.pencil[0] === value[0] && this.pencil[1] === value[1] && this.pencil[2] === value[2];
+                }
+
+                return value === this.pencil;
             }
         },
         mounted() {
@@ -174,7 +171,11 @@
         height: 2rem;
         display: inline-block;
         border: solid 1px $border;
-        margin: 0 0 .5rem 0;
+        margin: 0 .5rem .5rem 0;
         text-indent: -1000rem;
+
+        &.selected {
+            border: solid 1px $primary;
+        }
     }
 </style>

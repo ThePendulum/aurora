@@ -221,8 +221,11 @@
   height: 2rem;
   display: inline-block;
   border: solid 1px #ddd;
-  margin: 0 0 .5rem 0;
+  margin: 0 .5rem .5rem 0;
   text-indent: -1000rem;
+}
+.swatch.selected[data-v-58c3d081] {
+    border: solid 1px #2294ff;
 }
 
 .container[data-v-114b0345] {
