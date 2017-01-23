@@ -206,6 +206,7 @@
 }
 .draw[data-v-58c3d081] {
   min-height: 2rem;
+  border: solid 1px #ddd;
 }
 .canvas-container[data-v-58c3d081] {
   width: 100%;

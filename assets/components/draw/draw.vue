@@ -156,6 +156,7 @@
 
     .draw {
         min-height: 2rem;
+        border: solid 1px $border;
     }
 
     .canvas-container {
