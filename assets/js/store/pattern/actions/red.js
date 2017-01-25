@@ -25,5 +25,7 @@ export default function(context, red) {
         context.commit('hue', hsv[0]);
         context.commit('saturation', hsv[1] / 100);
         context.commit('value', hsv[2] / 100);
+
+        socket.transmit('hsv', pick(context.state, ['hue', 'saturation', 'value']));
     }
 };

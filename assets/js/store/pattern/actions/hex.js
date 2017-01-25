@@ -5,16 +5,12 @@ import pick from 'object.pick';
 
 import socket from '../../../socket.js';
 
-export default function(context, blue) {
+export default function(context, hex) {
+    const [red, green, blue] = convert.hex.rgb(hex);
+
+    context.commit('red', red);
+    context.commit('green', green);
     context.commit('blue', blue);
-
-    if(Number.isNaN(context.state.red)) {
-        context.commit('red', 0);
-    }
-
-    if(Number.isNaN(context.state.green)) {
-        context.commit('green', 0);
-    }
 
     socket.transmit('mode', 'rgb');
     socket.transmit('rgb', pick(context.state, ['red', 'green', 'blue']));

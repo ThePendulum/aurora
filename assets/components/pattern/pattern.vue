@@ -308,11 +308,7 @@
         methods: {
             focus(channel) { this.focused = channel; },
             updateHex: debounce(checkValue(function(value) {
-                const rgb = convert.hex.rgb(value);
-
-                this.$store.dispatch('red', rgb[0]);
-                this.$store.dispatch('green', rgb[1]);
-                this.$store.dispatch('blue', rgb[2]);
+                this.$store.dispatch('hex', value);
             }), 10),
             updateRed: checkValue(function(value) { this.$store.dispatch('red', value); }),
             updateGreen: checkValue(function(value) { this.$store.dispatch('green', value); }),
