@@ -55,6 +55,10 @@ const init = function(leds, socket) {
     scope.mx = 0;
     scope.my = 0;
 
+    socket.init('mode', () => {
+        return options.mode;
+    });
+
     socket.init('rgb', () => {
         return {
             red: rgb.red.value,
@@ -69,10 +73,6 @@ const init = function(leds, socket) {
             saturation: hsv.saturation.value,
             value: hsv.value.value
         };
-    });
-
-    socket.init('mode', () => {
-        return options.mode;
     });
 
     socket.init('modulation', () => {
