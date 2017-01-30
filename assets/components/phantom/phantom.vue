@@ -1,5 +1,8 @@
 <template>
-    <canvas :width="phantomWidth" :height="phantomHeight" ref="phantom" class="phantom">{{pixels}}</canvas>
+    <div>
+        <canvas :width="width" :height="height" ref="feedback" id="phantomFeedback" class="phantom"></canvas>
+        <canvas :width="width" :height="height" ref="draw" id="phantomDraw" class="phantom"></canvas>
+    </div>
 </template>
 
 <script>
@@ -8,32 +11,57 @@
     export default {
         data() {
             return {
-                phantom: null,
-                phantomCtx: null,
+                feedbackCtx: null,
             }
         },
         computed: {
             ...mapState({
-                phantomWidth(state) { return state.meta.width || 1; }, // default to 1 to prevent InvalidStateError for canvases with 0 width or height in Firefox
-                phantomHeight(state) { return state.meta.height || 1; },
-                pixels(state) {
-                    if(this.phantomCtx) {
-                        state.meta.pixels.forEach(pixel => {
-                            this.phantomCtx.fillStyle = 'rgb(' + pixel.values.map(Math.round).join() + ')';
-                            this.phantomCtx.fillRect(pixel.x, pixel.y, 1, 1);
-                        });
-                    }
-                }
+                width(state) { return state.meta.width || 1; }, // default to 1 to prevent InvalidStateError for canvases with 0 width or height in Firefox
+                height(state) { return state.meta.height || 1; },
             })
         },
         mounted() {
-            this.phantom = this.$refs.phantom;
-            this.phantomCtx = this.phantom.getContext('2d')
+            this.feedback = this.$refs.feedback;
+            this.feedbackCtx = this.feedback.getContext('2d')
+
+            this.draw = this.$refs.draw;
+            this.drawCtx = this.draw.getContext('2d');
+
+            this.$store.subscribe((mutation, state) => {
+                if(mutation.type === 'pixels') {
+                    if(this.feedbackCtx) {
+                        state.meta.pixels.forEach(pixel => {
+                            this.feedbackCtx.fillStyle = 'rgb(' + pixel.values.map(Math.round).join() + ')';
+                            this.feedbackCtx.fillRect(pixel.x, pixel.y, 1, 1);
+                        });
+
+                        this.$root.$emit('feedback');
+                        this.$root.$emit('draw');
+                    }
+                }
+
+                if(mutation.type === 'draw' || mutation.type === 'fill' || mutation.type === 'canvas') {
+                    if(this.drawCtx) {
+                        this.drawCtx.clearRect(0, 0, this.width, this.height);
+
+                        state.draw.canvas.forEach((column, x) => {
+                            column.forEach((pencil, y) => {
+                                if(pencil) {
+                                    this.drawCtx.fillStyle = 'rgb(' + pencil.map(Math.round).join() + ')';
+                                    this.drawCtx.fillRect(x, y, 1, 1);
+                                }
+                            });
+                        });
+
+                        this.$root.$emit('draw');
+                    }
+                }
+            });
         }
     };
 </script>
 
-<style scoped lang="sass">
+<style lang="sass">
     @import '../../css/theme';
 
     .phantom {

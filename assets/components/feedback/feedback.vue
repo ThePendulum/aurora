@@ -1,7 +1,7 @@
 <template>
     <div class="feedback-container">
         <vue-phantom ref="phantom" />
-        <canvas :width="feedbackWidth" :height="feedbackHeight" ref="feedback" class="feedback">{{pixels}}</canvas>
+        <canvas :width="width" :height="height" ref="feedback" class="feedback"></canvas>
     </div>
 </template>
 
@@ -13,35 +13,31 @@
             return {
                 feedback: null,
                 feedbackCtx: null,
-                feedbackWidth: 1,
-                feedbackHeight: 1
+                width: 1,
+                height: 1
             }
         },
-        computed: {
-            ...mapState({
-                pixels(state) {
-                    if(this.feedbackCtx) {
-                        this.feedbackCtx.drawImage(this.phantom, 0, 0, this.feedbackWidth, this.feedbackHeight);
-
-                        this.feedbackCtx.imageSmoothingEnabled = false;
-                        this.feedbackCtx.mozImageSmoothingEnabled = false;
-                        this.feedbackCtx.msImageSmoothingEnabled = false;
-                    }
-
-                    return state.meta.pixels;
-                }
-            })
-        },
         mounted() {
-            this.phantom = this.$refs.phantom.$el;
+            this.phantom = this.$refs.phantom.$el.querySelector('#phantomFeedback');
             this.phantomCtx = this.phantom.getContext('2d')
 
             this.feedback = this.$refs.feedback;
             this.feedbackCtx = this.feedback.getContext('2d');
 
-            this.feedbackDimensions = this.$refs.feedback.getBoundingClientRect();
-            this.feedbackWidth = this.feedbackDimensions.width;
-            this.feedbackHeight = this.feedbackDimensions.height;
+            const dimensions = this.$refs.feedback.getBoundingClientRect();
+
+            this.width = dimensions.width;
+            this.height = dimensions.height;
+
+            this.$root.$on('feedback', () => {
+                if(this.feedbackCtx) {
+                    this.feedbackCtx.imageSmoothingEnabled = false;
+                    this.feedbackCtx.mozImageSmoothingEnabled = false;
+                    this.feedbackCtx.msImageSmoothingEnabled = false;
+
+                    this.feedbackCtx.drawImage(this.phantom, 0, 0, this.width, this.height);
+                }
+            });
         }
     };
 </script>

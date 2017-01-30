@@ -204,14 +204,20 @@
   flex-direction: column;
   flex-grow: 1;
 }
+.canvas-container[data-v-58c3d081] {
+  width: 100%;
+  flex-grow: 1;
+  position: relative;
+}
+.feedback[data-v-58c3d081],
 .draw[data-v-58c3d081] {
   max-width: 100%;
   min-height: 2rem;
   border: solid 1px #ddd;
 }
-.canvas-container[data-v-58c3d081] {
-  width: 100%;
-  flex-grow: 1;
+.feedback[data-v-58c3d081] {
+  position: absolute;
+  z-index: -1;
 }
 .swatch[data-v-58c3d081],
 .eraser[data-v-58c3d081] {
@@ -304,7 +310,7 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
-.phantom[data-v-20da01dd] {
+.phantom {
   display: none;
 }
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */

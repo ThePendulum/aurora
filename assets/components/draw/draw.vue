@@ -11,16 +11,18 @@
         </div>
 
         <div class="panel panel-canvas">
-            <vue-phantom ref="phantom" />
+            <vue-phantom ref="feedbackPhantom" />
 
             <div class="canvas-container" ref="container">
-                <canvas :width="drawWidth" :height="drawHeight" ref="draw" class="draw" @mousedown="drawing = true" @touchstart="drawing = true" @click="draw">{{pixels}}</canvas>
+                <canvas :width="width" :height="height" ref="feedback" class="feedback"></canvas>
+                <canvas :width="width" :height="height" ref="draw" class="draw" @mousedown="drawing = true" @touchstart="drawing = true" @click="draw"></canvas>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import Vue from 'vue';
     import {mapState} from 'vuex';
 
     import palette from './palette.js';
@@ -29,42 +31,18 @@
         data() {
             return {
                 container: null,
+                feedbackCanvas: null,
+                feedbackCtx: null,
                 drawCanvas: null,
                 drawCtx: null,
-                drawWidth: 1,
-                drawHeight: 1,
+                phantomWidth: 1,
+                phantomHeight: 1,
+                width: 1,
+                height: 1,
                 drawing: false,
                 palette,
                 pencil: null
             };
-        },
-        computed: {
-            ...mapState({
-                pixels(state) {
-                    if(this.drawCtx) {
-                        this.drawCtx.drawImage(this.phantom, 0, 0, this.drawWidth, this.drawHeight);
-
-                        const {width, height, top, left} = this.container.getBoundingClientRect();
-
-                        let pixelSize = width / this.phantom.width;
-
-                        while(this.phantom.height * pixelSize > height) {
-                            pixelSize--;
-                        }
-
-                        this.drawWidth = this.phantom.width * pixelSize;
-                        this.drawHeight = this.phantom.height * pixelSize;
-                        this.drawTop = top;
-                        this.drawLeft = left;
-
-                        this.drawCtx.imageSmoothingEnabled = false;
-                        this.drawCtx.mozImageSmoothingEnabled = false;
-                        this.drawCtx.msImageSmoothingEnabled = false;
-                    }
-
-                    return state.meta.pixels;
-                }
-            })
         },
         methods: {
             draw(event) {
@@ -76,14 +54,14 @@
                     const clientX = event.clientX || (event.touches ? event.touches[0].clientX : null);
                     const clientY = event.clientY || (event.touches ? event.touches[0].clientY : null);
 
-                    const pixelWidth = this.drawWidth / this.phantom.width;
-                    const pixelHeight = this.drawHeight / this.phantom.height;
+                    const pixelWidth = this.width / this.feedbackPhantomCanvas.width;
+                    const pixelHeight = this.height / this.feedbackPhantomCanvas.height;
 
-                    const x = Math.floor((clientX - this.drawLeft) / pixelWidth);
-                    const y = Math.floor((clientY - this.drawTop) / pixelHeight);
+                    const x = Math.floor((clientX - this.left) / pixelWidth);
+                    const y = Math.floor((clientY - this.top) / pixelHeight);
 
-                    const xCapped = Math.max(Math.min(x, this.phantom.width - 1), 0);
-                    const yCapped = Math.max(Math.min(y, this.phantom.height - 1), 0);
+                    const xCapped = Math.max(Math.min(x, this.feedbackPhantomCanvas.width - 1), 0);
+                    const yCapped = Math.max(Math.min(y, this.feedbackPhantomCanvas.height - 1), 0);
 
                     this.$store.dispatch('draw', {
                         x: xCapped,
@@ -114,23 +92,68 @@
             }
         },
         mounted() {
-            this.phantom = this.$refs.phantom.$el;
-            this.phantomCtx = this.phantom.getContext('2d')
-
             this.container = this.$refs.container;
+
+            this.feedbackPhantomCanvas = this.$refs.feedbackPhantom.$el.querySelector('#phantomFeedback');
+            this.feedbackPhantomCtx = this.feedbackPhantomCanvas.getContext('2d')
+
+            this.drawPhantomCanvas = this.$refs.feedbackPhantom.$el.querySelector('#phantomDraw');
+            this.drawPhantomCtx = this.drawPhantomCanvas.getContext('2d')
+
+            this.feedbackCanvas = this.$refs.feedback;
+            this.feedbackCtx = this.feedbackCanvas.getContext('2d');
 
             this.drawCanvas = this.$refs.draw;
             this.drawCtx = this.drawCanvas.getContext('2d');
 
-            this.drawDimensions = this.drawCanvas.getBoundingClientRect();
-            this.drawWidth = this.drawDimensions.width;
-            this.drawHeight = this.drawDimensions.height;
+            this.phantomWidth = this.feedbackPhantomCanvas.width;
+            this.phantomHeight = this.feedbackPhantomCanvas.height;
+
+            const dimensions = this.feedbackCanvas.getBoundingClientRect();
+
+            this.width = dimensions.width;
+            this.height = dimensions.height;
 
             document.addEventListener('mouseup', event => this.drawing = false);
             document.addEventListener('touchend', event => this.drawing = false);
 
             document.addEventListener('mousemove', this.draw);
             document.addEventListener('touchmove', this.draw);
+
+            this.$root.$on('draw', () => {
+                this.drawCtx.clearRect(0, 0, this.width, this.height);
+
+                this.drawCtx.imageSmoothingEnabled = false;
+                this.drawCtx.mozImageSmoothingEnabled = false;
+                this.drawCtx.msImageSmoothingEnabled = false;
+
+                this.drawCtx.drawImage(this.drawPhantomCanvas, 0, 0, this.width, this.height);
+            });
+
+            this.$root.$on('feedback', () => {
+                if(this.feedbackCtx) {
+                    this.feedbackCtx.imageSmoothingEnabled = false;
+                    this.feedbackCtx.mozImageSmoothingEnabled = false;
+                    this.feedbackCtx.msImageSmoothingEnabled = false;
+
+                    this.feedbackCtx.drawImage(this.feedbackPhantomCanvas, 0, 0, this.width, this.height);
+
+                    const {width, height, top, left} = this.container.getBoundingClientRect();
+
+                    this.pixelSize = width / this.feedbackPhantomCanvas.width;
+
+                    while(this.feedbackPhantomCanvas.height * this.pixelSize > height) {
+                        this.pixelSize--;
+                    }
+
+                    this.width = this.feedbackPhantomCanvas.width * this.pixelSize;
+                    this.height = this.feedbackPhantomCanvas.height * this.pixelSize;
+                    this.phantomWidth = this.feedbackPhantomCanvas.width;
+                    this.phantomHeight = this.feedbackPhantomCanvas.height;
+                    this.top = top;
+                    this.left = left;
+                }
+            });
         }
     };
 </script>
@@ -151,15 +174,22 @@
         flex-grow: 1;
     }
 
+    .canvas-container {
+        width: 100%;
+        flex-grow: 1;
+        position: relative;
+    }
+
+    .feedback,
     .draw {
         max-width: 100%;
         min-height: 2rem;
         border: solid 1px $border;
     }
 
-    .canvas-container {
-        width: 100%;
-        flex-grow: 1;
+    .feedback {
+        position: absolute;
+        z-index: -1;
     }
 
     .swatch,

@@ -9,6 +9,14 @@ const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws
 const socket = {};
 
 const handlers = {
+    meta(meta) {
+        store.commit('width', meta.width);
+        store.commit('height', meta.height);
+    },
+    toggle(on) { store.commit('toggle', on); },
+    presets(presets) { store.commit('addPresets', presets); },
+    pixels(pixels) { store.commit('pixels', pixels); },
+    modulation(modulation) { store.commit('modulation', modulation); },
     rgb(rgb) {
         store.commit('red', rgb.red);
         store.commit('green', rgb.green);
@@ -35,14 +43,9 @@ const handlers = {
             store.commit('blue', rgb[2]);
         }
     },
-    meta(meta) {
-        store.commit('width', meta.width);
-        store.commit('height', meta.height);
+    canvas(canvas) {
+        store.commit('canvas', canvas);
     },
-    modulation(modulation) { store.commit('modulation', modulation); },
-    toggle(on) { store.commit('toggle', on); },
-    presets(presets) { store.commit('addPresets', presets); },
-    pixels(pixels) { store.commit('pixels', pixels); },
     error(error) { console.error(error); }
 };
 
