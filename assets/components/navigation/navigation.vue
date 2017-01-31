@@ -30,12 +30,14 @@
     .nav {
         flex-grow: 1;
         white-space: nowrap;
+        font-size: 0;
     }
 
     .nav-item {
         display: inline-block;
         padding: 1.5rem;
         margin: 0;
+        font-size: 1rem;
 
         &:hover,
         &.selected {
