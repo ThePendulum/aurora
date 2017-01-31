@@ -54,7 +54,7 @@ An example configuration file can be found at `config/example.js`. This file is 
 ### Rendering
 * `fps` and `interval`: The `fps` or `interval` defines how frequently a new frame is rendered. The `fps` defines the number of frames per second, while the `interval` defines after how many milliseconds a new frame is rendered. A fps of 30 is equal to an interval of 1000 / 30 = ~33 milliseconds. Likewise, an interval of 20 milliseconds is equal to an fps of 1000 / 20 = 50 frames.
 * `regulator`: The `regulator` allows the global brightness to be reduced. The values of each pixel will be multiplied with this value before being sent to the LEDs. For example, to (absolutely) half the brightness, the regulator would be `.5`.
-* `render`: To use unsupported chips, custom render methods can be imported and defined in an object using the newly supported chip as the key. Typically, custom render methods are placed in `plugins/`. Please refer to `src/modifiers/render` for insight on how render methods are composed. Configuration example:
+* `render`: To use unsupported chips, custom render methods can be imported and defined in an object using the newly supported chip as the key. Typically, custom render methods are placed in `plugins/`. Please refer to `[src/modifiers/render](src/modifiers/render)` for insight on how render methods are composed. Configuration example:
 
     ```
     const apa102 = require('../plugins/apa102');
