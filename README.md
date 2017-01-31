@@ -56,14 +56,14 @@ An example configuration file can be found at `config/example.js`. This file is 
 * `regulator`: The `regulator` allows the global brightness to be reduced. The values of each pixel will be multiplied with this value before being sent to the LEDs. For example, to (absolutely) half the brightness, the regulator would be `.5`.
 * `render`: To use unsupported chips, custom render methods can be imported and defined in an object using the newly supported chip as the key. Typically, custom render methods are placed in `plugins/`. Please refer to `src/modifiers/render` for insight on how render methods are composed. Configuration example:
 
-```
-const apa102 = require('../plugins/apa102');
+    ```
+    const apa102 = require('../plugins/apa102');
 
-config.render = {
-    chip: 'apa102',
-    apa102: apa102
-};
-```
+    config.render = {
+        chip: 'apa102',
+        apa102: apa102
+    };
+    ```
 
 ### Authentication
 * `requireAuth`: The aurora web interface can be made accessible on the Internet. This may call for a password to prevent unwanted access. When `requireAuth` is set to `true`, the web interface will prompt a login panel.
