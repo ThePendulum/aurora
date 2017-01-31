@@ -82,12 +82,12 @@ module.exports = function (wss, leds) {
         init[namespace] = handler;
     };
 
-    socket.listen = function (namespace, handler, proxy) {
-        var proxyHandler = function proxyHandler(data) {
+    socket.listen = function (namespace, handler, forward, bounce) {
+        var proxyHandler = function proxyHandler(data, id) {
             handler(data);
 
-            if (proxy !== false) {
-                socket.broadcast(namespace, data);
+            if (forward !== false) {
+                socket.broadcast(namespace, data, bounce === true ? null : id);
             }
         };
 
@@ -126,7 +126,7 @@ module.exports = function (wss, leds) {
 
                     if (listeners[namespace]) {
                         listeners[namespace].forEach(function (listener) {
-                            return listener(data);
+                            return listener(data, ws.id);
                         });
                     }
                 })();

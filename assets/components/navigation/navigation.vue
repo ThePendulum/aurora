@@ -2,6 +2,7 @@
     <nav class="nav">
         <router-link :to="{name: 'pattern'}" class="nav-item" :class="{selected: selected === 'pattern'}">Pattern</router-link>
         <router-link :to="{name: 'draw'}" class="nav-item" :class="{selected: selected === 'draw'}">Draw</router-link>
+        <router-link :to="{name: 'filters'}" class="nav-item" :class="{selected: selected === 'filters'}">Filters</router-link>
     </nav>
 </template>
 

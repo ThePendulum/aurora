@@ -5,10 +5,12 @@ const util = require('util');
 
 const color = require('./color');
 const draw = require('./draw');
+const filters = require('./filters');
 const feedback = require('./feedback');
+const previous = require('./previous');
 const regulator = require('./regulator');
 const render = require('./render');
 
 module.exports = function(leds) {
-    return [color(leds), draw(leds), feedback(leds), regulator(leds), render(leds)];
+    return [color(leds), draw(leds), filters(leds), feedback(leds), previous(leds), regulator(leds), render(leds)];
 };

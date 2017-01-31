@@ -9,12 +9,14 @@ import meta from './meta';
 import presets from './presets';
 import pattern from './pattern';
 import draw from './draw';
+import filters from './filters';
 
 export default new Vuex.Store({
     modules: {
         meta,
         presets,
         pattern,
-        draw
+        draw,
+        filters
     }
 });

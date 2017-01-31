@@ -46,6 +46,9 @@ const handlers = {
     canvas(canvas) {
         store.commit('canvas', canvas);
     },
+    smoothing(smoothing) {
+        store.commit('smoothing', smoothing);
+    },
     error(error) { console.error(error); }
 };
 

@@ -49,12 +49,12 @@ module.exports = function(wss, leds) {
         init[namespace] = handler;
     };
 
-    socket.listen = function(namespace, handler, proxy) {
-        const proxyHandler = function(data) {
+    socket.listen = function(namespace, handler, forward, bounce) {
+        const proxyHandler = function(data, id) {
             handler(data);
 
-            if(proxy !== false) {
-                socket.broadcast(namespace, data);
+            if(forward !== false) {
+                socket.broadcast(namespace, data, bounce === true ? null : id);
             }
         };
 
@@ -88,7 +88,7 @@ module.exports = function(wss, leds) {
                 const [namespace, data] = JSON.parse(msg);
 
                 if(listeners[namespace]) {
-                    listeners[namespace].forEach(listener => listener(data));
+                    listeners[namespace].forEach(listener => listener(data, ws.id));
                 }
             } catch(error) {
                 note('socket', error);
