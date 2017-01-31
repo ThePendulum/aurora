@@ -1,5 +1,5 @@
 # aurora
-aurora is an addressable LED controller for (but not limited to) the Raspberry Pi. It provides an easy to use web interface backed by a powerful mathematical expression parser.
+aurora is an addressable LED controller for (but not limited to) the Raspberry Pi. It provides an easy to use web interface backed by a powerful mathematical expression parser. Currently, aurora natively supports the WS2801, WS2811, WS2812 and WS2812B chips.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
