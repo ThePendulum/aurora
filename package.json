@@ -1,6 +1,6 @@
 {
   "name": "aurora",
-  "version": "1.33.0",
+  "version": "1.34.0",
   "description": "WS28xx LED remote",
   "main": "app.js",
   "repository": {
