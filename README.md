@@ -105,6 +105,7 @@ The following variables may be used in expressions on all color channels:
 
 ### Animation seeds
 * `beat` or `b`: An incremental value that ticks every update cycle.
+* `random1` and `random2` or `r1` and `r2`: Random values between 0 and 1 unique for every update cycle.
 * `randomPixel` or `rp`: A random value between 0 and 1 unique for every LED for every update cycle.
 
 ### Modulation pad

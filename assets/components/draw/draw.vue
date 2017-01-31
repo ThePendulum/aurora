@@ -2,7 +2,7 @@
     <div class="draw-container noselect">
         <div class="panel">
             <div class="draw-toolbar">
-                <button title="Erase" class="swatch" :class="{selected: isPencil(null)}" style="background: url('/img/transparency.png')" @click="pencil = null">Eraser</button>
+                <button title="Transparent" class="swatch" :class="{selected: isPencil(null)}" style="background: url('/img/transparency.png')" @click="pencil = null">Eraser</button>
                 <button v-for="swatch in palette" :title="swatch.name" class="swatch" :class="{selected: isPencil(swatch.color)}" :style="{background: 'rgb(' + swatch.color.join() + ')'}" @click="pencil = swatch.color">{{swatch.name}}</button>
 
                 <button class="button fill" @click="fill">Fill</button>

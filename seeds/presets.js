@@ -51,8 +51,18 @@ exports.seed = function(knex, Promise) {
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d', 'modulation'])
         }, {
+            name: 'Sparkle',
+            targets: JSON.stringify(['master']),
+            values: JSON.stringify({
+                hue: '60 * i',
+                saturation: 1,
+                value: 'sin(i + b)'
+            }),
+            user: 'aurora',
+            tags: JSON.stringify(['1d'])
+        }, {
             name: 'Spectrum',
-            targets: JSON.stringify(['master', 'hue']),
+            targets: JSON.stringify(['hue']),
             values: JSON.stringify({
                 hue: '60 * i',
                 saturation: 1,
@@ -114,7 +124,7 @@ exports.seed = function(knex, Promise) {
             tags: JSON.stringify(['1d', '2d'])
         }, {
             name: 'Alert',
-            targets: JSON.stringify(['master', 'value']),
+            targets: JSON.stringify(['value']),
             values: JSON.stringify({
                 hue: 0,
                 saturation: 1,
@@ -128,7 +138,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hue: 0,
                 saturation: 0,
-                value: 'sin(.05 * b) * r[1] * (.5 + .5 * sin(.05 * i * r[2]))'
+                value: 'sin(.05 * b) * r1 * (.5 + .5 * sin(.05 * i * r2))'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
