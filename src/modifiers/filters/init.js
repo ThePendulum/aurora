@@ -2,7 +2,7 @@
 
 const init = function(leds, socket) {
     const filters = {
-        smoothing: .5
+        smoothing: 0
     };
 
     socket.init('smoothing', () => {

@@ -3,7 +3,6 @@
 var config = require('config');
 var note = require('note-log');
 var util = require('util');
-var SPI = require('spi');
 
 var chipMap = require('./chipMap.js');
 

@@ -1,6 +1,7 @@
-node_modules/
 npm-debug*
+node_modules/
+/**/*/README.md
 database/*
-!database/README.md
+plugins/*
 config/*
 !config/example.js

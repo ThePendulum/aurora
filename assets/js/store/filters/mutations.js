@@ -2,6 +2,6 @@
 
 export default {
     smoothing(state, smoothing) {
-        state.smoothing = smoothing;
+        state.smoothing = Number(smoothing);
     }
 };
