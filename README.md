@@ -43,7 +43,7 @@ npm start
 ```
 
 ## Configuration
-An example configuration file can be found at `config/example.js`. This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and change it where necessary in your favorite text editor.
+An example configuration file can be found at [`config/example.js`](config/example.js). This file is only an example indeed and will be ignored and overwritten when aurora is updated. To configure aurora, copy this file to `config/default.js` and change it where necessary in your favorite text editor.
 
 ### Meta
 * `chip`: This is the chip type your LED strip uses. Currently supported are `ws2801`, `ws2811`, `ws2812` and `ws2812b`.
