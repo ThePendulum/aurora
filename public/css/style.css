@@ -98,6 +98,9 @@
         color: #2294ff;
         background: #fff;
 }
+.channel-presets .preset.selected[data-v-052d04e3] {
+      font-weight: bold;
+}
 .channel-presets .preset-name[data-v-052d04e3] {
     flex-grow: 1;
 }

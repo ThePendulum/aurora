@@ -84,19 +84,31 @@ const init = function(leds, socket) {
 
     socket.listen('rgb', newRgb => {
         Object.keys(rgb).forEach(prop => {
-            rgb[prop] = {
-                value: newRgb[prop],
-                eval: parser.parse(newRgb[prop].toString())
-            };
+            const newProp = newRgb[prop] === null ? '0' : newRgb[prop].toString();
+
+            try {
+                rgb[prop] = {
+                    value: newProp,
+                    eval: parser.parse(newProp)
+                };
+            } catch(error) {
+                note('color', 2, 'Invalid value for \'' + prop + '\': ' + error.message);
+            }
         });
     });
 
     socket.listen('hsv', newHsv => {
         Object.keys(hsv).forEach(prop => {
-            hsv[prop] = {
-                value: newHsv[prop],
-                eval: parser.parse(newHsv[prop].toString())
-            };
+            const newProp = newHsv[prop] === null ? '0' : newHsv[prop].toString();
+
+            try {
+                hsv[prop] = {
+                    value: newProp,
+                    eval: parser.parse(newProp)
+                };
+            } catch(error) {
+                note('color', 2, 'Invalid value for \'' + prop + '\': ' + error.message);
+            }
         });
     });
 

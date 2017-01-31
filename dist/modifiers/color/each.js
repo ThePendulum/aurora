@@ -50,7 +50,7 @@ var each = function each(pixel, leds, pre, init) {
             green = init.rgb.green.eval.evaluate(scope);
             blue = init.rgb.blue.eval.evaluate(scope);
         } catch (error) {
-            note(error);
+            note('color', 2, error.message);
         }
 
         pixel.previous.red = red;
