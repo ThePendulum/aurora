@@ -59,9 +59,11 @@ An example configuration file can be found at `config/example.js`. This file is 
     ```
     const apa102 = require('../plugins/apa102');
 
-    config.render = {
+    module.exports = {
         chip: 'apa102',
-        apa102: apa102
+        render: {
+            apa102: apa102
+        }
     };
     ```
 
