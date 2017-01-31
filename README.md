@@ -30,10 +30,10 @@ aurora is an addressable LED controller for the Raspberry Pi. It provides an eas
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
-aurora relies on Node.js, which is best installed through [nvm](https://github.com/creationix/nvm). Unfortunately, aurora requires root privileges to access the hardware required to control the LEDs. Therefore, Node.js must be installed for both your personal user account and root.
+aurora relies on Node.js, which is best installed through [nvm](https://github.com/creationix/nvm). Unfortunately, aurora requires root privileges to access the hardware required to control the LEDs. Therefore, Node.js must be installed for both your personal account and root.
 
 ### Dependencies
-Node.js comes with a package manager npm, which is used to install aurora's dependencies. Please make sure to sign out as root:
+Node.js comes with a package manager npm, which is used to install aurora's dependencies. Please make sure to sign out as root and use your personal account:
 
 ```
 npm install
