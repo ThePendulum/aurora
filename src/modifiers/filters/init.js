@@ -10,7 +10,7 @@ const init = function(leds, socket) {
     });
 
     socket.listen('smoothing', smoothing => {
-        filters.smoothing = smoothing;
+        filters.smoothing = Math.max(0, Math.min(.99, Number(smoothing)));
     });
 
     return {filters};
