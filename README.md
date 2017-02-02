@@ -58,6 +58,7 @@ An example configuration file can be found at [`config/example.js`](config/examp
 ### Rendering
 * `fps` and `interval`: The `fps` or `interval` defines how frequently a new frame is rendered. The `fps` defines the number of frames per second, while the `interval` defines after how many milliseconds a new frame is rendered. A fps of 30 is equal to an interval of 1000 / 30 = ~33 milliseconds. Likewise, an interval of 20 milliseconds is equal to an fps of 1000 / 20 = 50 frames.
 * `regulator`: The `regulator` allows the global brightness to be reduced. The values of each pixel will be multiplied with this value before being sent to the LEDs. For example, to (absolutely) half the brightness, the regulator would be `.5`.
+* `gamma`: If the rendered colors do not appear to match the instructions, a gamma correction factor can be configured.
 * `render`: To use unsupported chips, custom render methods can be imported and defined in an object using the newly supported chip as the key. Typically, custom render methods are placed in `plugins/`. Please refer to on of the default render methods in [`src/modifiers/render`](src/modifiers/render) for insight on how render methods are composed. Configuration example:
 
     ```

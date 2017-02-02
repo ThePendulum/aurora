@@ -1,5 +1,6 @@
 'use strict';
 
+var config = require('config');
 var ws281x = require('rpi-ws281x-native');
 
 var init = function init(leds) {

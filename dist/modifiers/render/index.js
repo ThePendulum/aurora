@@ -21,5 +21,5 @@ module.exports = function (leds) {
         return methods[leds.chip];
     }
 
-    throw new Error('Chip has no render method');
+    throw new Error('Chip has no render module');
 };

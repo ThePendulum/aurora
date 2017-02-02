@@ -9,8 +9,9 @@ var filters = require('./filters');
 var feedback = require('./feedback');
 var previous = require('./previous');
 var regulator = require('./regulator');
+var gamma = require('./gamma');
 var render = require('./render');
 
 module.exports = function (leds) {
-    return [color(leds), draw(leds), filters(leds), feedback(leds), previous(leds), regulator(leds), render(leds)];
+    return [color(leds), draw(leds), filters(leds), feedback(leds), previous(leds), regulator(leds), gamma(leds), render(leds)];
 };
