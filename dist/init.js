@@ -8,7 +8,17 @@ var chipMap = require('./chipMap.js');
 
 module.exports = function () {
     var size = config.size;
-    var zigzag = config.zigzag === undefined ? true : config.zigzag;
+    var zigzag = config.has('zigzag') ? config.zigzag : true;
+
+    var flipIndex = void 0,
+        flipX = void 0,
+        flipY = false;
+
+    if (config.has('mirror')) {
+        flipIndex = config.mirror.includes('index');
+        flipX = config.mirror.includes('x');
+        flipY = config.mirror.includes('y');
+    }
 
     var leds = {};
     var length = void 0;
@@ -29,29 +39,41 @@ module.exports = function () {
     }
 
     leds.pixels = Array.from({ length: length }, function (pixel, index) {
-        var x = void 0,
-            y = void 0;
-
-        if (Array.isArray(size)) {
-            y = Math.floor(index / leds.height);
-
-            if (zigzag && y % 2) {
-                x = index % leds.width;
-            } else {
-                x = leds.width - 1 - index % leds.width;
-            }
-        } else {
-            y = 0;
-            x = index;
-        }
-
-        return {
+        pixel = {
             values: [0, 0, 0],
             index: index,
-            x: x,
-            y: y,
+            realIndex: index,
+            x: index,
+            y: 0,
             previous: {}
         };
+
+        if (Array.isArray(size)) {
+            pixel.y = Math.floor(index / leds.height);
+
+            if (zigzag && y % 2) {
+                pixel.x = index % leds.width;
+            } else {
+                pixel.x = leds.width - 1 - index % leds.width;
+            }
+        } else {
+            pixel.y = 0;
+            pixel.x = index;
+        }
+
+        if (flipIndex) {
+            pixel.index = length - 1 - pixel.index;
+        }
+
+        if (flipX) {
+            pixel.x = leds.width - 1 - pixel.x;
+        }
+
+        if (flipY) {
+            pixel.y = leds.height - 1 - pixel.y;
+        }
+
+        return pixel;
     });
 
     leds.beat = 0;

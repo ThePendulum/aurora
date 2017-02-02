@@ -53,6 +53,7 @@ An example configuration file can be found at [`config/example.js`](config/examp
 * `chip`: This is the chip type your LED strip uses. Currently supported are `ws2801`, `ws2811`, `ws2812` and `ws2812b`.
 * `size`: This is the length of a strip, or dimensions of a matrix. The length of a strip is defined as an integer (e.g. `300` for 300 pixels), and the dimensions of a matrix are defined as an array (e.g. `[16, 16]` for a 16 by 16 matrix).
 * `colorIndex`: Not all chips expect color values in the order red, green, blue. The `colorIndex` determines the order in which values are sent to the chip. For example, `[0, 2, 1]` is red, blue, green, and `[1, 0, 2]` is green, red, blue.
+* `mirror`: If index, x or y need to be mirrored or flipped, they can be passed as an array. For example, to mirror the index and x-axis, but not y: `['index', 'x']`.
 * `zigzag`: Some, but not all, are wired in a snake or zigzag pattern. For example, in an 8 by 8 matrix, the 8th LED in series will be at the end of the first row, and the 9th LED in series will be at the end of the second row, going back. When `zigzag` is `false` or left undefined, it will be assumed all rows are in parallel, and the 9th LED in the example will be below the 1st LED at the start of the row. When `true`, a zigzag layout will be used.
 
 ### Rendering

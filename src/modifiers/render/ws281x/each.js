@@ -9,7 +9,7 @@ const g = colorIndex[1];
 const b = colorIndex[2];
 
 const each = function(pixel, leds, pre, init) {
-    init[pixel.index] = ((pixel.values[r] & 0xff) << 16) + ((pixel.values[g] & 0xff) << 8) + (pixel.values[b] & 0xff);
+    init[pixel.realIndex] = ((pixel.values[r] & 0xff) << 16) + ((pixel.values[g] & 0xff) << 8) + (pixel.values[b] & 0xff);
 
     return pixel.values;
 };
