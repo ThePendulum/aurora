@@ -34,7 +34,7 @@ exports.seed = function(knex, Promise) {
             name: 'Rainbow',
             targets: JSON.stringify(['master', 'hue']),
             values: JSON.stringify({
-                hue: 'i + b + mx * 360',
+                hue: 'i - b - mx * 360',
                 saturation: 1,
                 value: 1
             }),
@@ -46,7 +46,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hue: '60 * i',
                 saturation: 1,
-                value: 'sin(i + b)'
+                value: 'sin(i - b)'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d'])
@@ -82,7 +82,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hue: 30,
                 saturation: .4,
-                value: 'sin(i + b)'
+                value: 'sin(i - b)'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])
