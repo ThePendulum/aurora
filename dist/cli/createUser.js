@@ -1,9 +1,5 @@
 'use strict';
 
-var _noteLog = require('note-log');
-
-var _noteLog2 = _interopRequireDefault(_noteLog);
-
 var _createUser = require('../auth/createUser.js');
 
 var _createUser2 = _interopRequireDefault(_createUser);

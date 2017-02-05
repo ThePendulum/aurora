@@ -1,7 +1,5 @@
 'use strict';
 
-import note from 'note-log';
-
 import createUser from '../auth/createUser.js';
 
 const {username, password, roll, u, p, r} = require('yargs').argv;

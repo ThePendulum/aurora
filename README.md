@@ -78,13 +78,13 @@ An example configuration file can be found at [`config/example.js`](config/examp
 * `session.secret`: The session secret is used to provide secure authenticated access, and should be replaced with a long random token. The example token is public information, and may help unauthorized guests gaining access to your setup when authenticated is required.
 
 ### Users
-For authentication, at least 1 user is required. A user is added as follows:
+On installation, a default user with username and password `guest` is added. When authentication is disabled, all sessions belong to this guest account. E.g. presets will also be stored to this account. A new user can be added as follows:
 
 ```
-npm run user-add -- --username USERNAME --pasword PASSWORD --role ROLE
+npm run users-add -- --username USERNAME --pasword PASSWORD --role ROLE
 ```
 
-Accepted roles are `admin`, `guest` or `user` (default). Currently, there are no uses for roles, but in the future each may receive different privileges.
+Accepted roles are `admin`, `guest` or `user` (default). Existing users with the same username will be overwritten; a list of all users can be retrieved with `npm run users-list`. Currently, all roles are equivalent, but in the future each may receive different privileges.
 
 ### Default presets
 As you may wish to run aurora without any [presets](#presets), default presets are added manually:

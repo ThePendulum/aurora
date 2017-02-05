@@ -1,6 +1,7 @@
 'use strict';
 
 const scrypt = require('scrypt-for-humans');
+const passwordGenerator = require('generate-password');
 
 exports.up = function(knex, Promise) {
     return Promise.all([
@@ -8,19 +9,28 @@ exports.up = function(knex, Promise) {
             table.increments(),
             table.string('username').unique(),
             table.string('password'),
-            table.string('role', ['admin', 'guest', 'user'])
+            table.string('role')
         }).then(() => {
+            const rootPassword = passwordGenerator.generate({
+                length: 32,
+                numbers: true,
+                symbols: true,
+                uppercase: true
+            });
+
             return Promise.all([
-                knex('users').where({
-                    username: 'aurora'
-                }).delete(),
-                scrypt.hash('aurora')
+                knex('users').whereIn('username', ['aurora', 'guest']).delete(),
+                scrypt.hash(rootPassword)
             ]).then(results => {
-                return knex('users').insert({
+                return knex('users').insert([{
                     username: 'aurora',
                     password: results[1],
-                    role: 'admin'
-                });
+                    role: 'root'
+                }, {
+                    username: 'guest',
+                    password: 'guest',
+                    role: 'guest'
+                }]);
             });
         }),
         knex.schema.createTableIfNotExists('presets', table => {
