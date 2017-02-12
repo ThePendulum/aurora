@@ -8,6 +8,8 @@ const pick = require('object.pick');
 const Parser = require('expr-eval').Parser;
 const parser = new Parser();
 
+const expand =  require('../../utils/expand.js');
+
 const init = function(leds, socket) {
     const options = {
         mode: 'rgb'
@@ -84,7 +86,7 @@ const init = function(leds, socket) {
 
     socket.listen('rgb', newRgb => {
         Object.keys(rgb).forEach(prop => {
-            const newProp = newRgb[prop] === null ? '0' : newRgb[prop].toString();
+            const newProp = newRgb[prop] === null ? '0' : expand(newRgb[prop].toString());
 
             try {
                 rgb[prop] = {
@@ -99,7 +101,7 @@ const init = function(leds, socket) {
 
     socket.listen('hsv', newHsv => {
         Object.keys(hsv).forEach(prop => {
-            const newProp = newHsv[prop] === null ? '0' : newHsv[prop].toString();
+            const newProp = newHsv[prop] === null ? '0' : expand(newHsv[prop].toString());
 
             try {
                 hsv[prop] = {
