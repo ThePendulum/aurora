@@ -128,7 +128,7 @@ exports.seed = function(knex, Promise) {
             values: JSON.stringify({
                 hue: 0,
                 saturation: 0,
-                value: 'sin(.05 * b) * r1 * (.5 + .5 * sin(.05 * i * r2))'
+                value: 'sin(.05 * b) * r1 * (abs(random1 * l - i) < 50)'
             }),
             user: 'aurora',
             tags: JSON.stringify(['1d', '2d'])

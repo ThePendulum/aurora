@@ -60,9 +60,9 @@ module.exports = function(wss, leds) {
 
         if(listeners[namespace]) {
             listeners[namespace].push(proxyHandler);
+        } else {
+            listeners[namespace] = [proxyHandler];
         }
-
-        listeners[namespace] = [proxyHandler];
     };
 
     socket.connect = ws => {
